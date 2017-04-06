@@ -1,5 +1,4 @@
 import numpy as np
-from util import invert
 
 
 def synthesize(N, M, V, density, accuracy, conf_prob):
@@ -22,6 +21,7 @@ def synthesize(N, M, V, density, accuracy, conf_prob):
     Psi = [[] for obj in range(M)]
     for obj in range(M):
         for s in range(N):
+            accuracy = np.random.uniform(0.7, 1.0)
             if np.random.rand() < density:
                 if np.random.rand() < accuracy:
                     Psi[obj].append((s, GT[obj]))

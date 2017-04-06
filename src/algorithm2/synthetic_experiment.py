@@ -47,6 +47,7 @@ def accuracy():
     V = 50
     # synthetically generated observations
     density = 0.3
+    # TO DO
     accuracy = 0.8
 
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
@@ -117,6 +118,7 @@ def accuracy():
             )
 
     #pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv('synthetic_accuracy.csv', index=False)
 
 
 def convergence():
