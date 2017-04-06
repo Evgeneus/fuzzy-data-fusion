@@ -84,11 +84,17 @@ def accuracy():
             sums_t = time.time() - start
             sums_b = adapter_output(sums_belief, data)
 
-            mv_accu.append(np.average([mv_b[obj][GT[obj]] for obj in GT.keys()]))
-            em_accu.append(np.average([em_b[obj][GT[obj]] for obj in GT.keys()]))
-            mcmc_accu.append(np.average([mcmc_b[obj][GT[obj]] for obj in GT.keys()]))
-            f_mcmc_accu.append(np.average([f_mcmc_b[obj][GT[obj]] for obj in GT.keys()]))
-            sums_accu.append(np.average([sums_b[obj][GT[obj]] for obj in GT.keys()]))
+            # exclude objects on which no conflicts
+            obj_with_conflicts = []
+            for obj_id, obj in enumerate(mv_b):
+                if len(obj) > 1:
+                    obj_with_conflicts.append(obj_id)
+
+            mv_accu.append(np.average([mv_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            em_accu.append(np.average([em_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            mcmc_accu.append(np.average([mcmc_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            f_mcmc_accu.append(np.average([f_mcmc_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            sums_accu.append(np.average([sums_b[obj][GT[obj]] for obj in obj_with_conflicts]))
 
         res['mv'].append(np.average(mv_accu))
         res['mv std'].append(np.std(mv_accu))
