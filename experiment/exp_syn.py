@@ -4,20 +4,20 @@ import pandas as pd
 
 sys.path.append('/Users/Evgeny/wonderful_programming/fuzzy-fusion-venv/fuzzy-fusion/src/')
 sys.path.append('/Users/Evgeny/wonderful_programming/fuzzy-fusion-venv/fuzzy-fusion/experiment/')
-from generator.generator import generator
-from algorithm.gibbs import gibbs
-from algorithm.em import em
-from algorithm.sums import sums
-from algorithm.average_log import average_log
-from algorithm.investment import investment
-from algorithm.pooled_investment import pooled_investment
-from algorithm.m_voting import m_voting
-from algorithm.common import get_data
+from src.generator.generator import generator
+from src.algorithm.gibbs import gibbs
+from src.algorithm.em import em
+from src.algorithm.sums import sums
+from src.algorithm.average_log import average_log
+from src.algorithm.investment import investment
+from src.algorithm.pooled_investment import pooled_investment
+from src.algorithm.m_voting import m_voting
+from src.algorithm.common import get_data
 
 # number of sources
 s_number = 10
 # number of objects
-obj_number = 1000
+obj_number = 100
 # cluster size
 cl_size = 2
 # possible values for an objects(for the data generator)
