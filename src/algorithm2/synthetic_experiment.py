@@ -8,6 +8,7 @@ from f_mcmc import f_mcmc
 from generator import synthesize
 import pandas as pd
 from sums import sums
+from util import prob_binary_convert
 
 work_dir = '/home/bykau/Dropbox/Fuzzy/'
 n_runs = 1
@@ -60,30 +61,34 @@ def accuracy():
             start = time.time()
             mv_p = majority_voting(Psi)
             mv_t = time.time() - start
+            mv_b = prob_binary_convert(mv_p)
 
             start = time.time()
             em_A, em_p = expectation_maximization(N, M, Psi)
             em_t = time.time() - start
+            em_b = prob_binary_convert(em_p)
 
             start = time.time()
             mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
             mcmc_t = time.time() - start
+            mcmc_b = prob_binary_convert(mcmc_p)
 
             start = time.time()
             f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, Psi, Cl, mcmc_params)
             f_mcmc_t = time.time() - start
+            f_mcmc_b = prob_binary_convert(f_mcmc_p)
 
-            start = time.time()
             data = adapter_input(Psi)
+            start = time.time()
             sums_belief = sums(N, M, data)
-            sums_p = adapter_output(sums_belief, data)
             sums_t = time.time() - start
+            sums_b = adapter_output(sums_belief, data)
 
-            mv_accu.append(np.average([mv_p[obj][GT[obj]] for obj in GT.keys()]))
-            em_accu.append(np.average([em_p[obj][GT[obj]] for obj in GT.keys()]))
-            mcmc_accu.append(np.average([mcmc_p[obj][GT[obj]] for obj in GT.keys()]))
-            f_mcmc_accu.append(np.average([f_mcmc_p[obj][GT[obj]] for obj in GT.keys()]))
-            sums_accu.append(np.average([sums_p[obj][GT[obj]] for obj in GT.keys()]))
+            mv_accu.append(np.average([mv_b[obj][GT[obj]] for obj in GT.keys()]))
+            em_accu.append(np.average([em_b[obj][GT[obj]] for obj in GT.keys()]))
+            mcmc_accu.append(np.average([mcmc_b[obj][GT[obj]] for obj in GT.keys()]))
+            f_mcmc_accu.append(np.average([f_mcmc_b[obj][GT[obj]] for obj in GT.keys()]))
+            sums_accu.append(np.average([sums_b[obj][GT[obj]] for obj in GT.keys()]))
 
         res['mv'].append(np.average(mv_accu))
         res['mv std'].append(np.std(mv_accu))

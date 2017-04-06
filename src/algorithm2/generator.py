@@ -5,9 +5,9 @@ from util import invert
 def synthesize(N, M, V, density, accuracy, conf_prob):
     """
     Generates synthetic data.
-    :param N:
-    :param M:
-    :param V:
+    :param N: number of sources
+    :param M: number of objects
+    :param V: number of values per object
     :param density:
     :param accuracy:
     :param conf_prob:

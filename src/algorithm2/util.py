@@ -1,5 +1,5 @@
 import math
-
+from collections import defaultdict
 
 def log_likelihood(GT, M, Psi, A, p):
     """
@@ -66,3 +66,15 @@ def accu_G(f_mcmc_G, GT_G):
             total += 1
 
     return tp/total
+
+
+def prob_binary_convert(data):
+    data_b = []
+    for obj in data:
+        sources = obj.keys()
+        probs = obj.values()
+        index_max = probs.index(max(probs))
+        binary = [0.] * len(probs)
+        binary[index_max] = 1.
+        data_b.append(defaultdict(int, zip(sources, binary)))
+    return data_b
