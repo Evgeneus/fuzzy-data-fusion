@@ -11,7 +11,7 @@ from sums import sums
 from util import prob_binary_convert
 
 work_dir = '/home/bykau/Dropbox/Fuzzy/'
-n_runs = 1
+n_runs = 5
 
 
 def adapter_input(Psi):

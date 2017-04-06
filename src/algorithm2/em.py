@@ -19,7 +19,7 @@ def expectation_maximization(N, M, Psi):
     eps = 0.001
 
     # init accuracies
-    A = [0.8 for s in range(N)]
+    A = [np.random.uniform(0.7, 1.0) for s in range(N)]
     while True:
         # E-step
         p = []

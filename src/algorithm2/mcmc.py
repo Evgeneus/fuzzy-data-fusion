@@ -21,7 +21,7 @@ def mcmc(N, M, Psi, params):
     inv_Psi = invert(N, M, Psi)
 
     # random init
-    A = np.random.uniform(0.8, 1.0, N)
+    A = np.random.uniform(0.7, 1.0, N)
 
     # MCMC sampling
     sample_size = 0.0

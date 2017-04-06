@@ -26,7 +26,7 @@ def f_mcmc(N, M, Psi, Cl, params):
     FV = params['FV']
 
     # init accuracies
-    A = np.random.uniform(0.8, 1, N)
+    A = np.random.uniform(0.7, 1, N)
 
     # init confusions, for now we start with no confusions
     G = {}
