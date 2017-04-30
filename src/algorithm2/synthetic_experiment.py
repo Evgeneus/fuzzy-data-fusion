@@ -52,12 +52,15 @@ def accuracy():
 
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
-    res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [], 'f_mcmc': [], 'sums std': [], 'mv std': [],
-           'em std': [], 'mcmc std': [], 'f_mcmc std': [], 'confusion probability': conf_probs}
+    res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [], 'sums std': [], 'mv std': [],
+           'em std': [], 'mcmc std': [],
+           'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [], 'sums std f': [], 'mv std f': [],
+           'em std f': [], 'mcmc std f': [], 'confusion probability': conf_probs}
     for conf_prob in conf_probs:
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, accuracy, 1-conf_prob)
 
-        mv_accu, em_accu, mcmc_accu, f_mcmc_accu, sums_accu = [], [], [], [], []
+        mv_accu, em_accu, mcmc_accu, sums_accu = [], [], [], []
+        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f = [], [], [], []
         for run in range(n_runs):
             Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
 
@@ -65,16 +68,22 @@ def accuracy():
             mv_p = majority_voting(Psi)
             mv_t = time.time() - start
             mv_b = prob_binary_convert(mv_p)
+            mv_pf = majority_voting(Psi_fussy)
+            mv_bf = prob_binary_convert(mv_pf)
 
             start = time.time()
             em_A, em_p = expectation_maximization(N, M, Psi)
             em_t = time.time() - start
             em_b = prob_binary_convert(em_p)
+            em_Af, em_pf = expectation_maximization(N, M, Psi_fussy)
+            em_bf = prob_binary_convert(em_pf)
 
             start = time.time()
             mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
             mcmc_t = time.time() - start
             mcmc_b = prob_binary_convert(mcmc_p)
+            mcmc_Af, mcmc_pf = mcmc(N, M, Psi_fussy, mcmc_params)
+            mcmc_bf = prob_binary_convert(mcmc_pf)
 
             # start = time.time()
             # f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, Psi, Cl, mcmc_params)
@@ -87,6 +96,10 @@ def accuracy():
             sums_t = time.time() - start
             sums_b = adapter_output(sums_belief, data)
 
+            data_f = adapter_input(Psi_fussy)
+            sums_belief_f = sums(N, M, data_f)
+            sums_bf = adapter_output(sums_belief_f, data_f)
+
             # exclude objects on which no conflicts
             obj_with_conflicts = []
             for obj_id, obj in enumerate(mv_b):
@@ -94,20 +107,35 @@ def accuracy():
                     obj_with_conflicts.append(obj_id)
 
             mv_accu.append(np.average([mv_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            mv_accu_f.append(np.average([mv_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
             em_accu.append(np.average([em_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            em_accu_f.append(np.average([em_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
             mcmc_accu.append(np.average([mcmc_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            mcmc_accu_f.append(np.average([mcmc_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
             # f_mcmc_accu.append(np.average([f_mcmc_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             sums_accu.append(np.average([sums_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            sums_accu_f.append(np.average([sums_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
         res['mv'].append(np.average(mv_accu))
+        res['mv_f'].append(np.average(mv_accu_f))
         res['mv std'].append(np.std(mv_accu))
+
         res['em'].append(np.average(em_accu))
+        res['em_f'].append(np.average(em_accu_f))
         res['em std'].append(np.std(em_accu))
+
         res['mcmc'].append(np.average(mcmc_accu))
+        res['mcmc_f'].append(np.average(mcmc_accu_f))
         res['mcmc std'].append(np.std(mcmc_accu))
+
         # res['f_mcmc'].append(np.average(f_mcmc_accu))
         # res['f_mcmc std'].append(np.std(f_mcmc_accu))
+
         res['sums'].append(np.average(sums_accu))
+        res['sums_f'].append(np.average(sums_accu_f))
         res['sums std'].append(np.std(sums_accu))
 
         print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, sums: {:1.4f}'.format(conf_prob,
@@ -117,6 +145,17 @@ def accuracy():
                                                                                        np.average(sums_accu)
                                                                                        )
             )
+        print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, sums_f: {:1.4f}'.format(conf_prob,
+                                                                                                         np.average(
+                                                                                                             mv_accu_f),
+                                                                                                         np.average(
+                                                                                                             em_accu_f),
+                                                                                                         np.average(
+                                                                                                             mcmc_accu_f),
+                                                                                                         np.average(
+                                                                                                             sums_accu_f)
+                                                                                                         )
+              )
 
     #pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy.csv', index=False)
     # pd.DataFrame(res).to_csv('synthetic_accuracy_100r_5v7.csv', index=False)
