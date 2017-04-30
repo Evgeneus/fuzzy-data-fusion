@@ -3,6 +3,7 @@ import math
 from numpy.random import beta
 from util import fPsi, log_likelihood
 from collections import defaultdict
+import copy
 from generator import synthesize
 from em import expectation_maximization
 
@@ -181,4 +182,20 @@ def f_mcmc(N, M, Psi, Cl, params):
             f_mcmc_G[obj][s][0] /= total
             f_mcmc_G[obj][s][1] /= total
 
-    return f_mcmc_A, f_mcmc_p, f_mcmc_G
+    # Psi Fussy
+    Psi_fussy = copy.deepcopy(Psi)
+    for obj in f_mcmc_G.keys():
+        for s in f_mcmc_G[obj].keys():
+            p_confused = f_mcmc_G[obj][s][0]
+            if np.random.binomial(1, p_confused):
+                for index, d_item in enumerate(Psi_fussy[obj]):
+                    s_voted = d_item[0]
+                    value = d_item[1]
+                    if s == s_voted:
+                        del Psi_fussy[obj][index]
+                        other_obj_id = Cl[obj]['other']
+                        Psi_fussy[other_obj_id].append((s, value))
+                        break
+
+    # return f_mcmc_A, f_mcmc_p, f_mcmc_G
+    return Psi_fussy
