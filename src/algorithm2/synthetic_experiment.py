@@ -8,7 +8,7 @@ from generator import synthesize
 import pandas as pd
 
 work_dir = '/home/bykau/Dropbox/Fuzzy/'
-n_runs = 50
+n_runs = 10
 
 
 def adapter_input(Psi):
@@ -30,7 +30,7 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 500
+    M = 5000
     # number of values per object
     V = 50
     # synthetically generated observations
