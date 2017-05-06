@@ -7,10 +7,11 @@ from f_mcmc import f_mcmc
 from generator import synthesize
 import pandas as pd
 from sums import sums
+from average_log import average_log
 from util import prob_binary_convert
 
 work_dir = '/home/bykau/Dropbox/Fuzzy/'
-n_runs = 10
+n_runs = 3
 
 
 def adapter_input(Psi):
@@ -41,7 +42,7 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 5000
+    M = 500
     # number of values per object
     V = 50
     # synthetically generated observations
@@ -50,40 +51,51 @@ def accuracy():
 
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
-    res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [], 'sums_std': [],
-           'em_std': [], 'mcmc_std': [], 'sums_f': [], 'mv_f': [],
-           'em_f': [], 'mcmc_f': [], 'sums_std_f': [],
-           'em_std_f': [], 'mcmc_std_f': [], 'conf_probs': conf_probs}
+    res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
+           'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [],
+           'conf_probs': conf_probs, 'avlog': [], 'avlog_f': []}
     for conf_prob in conf_probs:
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob)
 
-        mv_accu, em_accu, mcmc_accu, sums_accu = [], [], [], []
-        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f = [], [], [], []
+        mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu = [], [], [], [], []
+        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f = [], [], [], [], []
         for run in range(n_runs):
             Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
 
+            # MV
             mv_p = majority_voting(Psi)
             mv_b = prob_binary_convert(mv_p)
             mv_pf = majority_voting(Psi_fussy)
             mv_bf = prob_binary_convert(mv_pf)
 
+            # EM
             em_A, em_p = expectation_maximization(N, M, Psi)
             em_b = prob_binary_convert(em_p)
             em_Af, em_pf = expectation_maximization(N, M, Psi_fussy)
             em_bf = prob_binary_convert(em_pf)
 
+            # MCMC
             mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
             mcmc_b = prob_binary_convert(mcmc_p)
             mcmc_Af, mcmc_pf = mcmc(N, M, Psi_fussy, mcmc_params)
             mcmc_bf = prob_binary_convert(mcmc_pf)
 
+
             data = adapter_input(Psi)
+            data_f = adapter_input(Psi_fussy)
+            # SUMS
             sums_belief = sums(N, M, data)
             sums_b = adapter_output(sums_belief, data)
 
-            data_f = adapter_input(Psi_fussy)
             sums_belief_f = sums(N, M, data_f)
             sums_bf = adapter_output(sums_belief_f, data_f)
+
+            # AVG LOG
+            avlog_belief = average_log(N, M, data)
+            avlog_b = adapter_output(avlog_belief, data)
+
+            avlog_belief_f = average_log(N, M, data_f)
+            avlog_bf = adapter_output(avlog_belief_f, data_f)
 
             # exclude objects on which no conflicts
             obj_with_conflicts = []
@@ -103,40 +115,44 @@ def accuracy():
             sums_accu.append(np.average([sums_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             sums_accu_f.append(np.average([sums_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
+            avlog_accu.append(np.average([avlog_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            avlog_accu_f.append(np.average([avlog_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
         res['mv'].append(np.average(mv_accu))
         res['mv_f'].append(np.average(mv_accu_f))
 
         res['em'].append(np.average(em_accu))
-        res['em_std'].append(np.std(em_accu))
         res['em_f'].append(np.average(em_accu_f))
-        res['em_std_f'].append(np.std(em_accu_f))
 
         res['mcmc'].append(np.average(mcmc_accu))
-        res['mcmc_std'].append(np.std(mcmc_accu))
         res['mcmc_f'].append(np.average(mcmc_accu_f))
-        res['mcmc_std_f'].append(np.std(mcmc_accu_f))
 
         res['sums'].append(np.average(sums_accu))
-        res['sums_std'].append(np.std(sums_accu))
         res['sums_f'].append(np.average(sums_accu_f))
-        res['sums_std_f'].append(np.std(sums_accu_f))
+
+        res['avlog'].append(np.average(avlog_accu))
+        res['avlog_f'].append(np.average(avlog_accu_f))
 
         print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
-              'sums: {:1.4f}'
+              'sums: {:1.4f}, avlog: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu),
                np.average(em_accu),
                np.average(mcmc_accu),
-               np.average(sums_accu)))
+               np.average(sums_accu),
+               np.average(avlog_accu)
+            ))
         print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, '
-              'sums_f: {:1.4f}'
+              'sums_f: {:1.4f}, avlog_f: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu_f),
                np.average(em_accu_f),
                np.average(mcmc_accu_f),
-               np.average(sums_accu_f)))
+               np.average(sums_accu_f),
+               np.average(avlog_accu_f)
+            ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary-2', index=False)
 
 
 def convergence():
