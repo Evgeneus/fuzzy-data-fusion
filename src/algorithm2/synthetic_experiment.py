@@ -9,9 +9,10 @@ import pandas as pd
 from sums import sums
 from average_log import average_log
 from investment import investment
+from pooled_investment import pooled_investment
 from util import prob_binary_convert
 
-n_runs = 3
+n_runs = 10
 
 
 def adapter_input(Psi):
@@ -42,7 +43,7 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 500
+    M = 5000
     # number of values per object
     V = 50
     # synthetically generated observations
@@ -54,12 +55,14 @@ def accuracy():
     res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
            'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [],
            'conf_probs': conf_probs, 'avlog': [], 'avlog_f': [],
-           'inv': [], 'inv_f': []}
+           'inv': [], 'inv_f': [], 'pinv': [], 'pinv_f': []}
     for conf_prob in conf_probs:
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob)
 
-        mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu, inv_accu = [], [], [], [], [], []
-        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, inv_accu_f = [], [], [], [], [], []
+        mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu, inv_accu, \
+        pinv_accu = [], [], [], [], [], [], []
+        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
+        inv_accu_f, pinv_accu_f = [], [], [], [], [], [], []
         for run in range(n_runs):
             Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
 
@@ -105,6 +108,12 @@ def accuracy():
             inv_belief_f = investment(N, data_f)
             inv_bf = adapter_output(inv_belief_f, data_f)
 
+            # POOLED INVESTMENT
+            pinv_belief = pooled_investment(N, data)
+            pinv_b = adapter_output(pinv_belief, data)
+
+            pinv_belief_f = pooled_investment(N, data_f)
+            pinv_bf = adapter_output(pinv_belief_f, data_f)
 
             # exclude objects on which no conflicts
             obj_with_conflicts = []
@@ -130,6 +139,9 @@ def accuracy():
             inv_accu.append(np.average([inv_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             inv_accu_f.append(np.average([inv_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
+            pinv_accu.append(np.average([pinv_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            pinv_accu_f.append(np.average([pinv_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
         res['mv'].append(np.average(mv_accu))
         res['mv_f'].append(np.average(mv_accu_f))
 
@@ -148,18 +160,22 @@ def accuracy():
         res['inv'].append(np.average(inv_accu))
         res['inv_f'].append(np.average(inv_accu_f))
 
+        res['pinv'].append(np.average(pinv_accu))
+        res['pinv_f'].append(np.average(pinv_accu_f))
+
         print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
-              'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}'
+              'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}, pinv: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu),
                np.average(em_accu),
                np.average(mcmc_accu),
                np.average(sums_accu),
                np.average(avlog_accu),
-               np.average(inv_accu)
+               np.average(inv_accu),
+               np.average(pinv_accu)
             ))
         print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, '
-              'sums_f: {:1.4f}, avlog_f: {:1.4f}, inv_f: {:1.4f}'
+              'sums_f: {:1.4f}, avlog_f: {:1.4f}, inv_f: {:1.4f}, pinv_f: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu_f),
                np.average(em_accu_f),
@@ -167,9 +183,10 @@ def accuracy():
                np.average(sums_accu_f),
                np.average(avlog_accu_f),
                np.average(inv_accu_f),
+               np.average(pinv_accu_f)
             ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary-2', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
 
 
 def convergence():
