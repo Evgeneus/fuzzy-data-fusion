@@ -84,17 +84,17 @@ def accuracy():
             data = adapter_input(Psi)
             data_f = adapter_input(Psi_fussy)
             # SUMS
-            sums_belief = sums(N, M, data)
+            sums_belief = sums(N, data)
             sums_b = adapter_output(sums_belief, data)
 
-            sums_belief_f = sums(N, M, data_f)
+            sums_belief_f = sums(N, data_f)
             sums_bf = adapter_output(sums_belief_f, data_f)
 
             # AVG LOG
-            avlog_belief = average_log(N, M, data)
+            avlog_belief = average_log(N, data)
             avlog_b = adapter_output(avlog_belief, data)
 
-            avlog_belief_f = average_log(N, M, data_f)
+            avlog_belief_f = average_log(N, data_f)
             avlog_bf = adapter_output(avlog_belief_f, data_f)
 
             # exclude objects on which no conflicts
