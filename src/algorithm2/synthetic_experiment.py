@@ -1,6 +1,5 @@
 from collections import defaultdict
 import numpy as np
-import time
 from mv import majority_voting
 from em import expectation_maximization
 from mcmc import mcmc
@@ -11,7 +10,7 @@ from sums import sums
 from util import prob_binary_convert
 
 work_dir = '/home/bykau/Dropbox/Fuzzy/'
-n_runs = 5
+n_runs = 10
 
 
 def adapter_input(Psi):
@@ -42,7 +41,7 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 500
+    M = 5000
     # number of values per object
     V = 50
     # synthetically generated observations
@@ -137,7 +136,7 @@ def accuracy():
                np.average(mcmc_accu_f),
                np.average(sums_accu_f)))
 
-    # pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
 
 
 def convergence():
