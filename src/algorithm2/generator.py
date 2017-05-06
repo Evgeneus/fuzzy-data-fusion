@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def synthesize(N, M, V, density, accuracy, conf_prob):
+def synthesize(N, M, V, density, conf_prob):
     """
     Generates synthetic data.
     :param N: number of sources
