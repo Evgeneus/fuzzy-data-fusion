@@ -68,13 +68,13 @@ def get_belief(data, trustw_list, s_obs_count):
     return belief
 
 
-def investment(s_number, obj_number, data):
+def investment(s_number, data):
     sources = range(s_number)
     s_obs_count = dict(zip(sources, [0]*s_number))
     for obj in data.values():
         for s in obj[0]:
             s_obs_count[s] += 1
-    trustw_list = [random.uniform(0.8, 0.95) for i in range(s_number)]
+    trustw_list = [random.uniform(0.7, 1.) for _ in range(s_number)]
     trustw_delta = 0.3
     iter_number = 0
     while trustw_delta > eps and iter_number < max_rounds:

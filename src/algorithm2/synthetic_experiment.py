@@ -8,9 +8,9 @@ from generator import synthesize
 import pandas as pd
 from sums import sums
 from average_log import average_log
+from investment import investment
 from util import prob_binary_convert
 
-work_dir = '/home/bykau/Dropbox/Fuzzy/'
 n_runs = 3
 
 
@@ -53,12 +53,13 @@ def accuracy():
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
     res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
            'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [],
-           'conf_probs': conf_probs, 'avlog': [], 'avlog_f': []}
+           'conf_probs': conf_probs, 'avlog': [], 'avlog_f': [],
+           'inv': [], 'inv_f': []}
     for conf_prob in conf_probs:
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob)
 
-        mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu = [], [], [], [], []
-        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f = [], [], [], [], []
+        mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu, inv_accu = [], [], [], [], [], []
+        mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, inv_accu_f = [], [], [], [], [], []
         for run in range(n_runs):
             Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
 
@@ -97,6 +98,14 @@ def accuracy():
             avlog_belief_f = average_log(N, data_f)
             avlog_bf = adapter_output(avlog_belief_f, data_f)
 
+            # INVESTMENT
+            inv_belief = investment(N, data)
+            inv_b = adapter_output(inv_belief, data)
+
+            inv_belief_f = investment(N, data_f)
+            inv_bf = adapter_output(inv_belief_f, data_f)
+
+
             # exclude objects on which no conflicts
             obj_with_conflicts = []
             for obj_id, obj in enumerate(mv_b):
@@ -118,6 +127,9 @@ def accuracy():
             avlog_accu.append(np.average([avlog_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             avlog_accu_f.append(np.average([avlog_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
+            inv_accu.append(np.average([inv_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            inv_accu_f.append(np.average([inv_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
+
         res['mv'].append(np.average(mv_accu))
         res['mv_f'].append(np.average(mv_accu_f))
 
@@ -133,23 +145,28 @@ def accuracy():
         res['avlog'].append(np.average(avlog_accu))
         res['avlog_f'].append(np.average(avlog_accu_f))
 
+        res['inv'].append(np.average(inv_accu))
+        res['inv_f'].append(np.average(inv_accu_f))
+
         print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
-              'sums: {:1.4f}, avlog: {:1.4f}'
+              'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu),
                np.average(em_accu),
                np.average(mcmc_accu),
                np.average(sums_accu),
-               np.average(avlog_accu)
+               np.average(avlog_accu),
+               np.average(inv_accu)
             ))
         print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, '
-              'sums_f: {:1.4f}, avlog_f: {:1.4f}'
+              'sums_f: {:1.4f}, avlog_f: {:1.4f}, inv_f: {:1.4f}'
               .format(conf_prob,
                np.average(mv_accu_f),
                np.average(em_accu_f),
                np.average(mcmc_accu_f),
                np.average(sums_accu_f),
-               np.average(avlog_accu_f)
+               np.average(avlog_accu_f),
+               np.average(inv_accu_f),
             ))
 
     pd.DataFrame(res).to_csv('synthetic_accuracy_binary-2', index=False)
@@ -184,7 +201,7 @@ def convergence():
 
         print('p: {}, accu: {}, std: {}'.format(p, np.average(runs), np.std(runs)))
 
-    pd.DataFrame(res).to_csv(work_dir + 'synthetic_convergence.csv', index=False)
+    pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
 
 
 def values():
@@ -212,7 +229,7 @@ def values():
         res['std'].append(np.std(f_mcmc_accu))
         print('V: {}, accu: {:1.4f}'.format(V, np.average(f_mcmc_accu)))
 
-    pd.DataFrame(res).to_csv(work_dir + 'synthetic_values.csv', index=False)
+    pd.DataFrame(res).to_csv('synthetic_values.csv', index=False)
 
 
 if __name__ == '__main__':
