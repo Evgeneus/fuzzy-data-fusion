@@ -34,7 +34,7 @@ def synthesize(N, M, V, density, conf_prob):
     Cl = {}
     for obj in range(M/2):
         Cl[obj] = {'id': obj, 'other': M/2 + obj}
-        Cl[M / 2 + obj] = {'id': obj, 'other': obj}
+        Cl[M / 2 + obj] = {'id': M/2 + obj, 'other': obj}
     c_Psi = [[] for obj in range(M)]
     GT_G = {}
     for obj in range(M):
