@@ -52,12 +52,12 @@ def accuracy():
     for run in range(n_runs):
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
-        mcmc_A, mcmc_p = mcmc(N, M, Psi, {'N_iter': 10, 'burnin': 1, 'thin': 2})
+        mcmc_A, mcmc_p = mcmc(N, M, Psi, {'N_iter': 30, 'burnin': 5, 'thin': 3})
 
         Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
-        mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, {'N_iter': 10, 'burnin': 1, 'thin': 2})
+        mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, {'N_iter': 30, 'burnin': 5, 'thin': 3})
 
         mv_hits = []
         em_hits = []
@@ -65,8 +65,15 @@ def accuracy():
         mv_f_hits = []
         em_f_hits = []
         mcmc_f_hits = []
+
+        obj_with_conflicts = []
+        for obj_id, obj in enumerate(mv_p):
+            if len(obj) > 1:
+                obj_with_conflicts.append(obj_id)
+
         for obj in range(M):
-            if len(Psi[obj]) > 0:
+            # if len(Psi[obj]) > 0:
+            if obj in obj_with_conflicts:
                 mv_hits.append(mv_p[obj][GT[obj]])
                 em_hits.append(em_p[obj][GT[obj]])
                 mcmc_hits.append(mcmc_p[obj][GT[obj]])
