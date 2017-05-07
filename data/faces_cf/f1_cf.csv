@@ -1,121 +1,241 @@
 _unit_id,_created_at,_id,_started_at,_tainted,_channel,_trust,_worker_id,_country,_region,_city,_ip,vote,pic_url,question_n,v1,v2,v3,v4,v5
-1232065450,5/5/2017 18:16:27,2536589798,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
+1232065450,5/5/2017 18:16:27,2536589798,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
 1232065450,5/5/2017 18:16:56,2536590617,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Al Pacino,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
-1232065450,5/5/2017 18:18:34,2536593360,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Al Pacino,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
+1232065450,5/5/2017 18:18:34,2536593360,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Al Pacino,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
 1232065450,5/5/2017 18:32:19,2536617309,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Al Pacino,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
 1232065450,5/5/2017 18:36:23,2536624697,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Al Pacino,http://i.imgur.com/9ESo0gc.png,1,Robert Downey Jr,David Naughton,Al Pacino,Dustin Hoffman,Paul McCartney
-1232065451,5/5/2017 18:16:27,2536589827,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
+1232065451,5/5/2017 18:16:27,2536589827,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
 1232065451,5/5/2017 18:16:56,2536590638,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Balthazar Getty,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
-1232065451,5/5/2017 18:18:34,2536593325,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Chuck Norris,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
+1232065451,5/5/2017 18:18:34,2536593325,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Chuck Norris,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
 1232065451,5/5/2017 18:32:19,2536617306,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Alan Rickman,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
 1232065451,5/5/2017 18:36:23,2536624689,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Alan Rickman,http://i.imgur.com/qXmk03j.png,2,Balthazar Getty,Chuck Norris,Alan Rickman,Will Arnett,Tom Green
-1232065452,5/5/2017 18:16:27,2536589824,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
+1232065452,5/5/2017 18:16:27,2536589824,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
 1232065452,5/5/2017 18:16:56,2536590595,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
-1232065452,5/5/2017 18:18:34,2536593350,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
+1232065452,5/5/2017 18:18:34,2536593350,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
 1232065452,5/5/2017 18:32:19,2536617323,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
 1232065452,5/5/2017 18:36:23,2536624676,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Jessica Alba,http://i.imgur.com/zX520z8.png,3,Alicia Keys,Rose Byrne,Jessica Alba,Leighton Meester,Arielle Kebbel
-1232065453,5/5/2017 18:16:27,2536589826,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
+1232065453,5/5/2017 18:16:27,2536589826,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
 1232065453,5/5/2017 18:16:56,2536590621,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Nicolas Cage,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
-1232065453,5/5/2017 18:18:34,2536593347,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
+1232065453,5/5/2017 18:18:34,2536593347,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
 1232065453,5/5/2017 18:32:19,2536617320,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Michael McDonald,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
 1232065453,5/5/2017 18:36:23,2536624718,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,I don't know,http://i.imgur.com/APKy72O.png,4,David Schwimmer,Jimmy Fallon,John Travolta,Nicolas Cage,Michael McDonald
-1232065454,5/5/2017 18:16:27,2536589815,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
+1232065454,5/5/2017 18:16:27,2536589815,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
 1232065454,5/5/2017 18:16:56,2536590641,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Robbie Amell,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
-1232065454,5/5/2017 18:18:34,2536593342,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
+1232065454,5/5/2017 18:18:34,2536593342,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
 1232065454,5/5/2017 18:32:19,2536617296,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Alan Cumming,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
 1232065454,5/5/2017 18:36:23,2536624693,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Alan Cumming,http://i.imgur.com/zizsyGu.png,5,Alan Cumming,Paul Reubens,Kevin Alejandro,Colin Egglesfield,Robbie Amell
-1232065455,5/5/2017 18:16:27,2536589839,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
+1232065455,5/5/2017 18:16:27,2536589839,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
 1232065455,5/5/2017 18:16:56,2536590587,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Gwen Stefani,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
-1232065455,5/5/2017 18:18:34,2536593328,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Gwen Stefani,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
+1232065455,5/5/2017 18:18:34,2536593328,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Gwen Stefani,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
 1232065455,5/5/2017 18:32:19,2536617307,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,I don't know,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
 1232065455,5/5/2017 18:36:23,2536624731,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Gwen Stefani,http://i.imgur.com/yfXU3eJ.png,6,Jessica Simpson,Brittany Murphy,Ashley Tisdale,Iggy Azalea,Gwen Stefani
-1232065456,5/5/2017 18:16:27,2536589842,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Adam Sandler,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
+1232065456,5/5/2017 18:16:27,2536589842,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Adam Sandler,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
 1232065456,5/5/2017 18:16:56,2536590612,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Adam Sandler,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
-1232065456,5/5/2017 18:18:34,2536593341,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Jason Biggs,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
+1232065456,5/5/2017 18:18:34,2536593341,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Jason Biggs,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
 1232065456,5/5/2017 18:32:19,2536617326,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Jason Biggs,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
 1232065456,5/5/2017 18:36:23,2536624701,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,I don't know,http://i.imgur.com/WGIIn8b.png,7,Adam Sandler,Jason Biggs,Will Arnett,Robbie Amell,Rick Moranis
-1232065457,5/5/2017 18:16:27,2536589821,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
+1232065457,5/5/2017 18:16:27,2536589821,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
 1232065457,5/5/2017 18:16:56,2536590607,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
-1232065457,5/5/2017 18:18:34,2536593338,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
+1232065457,5/5/2017 18:18:34,2536593338,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
 1232065457,5/5/2017 18:32:19,2536617315,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
 1232065457,5/5/2017 18:36:23,2536624736,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Sandra Bullock,http://i.imgur.com/0ITh1gv.png,8,Sandra Bullock,Rosalyn Sanchez,Eva Longoria,Julia Roberts,Demi Moore
-1232065458,5/5/2017 18:16:27,2536589833,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
+1232065458,5/5/2017 18:16:27,2536589833,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
 1232065458,5/5/2017 18:16:56,2536590589,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Chris Martin,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
-1232065458,5/5/2017 18:18:34,2536593333,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
+1232065458,5/5/2017 18:18:34,2536593333,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
 1232065458,5/5/2017 18:32:19,2536617316,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Tim Allen,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
 1232065458,5/5/2017 18:36:23,2536624735,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Tim Allen,http://i.imgur.com/HmLHcTn.png,9,Chris Martin,Chuck Norris,Tim Allen,Hugh Jackman,Colin Egglesfield
-1232065459,5/5/2017 18:16:27,2536589823,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
+1232065459,5/5/2017 18:16:27,2536589823,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
 1232065459,5/5/2017 18:16:56,2536590642,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Robert Downey Jr,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
-1232065459,5/5/2017 18:18:34,2536593366,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
+1232065459,5/5/2017 18:18:34,2536593366,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
 1232065459,5/5/2017 18:32:19,2536617298,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Javier Bardem,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
 1232065459,5/5/2017 18:36:23,2536624724,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Javier Bardem,http://i.imgur.com/9NLJC8T.png,10,Javier Bardem,Jeffrey Dean Morgan,Robert Downey Jr,Gerard Butler,Benicio Del Toro
-1232065460,5/5/2017 18:16:27,2536589845,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
+1232065460,5/5/2017 18:16:27,2536589845,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
 1232065460,5/5/2017 18:16:56,2536590592,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Ginnifer Goodwin,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
-1232065460,5/5/2017 18:18:34,2536593340,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
+1232065460,5/5/2017 18:18:34,2536593340,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
 1232065460,5/5/2017 18:32:19,2536617322,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,I don't know,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
 1232065460,5/5/2017 18:36:23,2536624684,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Jennifer Morrison,http://i.imgur.com/ASFd9YD.png,11,Kirsten Dunst,Jennifer Morrison,Kate Bosworth,Katie Holmes,Ginnifer Goodwin
-1232065461,5/5/2017 18:16:27,2536589831,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
+1232065461,5/5/2017 18:16:27,2536589831,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
 1232065461,5/5/2017 18:16:56,2536590634,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Anne Hathaway,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
-1232065461,5/5/2017 18:18:34,2536593339,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Krysten Ritter,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
+1232065461,5/5/2017 18:18:34,2536593339,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Krysten Ritter,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
 1232065461,5/5/2017 18:32:19,2536617297,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Krysten Ritter,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
 1232065461,5/5/2017 18:36:23,2536624721,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Krysten Ritter,http://i.imgur.com/WPKWyBy.png,12,Liv Taler,Krysten Ritter,Winona Ryder,Anne Hathaway,Audrey Tautou
-1232065462,5/5/2017 18:16:27,2536589846,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
+1232065462,5/5/2017 18:16:27,2536589846,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
 1232065462,5/5/2017 18:16:56,2536590644,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,I don't know,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
-1232065462,5/5/2017 18:18:34,2536593343,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
+1232065462,5/5/2017 18:18:34,2536593343,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
 1232065462,5/5/2017 18:32:19,2536617303,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Bob Saget,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
 1232065462,5/5/2017 18:36:23,2536624678,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Bob Saget,http://i.imgur.com/rAsogCf.png,13,Jeffrey Dean Morgan,Stephen Colbert,Bob Saget,Bob Balaban,Dane Cook
-1232065463,5/5/2017 18:16:27,2536589806,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
+1232065463,5/5/2017 18:16:27,2536589806,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
 1232065463,5/5/2017 18:16:56,2536590596,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Gwyneth Paltrow,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
-1232065463,5/5/2017 18:18:34,2536593330,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Amy Adams,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
+1232065463,5/5/2017 18:18:34,2536593330,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Amy Adams,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
 1232065463,5/5/2017 18:32:19,2536617311,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Isla Fisher,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
 1232065463,5/5/2017 18:36:23,2536624734,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Isla Fisher,http://i.imgur.com/MAkut8d.png,14,Gwyneth Paltrow,Amy Adams,Nicole Kidman,Isabelle Carre,Isla Fisher
-1232065464,5/5/2017 18:16:27,2536589802,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
+1232065464,5/5/2017 18:16:27,2536589802,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
 1232065464,5/5/2017 18:16:56,2536590637,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Kenny G,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
-1232065464,5/5/2017 18:18:34,2536593363,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
+1232065464,5/5/2017 18:18:34,2536593363,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
 1232065464,5/5/2017 18:32:19,2536617314,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Kenny G,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
 1232065464,5/5/2017 18:36:23,2536624675,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,I don't know,http://i.imgur.com/JYQbCsT.png,15,Matt Bomer,David Boreanaz,Kenny G,Henry Cavill,Weird Al. Hair
-1232065465,5/5/2017 18:16:27,2536589829,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Nelson Mandela,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
+1232065465,5/5/2017 18:16:27,2536589829,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Nelson Mandela,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
 1232065465,5/5/2017 18:16:56,2536590639,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Morgan Freeman,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
-1232065465,5/5/2017 18:18:34,2536593345,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Samuel L Jackson,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
+1232065465,5/5/2017 18:18:34,2536593345,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Samuel L Jackson,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
 1232065465,5/5/2017 18:32:19,2536617294,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Kofi Anan,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
 1232065465,5/5/2017 18:36:23,2536624729,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Kofi Anan,http://i.imgur.com/DSmMXXO.png,16,Nelson Mandela,Morgan Freeman,Bill Russell,Kofi Anan,Samuel L Jackson
-1232065466,5/5/2017 18:16:27,2536589809,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
+1232065466,5/5/2017 18:16:27,2536589809,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
 1232065466,5/5/2017 18:16:56,2536590626,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Zach Braff,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
-1232065466,5/5/2017 18:18:34,2536593312,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
+1232065466,5/5/2017 18:18:34,2536593312,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
 1232065466,5/5/2017 18:32:19,2536617319,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Alan Cumming,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
 1232065466,5/5/2017 18:36:23,2536624705,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,I don't know,http://i.imgur.com/zizsyGu.png,17,Pee Wee Herman,Dax Shepard,Asa Butterfield,Alan Cumming,Zach Braff
-1232065467,5/5/2017 18:16:27,2536589794,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
+1232065467,5/5/2017 18:16:27,2536589794,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
 1232065467,5/5/2017 18:16:56,2536590600,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Sofia Vergara's,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
-1232065467,5/5/2017 18:18:34,2536593323,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Zoë Saldana,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
+1232065467,5/5/2017 18:18:34,2536593323,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Zoë Saldana,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
 1232065467,5/5/2017 18:32:19,2536617312,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,I don't know,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
 1232065467,5/5/2017 18:36:23,2536624687,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Thandie Newton,http://i.imgur.com/2FXQmsl.png,18,Emily Blunt,Thandie Newton,Zoë Saldana,Sofia Vergara's,Eva Longoria
-1232065468,5/5/2017 18:16:27,2536589818,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
+1232065468,5/5/2017 18:16:27,2536589818,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
 1232065468,5/5/2017 18:16:56,2536590585,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Brad Pitt,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
-1232065468,5/5/2017 18:18:34,2536593335,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Robert Redford,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
+1232065468,5/5/2017 18:18:34,2536593335,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Robert Redford,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
 1232065468,5/5/2017 18:32:19,2536617300,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Robert Redford,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
 1232065468,5/5/2017 18:36:23,2536624681,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Robert Redford,http://i.imgur.com/TSs9xZ5.png,19,Brad Pitt,Robert Redford,Mark Walhberg,Michael Fassbender,Robert Redford
-1232065469,5/5/2017 18:16:27,2536589796,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Kim Kardashian,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
+1232065469,5/5/2017 18:16:27,2536589796,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Kim Kardashian,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
 1232065469,5/5/2017 18:16:56,2536590636,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Kim Kardashian,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
-1232065469,5/5/2017 18:18:34,2536593320,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Nicole Scherzinger,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
+1232065469,5/5/2017 18:18:34,2536593320,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Nicole Scherzinger,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
 1232065469,5/5/2017 18:32:19,2536617295,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Roselyn Sanchez,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
 1232065469,5/5/2017 18:36:23,2536624726,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Roselyn Sanchez,http://i.imgur.com/crgcDss.png,20,Vanessa Hudgens,Nicole Scherzinger,Roselyn Sanchez,Jennifer Lopez,Kim Kardashian
-1232065470,5/5/2017 18:16:27,2536589812,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
+1232065470,5/5/2017 18:16:27,2536589812,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
 1232065470,5/5/2017 18:16:56,2536590640,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Kirstie Alley,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
-1232065470,5/5/2017 18:18:34,2536593358,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
+1232065470,5/5/2017 18:18:34,2536593358,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,I don't know,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
 1232065470,5/5/2017 18:32:19,2536617317,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,I don't know,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
 1232065470,5/5/2017 18:36:23,2536624709,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Lauren Conrad,http://i.imgur.com/73adZGP.png,21,Lauren Conrad,Carmen Electra,Fergie,Kirstie Alley,Amy Adams
-1232065471,5/5/2017 18:16:27,2536589804,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
+1232065471,5/5/2017 18:16:27,2536589804,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
 1232065471,5/5/2017 18:16:56,2536590630,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Patrick Dempsey,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
-1232065471,5/5/2017 18:18:34,2536593317,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
+1232065471,5/5/2017 18:18:34,2536593317,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
 1232065471,5/5/2017 18:32:19,2536617325,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
 1232065471,5/5/2017 18:36:23,2536624737,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Hugh Jackman,http://i.imgur.com/zYH3i5w.png,22,James Purefoy,Clint Eastwood,Patrick Dempsey,Tim Daly,Hugh Jackman
-1232065472,5/5/2017 18:16:27,2536589800,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
+1232065472,5/5/2017 18:16:27,2536589800,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
 1232065472,5/5/2017 18:16:56,2536590603,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Bob Odenkirk,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
-1232065472,5/5/2017 18:18:34,2536593355,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Richard Lewis,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
+1232065472,5/5/2017 18:18:34,2536593355,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Richard Lewis,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
 1232065472,5/5/2017 18:32:19,2536617301,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,I don't know,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
 1232065472,5/5/2017 18:36:23,2536624714,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,Richard Lewis,http://i.imgur.com/N57oJaF.png,23,Jon Stewart,Al Pacino,Bob Odenkirk,Dustin Hoffman,Richard Lewis
-1232065473,5/5/2017 18:16:27,2536589836,5/5/2017 18:14:34,false,elite,1.0,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
+1232065473,5/5/2017 18:16:27,2536589836,5/5/2017 18:14:34,false,elite,1,38911757,BRA,21,Nova Iguacu,179.198.243.127,I don't know,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
 1232065473,5/5/2017 18:16:56,2536590643,5/5/2017 18:14:21,false,elite,0.6042,40941178,BRA,23,Porto Alegre,179.219.1.231,Daisy Ridley,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
-1232065473,5/5/2017 18:18:34,2536593353,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,00,Belgrade,77.46.254.172,Keira Knightley,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
+1232065473,5/5/2017 18:18:34,2536593353,5/5/2017 18:14:35,false,clixsense,0.5694,40846833,SRB,0,Belgrade,77.46.254.172,Keira Knightley,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
 1232065473,5/5/2017 18:32:19,2536617304,5/5/2017 18:14:35,false,neodev,0.4792,11172894,IND,28,Rishra,117.194.7.162,Keira Knightley,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
 1232065473,5/5/2017 18:36:23,2536624738,5/5/2017 18:14:26,false,clixsense,0.5,16165566,ROU,21,Lupeni,79.119.230.227,I don't know,http://i.imgur.com/L0hp2KH.png,24,Alicia Vikander,Keira Knightley,Keira Knightley,Daisy Ridley,Natalie Portman
+,,,,,,,11111,,,,,Al Pacino,,1,,,,,
+,,,,,,,11111,,,,,I don't know,,2,,,,,
+,,,,,,,11111,,,,,I don't know,,3,,,,,
+,,,,,,,11111,,,,,I don't know,,4,,,,,
+,,,,,,,11111,,,,,I don't know,,5,,,,,
+,,,,,,,11111,,,,,I don't know,,6,,,,,
+,,,,,,,11111,,,,,I don't know,,7,,,,,
+,,,,,,,11111,,,,,Sandra Bullock,,8,,,,,
+,,,,,,,11111,,,,,I don't know,,9,,,,,
+,,,,,,,11111,,,,,I don't know,,10,,,,,
+,,,,,,,11111,,,,,I don't know,,11,,,,,
+,,,,,,,11111,,,,,Liv Taler,,12,,,,,
+,,,,,,,11111,,,,,I don't know,,13,,,,,
+,,,,,,,11111,,,,,I don't know,,14,,,,,
+,,,,,,,11111,,,,,I don't know,,15,,,,,
+,,,,,,,11111,,,,,Kofi Anan,,16,,,,,
+,,,,,,,11111,,,,,I don't know,,17,,,,,
+,,,,,,,11111,,,,,I don't know,,18,,,,,
+,,,,,,,11111,,,,,I don't know,,19,,,,,
+,,,,,,,11111,,,,,I don't know,,20,,,,,
+,,,,,,,11111,,,,,I don't know,,21,,,,,
+,,,,,,,11111,,,,,Hugh Jackman,,22,,,,,
+,,,,,,,11111,,,,,I don't know,,23,,,,,
+,,,,,,,11111,,,,,I don't know,,24,,,,,
+,,,,,,,11112,,,,,Al Pacino,,1,,,,,
+,,,,,,,11112,,,,,Alan Rickman,,2,,,,,
+,,,,,,,11112,,,,,Jessica Alba,,3,,,,,
+,,,,,,,11112,,,,,I don't know,,4,,,,,
+,,,,,,,11112,,,,,Alan Cumming,,5,,,,,
+,,,,,,,11112,,,,,Gwen Stefani,,6,,,,,
+,,,,,,,11112,,,,,I don't know,,7,,,,,
+,,,,,,,11112,,,,,Sandra Bullock,,8,,,,,
+,,,,,,,11112,,,,,I don't know,,9,,,,,
+,,,,,,,11112,,,,,Javier Bardem,,10,,,,,
+,,,,,,,11112,,,,,Katie Holmes,,11,,,,,
+,,,,,,,11112,,,,,Anne Hathaway,,12,,,,,
+,,,,,,,11112,,,,,Bob Saget,,13,,,,,
+,,,,,,,11112,,,,,Isla Fisher,,14,,,,,
+,,,,,,,11112,,,,,I don't know,,15,,,,,
+,,,,,,,11112,,,,,Kofi Anan,,16,,,,,
+,,,,,,,11112,,,,,Alan Cumming,,17,,,,,
+,,,,,,,11112,,,,,I don't know,,18,,,,,
+,,,,,,,11112,,,,,I don't know,,19,,,,,
+,,,,,,,11112,,,,,Kim Kardashian,,20,,,,,
+,,,,,,,11112,,,,,Carmen Electra,,21,,,,,
+,,,,,,,11112,,,,,Hugh Jackman,,22,,,,,
+,,,,,,,11112,,,,,I don't know,,23,,,,,
+,,,,,,,11112,,,,,Natalie Portman,,24,,,,,
+,,,,,,,11113,,,,,Al Pacino,,1,,,,,
+,,,,,,,11113,,,,,Alan Rickman,,2,,,,,
+,,,,,,,11113,,,,,I don't know,,3,,,,,
+,,,,,,,11113,,,,,Nicolas Cage,,4,,,,,
+,,,,,,,11113,,,,,I don't know,,5,,,,,
+,,,,,,,11113,,,,,Jessica Simpson,,6,,,,,
+,,,,,,,11113,,,,,I don't know,,7,,,,,
+,,,,,,,11113,,,,,Sandra Bullock,,8,,,,,
+,,,,,,,11113,,,,,Chuck Norris,,9,,,,,
+,,,,,,,11113,,,,,Javier Bardem,,10,,,,,
+,,,,,,,11113,,,,,Kirsten Dunst,,11,,,,,
+,,,,,,,11113,,,,,Anne Hathaway,,12,,,,,
+,,,,,,,11113,,,,,I don't know,,13,,,,,
+,,,,,,,11113,,,,,I don't know,,14,,,,,
+,,,,,,,11113,,,,,Weird Al. Hair,,15,,,,,
+,,,,,,,11113,,,,,Morgan Freeman,,16,,,,,
+,,,,,,,11113,,,,,I don't know,,17,,,,,
+,,,,,,,11113,,,,,I don't know,,18,,,,,
+,,,,,,,11113,,,,,Brad Pitt,,19,,,,,
+,,,,,,,11113,,,,,I don't know,,20,,,,,
+,,,,,,,11113,,,,,I don't know,,21,,,,,
+,,,,,,,11113,,,,,Hugh Jackman,,22,,,,,
+,,,,,,,11113,,,,,I don't know,,23,,,,,
+,,,,,,,11113,,,,,Keira Knightley,,24,,,,,
+,,,,,,,11114,,,,,I don't know,,1,,,,,
+,,,,,,,11114,,,,,I don't know,,2,,,,,
+,,,,,,,11114,,,,,Jessica Alba,,3,,,,,
+,,,,,,,11114,,,,,I don't know,,4,,,,,
+,,,,,,,11114,,,,,I don't know,,5,,,,,
+,,,,,,,11114,,,,,I don't know,,6,,,,,
+,,,,,,,11114,,,,,Jason Biggs,,7,,,,,
+,,,,,,,11114,,,,,Sandra Bullock,,8,,,,,
+,,,,,,,11114,,,,,Tim Allen,,9,,,,,
+,,,,,,,11114,,,,,Javier Bardem,,10,,,,,
+,,,,,,,11114,,,,,I don't know,,11,,,,,
+,,,,,,,11114,,,,,I don't know,,12,,,,,
+,,,,,,,11114,,,,,Bob Saget,,13,,,,,
+,,,,,,,11114,,,,,Isla Fisher,,14,,,,,
+,,,,,,,11114,,,,,I don't know,,15,,,,,
+,,,,,,,11114,,,,,I don't know,,16,,,,,
+,,,,,,,11114,,,,,I don't know,,17,,,,,
+,,,,,,,11114,,,,,I don't know,,18,,,,,
+,,,,,,,11114,,,,,I don't know,,19,,,,,
+,,,,,,,11114,,,,,I don't know,,20,,,,,
+,,,,,,,11114,,,,,I don't know,,21,,,,,
+,,,,,,,11114,,,,,Hugh Jackman,,22,,,,,
+,,,,,,,11114,,,,,Richard Lewis,,23,,,,,
+,,,,,,,11114,,,,,I don't know,,24,,,,,
+,,,,,,,11115,,,,,I don't know,,1,,,,,
+,,,,,,,11115,,,,,I don't know,,2,,,,,
+,,,,,,,11115,,,,,I don't know,,3,,,,,
+,,,,,,,11115,,,,,I don't know,,4,,,,,
+,,,,,,,11115,,,,,I don't know,,5,,,,,
+,,,,,,,11115,,,,,I don't know,,6,,,,,
+,,,,,,,11115,,,,,Jason Biggs,,7,,,,,
+,,,,,,,11115,,,,,Sandra Bullock,,8,,,,,
+,,,,,,,11115,,,,,Tim Allen,,9,,,,,
+,,,,,,,11115,,,,,Javier Bardem,,10,,,,,
+,,,,,,,11115,,,,,I don't know,,11,,,,,
+,,,,,,,11115,,,,,I don't know,,12,,,,,
+,,,,,,,11115,,,,,Bob Saget,,13,,,,,
+,,,,,,,11115,,,,,Isla Fisher,,14,,,,,
+,,,,,,,11115,,,,,I don't know,,15,,,,,
+,,,,,,,11115,,,,,Kofi Anan,,16,,,,,
+,,,,,,,11115,,,,,I don't know,,17,,,,,
+,,,,,,,11115,,,,,Thandie Newton,,18,,,,,
+,,,,,,,11115,,,,,Robert Redford,,19,,,,,
+,,,,,,,11115,,,,,I don't know,,20,,,,,
+,,,,,,,11115,,,,,I don't know,,21,,,,,
+,,,,,,,11115,,,,,Hugh Jackman,,22,,,,,
+,,,,,,,11115,,,,,Richard Lewis,,23,,,,,
+,,,,,,,11115,,,,,I don't know,,24,,,,,
