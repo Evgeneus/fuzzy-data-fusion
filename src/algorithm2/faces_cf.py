@@ -46,32 +46,51 @@ def accuracy():
     N, M, Psi, GT, Cl = load_data()
     res = {'accuracy': [],
            'std': [],
-           'methods': ['mv', 'em', 'mcmc']}
-    runs = [[], [], [], []]
+           'methods': ['mv', 'em', 'mcmc',
+                       'mv_f', 'em_f', 'mcmc_f']}
+    runs = [[], [], [], [], [], [], [], []]
     for run in range(n_runs):
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, {'N_iter': 10, 'burnin': 1, 'thin': 2})
 
-        Psi_fussy, f_mcmc_G = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        mv_f_p = majority_voting(Psi_fussy)
+        em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
+        mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, {'N_iter': 10, 'burnin': 1, 'thin': 2})
 
         mv_hits = []
         em_hits = []
         mcmc_hits = []
+        mv_f_hits = []
+        em_f_hits = []
+        mcmc_f_hits = []
         for obj in range(M):
             if len(Psi[obj]) > 0:
                 mv_hits.append(mv_p[obj][GT[obj]])
                 em_hits.append(em_p[obj][GT[obj]])
                 mcmc_hits.append(mcmc_p[obj][GT[obj]])
 
+                mv_f_hits.append(mv_f_p[obj][GT[obj]])
+                em_f_hits.append(em_f_p[obj][GT[obj]])
+                mcmc_f_hits.append(mcmc_f_p[obj][GT[obj]])
+
         runs[0].append(np.average(mv_hits))
         runs[1].append(np.average(em_hits))
         runs[2].append(np.average(mcmc_hits))
 
+        runs[3].append(np.average(mv_f_hits))
+        runs[4].append(np.average(em_f_hits))
+        runs[5].append(np.average(mcmc_f_hits))
+
 
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
+    print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[1]), np.std(runs[1])))
+    print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[4]), np.std(runs[4])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
+    print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
+
 
     res['accuracy'].append(np.average(runs[0]))
     res['accuracy'].append(np.average(runs[1]))
@@ -80,6 +99,12 @@ def accuracy():
     res['std'].append(np.std(runs[1]))
     res['std'].append(np.std(runs[2]))
 
+    res['accuracy'].append(np.average(runs[3]))
+    res['accuracy'].append(np.average(runs[4]))
+    res['accuracy'].append(np.average(runs[5]))
+    res['std'].append(np.std(runs[3]))
+    res['std'].append(np.std(runs[4]))
+    res['std'].append(np.std(runs[5]))
 
     # for obj in range(M):
     #     for s, val in Psi[obj]:
