@@ -47,7 +47,7 @@ def accuracy():
     # number of values per object
     V = 50
     # synthetically generated observations
-    density = 0.4
+    density = 0.5
     # TO DO
 
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
@@ -186,7 +186,7 @@ def accuracy():
                np.average(pinv_accu_f)
             ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary_m5000', index=False)
 
 
 def convergence():
@@ -218,7 +218,7 @@ def convergence():
 
         print('p: {}, accu: {}, std: {}'.format(p, np.average(runs), np.std(runs)))
 
-    pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
+    # pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
 
 
 def values():
