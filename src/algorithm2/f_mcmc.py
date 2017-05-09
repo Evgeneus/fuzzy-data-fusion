@@ -198,4 +198,4 @@ def f_mcmc(N, M, Psi, Cl, params):
                         break
 
     # return f_mcmc_A, f_mcmc_p, f_mcmc_G
-    return Psi_fussy
+    return f_mcmc_G, Psi_fussy
