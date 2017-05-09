@@ -10,10 +10,11 @@ from sums import sums
 from average_log import average_log
 from investment import investment
 from pooled_investment import pooled_investment
-from util import prob_binary_convert
+from util import prob_binary_convert, accu_G
 
 n_runs = 10
 
+work_dir = '../../data/'
 
 def adapter_input(Psi):
     Psi_new = {}
@@ -57,7 +58,7 @@ def accuracy():
            'conf_probs': conf_probs, 'avlog': [], 'avlog_f': [],
            'inv': [], 'inv_f': [], 'pinv': [], 'pinv_f': []}
     for conf_prob in conf_probs:
-        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob)
+        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, None)
 
         mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu, inv_accu, \
         pinv_accu = [], [], [], [], [], [], []
@@ -186,7 +187,7 @@ def accuracy():
                np.average(pinv_accu_f)
             ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary_m5000', index=False)
+    # pd.DataFrame(res).to_csv('synthetic_accuracy_binary_m5000', index=False)
 
 
 def convergence():
@@ -249,8 +250,47 @@ def values():
     pd.DataFrame(res).to_csv('synthetic_values.csv', index=False)
 
 
+def get_acc_g():
+    """
+       Vary the confusion probability on synthetic data.
+       """
+    # number of sources
+    N = 30
+    # number of objects
+    M = 5000
+    # number of values per object
+    V = 50
+    # synthetically generated observations
+    density = 0.5
+    # TO DO
+
+    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
+    conf_probs = [0.2, 0.3, 0.4]
+    s_acc_list = [0.6, 0.7, 0.8, 0.9, 1.]
+    res = {'conf_probs': [], 'acc_g': [], 'acc_g_std': [], 's_acc': []}
+    for conf_prob in conf_probs:
+        for s_acc in s_acc_list:
+            GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, s_acc)
+            accu_G_list = []
+            for run in range(n_runs):
+                f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
+                accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+
+            res['acc_g'].append(np.mean(accu_G_list))
+            res['acc_g_std'].append(np.std(accu_G_list))
+            res['s_acc'].append(s_acc)
+            res['conf_probs'].append(conf_prob)
+
+            print 's_acc: {}'.format(s_acc)
+            print 'conf_prob: {}'.format(conf_prob)
+            print 'acc G: {}'.format(np.mean(accu_G_list))
+            print '---------------'
+    pd.DataFrame(res).to_csv(work_dir + 'accuracy_g.scv', index=False)
+
+
 if __name__ == '__main__':
-    accuracy()
+    # accuracy()
     #convergence()
     #values()
+    get_acc_g()
 

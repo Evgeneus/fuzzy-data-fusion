@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def synthesize(N, M, V, density, conf_prob):
+def synthesize(N, M, V, density, conf_prob, s_acc):
     """
     Generates synthetic data.
     :param N: number of sources
@@ -21,7 +21,10 @@ def synthesize(N, M, V, density, conf_prob):
     Psi = [[] for obj in range(M)]
     for obj in range(M):
         for s in range(N):
-            accuracy = np.random.uniform(0.7, 1.0)
+            if s_acc:
+                accuracy = s_acc
+            else:
+                accuracy = np.random.uniform(0.7, 1.0)
             if np.random.rand() < density:
                 if np.random.rand() < accuracy:
                     Psi[obj].append((s, GT[obj]))
