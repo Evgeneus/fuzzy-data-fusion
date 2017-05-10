@@ -17,10 +17,11 @@ def expectation_maximization(N, M, Psi):
     inv_Psi = invert(N, M, Psi)
     # convergence eps
     eps = 0.001
-
+    iter_max = 50
     # init accuracies
     A = [np.random.uniform(0.7, 1.0) for s in range(N)]
-    while True:
+    iter = 0
+    while iter != iter_max:
         # E-step
         p = []
         for obj in range(M):
@@ -63,4 +64,5 @@ def expectation_maximization(N, M, Psi):
         else:
             A = A_new
 
+        iter += 1
     return A, p
