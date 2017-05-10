@@ -31,6 +31,8 @@ def load_data():
     for obj in range(M):
         GT_G[obj] = {}
 
+    conf_counter = 0
+    total_votes = 0
     Psi = [[] for obj in range(M)]
     for obj_id in range(M):
         if obj_id < 24:
@@ -48,8 +50,13 @@ def load_data():
             other_GT = GT[other_id]
             if vote == other_GT:
                 GT_G[obj_id][s_id] = 0
+                conf_counter += 1
             else:
                 GT_G[obj_id][s_id] = 1
+            total_votes += 1
+
+    print '#confusions: {}'.format(conf_counter)
+    print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
@@ -147,5 +154,5 @@ def get_acc_g():
 
 
 if __name__ == '__main__':
-    # accuracy()
     get_acc_g()
+    accuracy()
