@@ -65,7 +65,7 @@ def accuracy():
         mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
         inv_accu_f, pinv_accu_f = [], [], [], [], [], [], []
         for run in range(n_runs):
-            Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
+            Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)[1]
 
             # MV
             mv_p = majority_voting(Psi)
@@ -289,8 +289,8 @@ def get_acc_g():
 
 
 if __name__ == '__main__':
-    # accuracy()
+    accuracy()
     #convergence()
     #values()
-    get_acc_g()
+    # get_acc_g()
 
