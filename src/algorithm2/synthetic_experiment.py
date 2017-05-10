@@ -187,7 +187,7 @@ def accuracy():
                np.average(pinv_accu_f)
             ))
 
-    # pd.DataFrame(res).to_csv('synthetic_accuracy_binary_m5000', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
 
 
 def convergence():

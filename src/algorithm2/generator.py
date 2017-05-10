@@ -24,7 +24,8 @@ def synthesize(N, M, V, density, conf_prob, s_acc):
             if s_acc:
                 accuracy = s_acc
             else:
-                accuracy = np.random.uniform(0.7, 1.0)
+                # accuracy = np.random.uniform(0.7, 1.0)
+                accuracy = 0.9
             if np.random.rand() < density:
                 if np.random.rand() < accuracy:
                     Psi[obj].append((s, GT[obj]))

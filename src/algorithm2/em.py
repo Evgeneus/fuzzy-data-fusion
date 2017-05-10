@@ -17,7 +17,7 @@ def expectation_maximization(N, M, Psi):
     inv_Psi = invert(N, M, Psi)
     # convergence eps
     eps = 0.001
-    iter_max = 50
+    iter_max = 100
     # init accuracies
     A = [np.random.uniform(0.7, 1.0) for s in range(N)]
     iter = 0

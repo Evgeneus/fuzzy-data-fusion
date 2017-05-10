@@ -7,7 +7,7 @@ from mcmc import mcmc
 from f_mcmc import f_mcmc
 from util import accu_G
 
-n_runs = 10
+n_runs = 200
 
 
 def load_data():
