@@ -1,10 +1,11 @@
 import pandas as pd
+import numpy as np
 
 from em import expectation_maximization
 from mv import majority_voting
 from mcmc import mcmc
 from f_mcmc import f_mcmc
-import numpy as np
+from util import accu_G
 
 n_runs = 10
 
@@ -13,7 +14,6 @@ def load_data():
     M = 48
     GT_df = pd.read_csv('../../data/faces_cf/gt.csv')
     GT = dict(zip(GT_df['obj_id'].values, GT_df['GT'].values))
-
     f1_df = pd.read_csv('../../data/faces_cf/f1_cf.csv')
     f2_df = pd.read_csv('../../data/faces_cf/f2_cf.csv')
     s_f1 = set(f1_df['_worker_id'].values)
@@ -27,6 +27,10 @@ def load_data():
         Cl.update({i: {'id': i, 'other': i+24}})
         Cl.update({i+24: {'id': i + 24, 'other': i}})
 
+    GT_G = {}
+    for obj in range(M):
+        GT_G[obj] = {}
+
     Psi = [[] for obj in range(M)]
     for obj_id in range(M):
         if obj_id < 24:
@@ -39,25 +43,33 @@ def load_data():
             if vote == "I don't know":
                 continue
             Psi[obj_id].append((s_id, vote))
-    return N, M, Psi, GT, Cl
+
+            other_id = Cl[obj_id]['other']
+            other_GT = GT[other_id]
+            if vote == other_GT:
+                GT_G[obj_id][s_id] = 0
+            else:
+                GT_G[obj_id][s_id] = 1
+    return [N, M, Psi, GT, Cl, GT_G]
 
 
 def accuracy():
-    N, M, Psi, GT, Cl = load_data()
+    N, M, Psi, GT, Cl = load_data()[:-1]
     res = {'accuracy': [],
            'std': [],
            'methods': ['mv', 'em', 'mcmc',
                        'mv_f', 'em_f', 'mcmc_f']}
     runs = [[], [], [], [], [], [], [], []]
+    mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
     for run in range(n_runs):
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
-        mcmc_A, mcmc_p = mcmc(N, M, Psi, {'N_iter': 30, 'burnin': 5, 'thin': 3})
+        mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
-        Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
-        mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, {'N_iter': 30, 'burnin': 5, 'thin': 3})
+        mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
 
         mv_hits = []
         em_hits = []
@@ -121,5 +133,19 @@ def accuracy():
     #pd.DataFrame(res).to_csv(work_dir + 'face_accuracy.csv', index=False)
 
 
+def get_acc_g():
+    n_runs = 50
+    accu_G_list = []
+    mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
+    N, M, Psi, GT, Cl, GT_G = load_data()
+    for run in range(n_runs):
+        f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
+        accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+
+    print 'G Accu: {}'.format(np.mean(accu_G_list))
+    print 'G Accu std: {}'.format(np.std(accu_G_list))
+
+
 if __name__ == '__main__':
-    accuracy()
+    # accuracy()
+    get_acc_g()
