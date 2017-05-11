@@ -231,21 +231,21 @@ def values():
     # number of objects
     M = 5000
     # synthetically generated observations
-    density = 0.3
-    accuracy = 0.8
-    conf_prob = 0.8
+    density = 0.5
+    accuracy = 0.9
+    conf_prob = 0.2
     Vs = [2, 4, 8, 16, 32, 64, 128]
     params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
-    res = {'accuracy': [], 'std': [], 'number of distinct values per object': Vs}
+    res = {'G accuracy': [], 'error': [], 'number of distinct values per object': Vs}
     for V in Vs:
-        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, accuracy, conf_prob)
-        f_mcmc_accu = []
+        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, accuracy)
+        G_accu = []
         for run in range(n_runs):
-            f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)
-            f_mcmc_accu.append(np.average([f_mcmc_p[obj][GT[obj]] for obj in GT.keys()]))
-        res['accuracy'].append(np.average(f_mcmc_accu))
-        res['std'].append(np.std(f_mcmc_accu))
-        print('V: {}, accu: {:1.4f}'.format(V, np.average(f_mcmc_accu)))
+            f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)[0]
+            G_accu = np.average(accu_G(f_mcmc_G, GT_G))
+        res['G accuracy'].append(np.average(G_accu))
+        res['error'].append(np.std(G_accu))
+        print('V: {}, accu: {:1.4f}'.format(V, np.average(G_accu)))
 
     pd.DataFrame(res).to_csv('synthetic_values.csv', index=False)
 
@@ -290,7 +290,7 @@ def get_acc_g():
 
 if __name__ == '__main__':
     # accuracy()
-    convergence()
-    #values()
+    # convergence()
+    values()
     # get_acc_g()
 
