@@ -285,7 +285,7 @@ def get_acc_g():
             print 'conf_prob: {}'.format(conf_prob)
             print 'acc G: {}'.format(np.mean(accu_G_list))
             print '---------------'
-    pd.DataFrame(res).to_csv(work_dir + 'accuracy_g.scv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'accuracy_g.csv', index=False)
 
 
 if __name__ == '__main__':
