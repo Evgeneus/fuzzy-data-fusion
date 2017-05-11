@@ -201,25 +201,25 @@ def convergence():
     # number of values per object
     V = 30
     # synthetically generated observations
-    density = 0.3
-    accuracy = 0.8
-    conf_prob = 0.8
+    density = 0.5
+    accuracy = 0.9
+    conf_prob = 0.2
 
-    GT, GT_G, Cl, Psi = synthesize(N, M, V, density, accuracy, conf_prob)
-    res = {'accuracy': [], 'error': [], 'number of iterations': [5, 10, 30, 50, 100]}
+    GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, accuracy)
+    res = {'G accuracy': [], 'error': [], 'number of iterations': [3, 5, 10, 30, 50, 100]}
     for p in [(3, 0, 1), (5, 0, 1), (10, 1, 2), (30, 5, 3), (50, 7, 5), (100, 10, 7)]:
         params = {'N_iter': p[0], 'burnin': p[1], 'thin': p[2], 'FV': 0}
         runs = []
         for run in range(n_runs):
-            f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)
-            f_mcmc_accu = np.average([f_mcmc_p[obj][GT[obj]] for obj in GT.keys()])
-            runs.append(f_mcmc_accu)
-        res['accuracy'].append(np.average(runs))
+            f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)[0]
+            G_accu = np.average(accu_G(f_mcmc_G, GT_G))
+            runs.append(G_accu)
+        res['G accuracy'].append(np.average(runs))
         res['error'].append(np.std(runs))
 
-        print('p: {}, accu: {}, std: {}'.format(p, np.average(runs), np.std(runs)))
+        print('p: {}, G accu: {}, std: {}'.format(p, np.average(runs), np.std(runs)))
 
-    # pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
+    pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
 
 
 def values():
@@ -289,8 +289,8 @@ def get_acc_g():
 
 
 if __name__ == '__main__':
-    accuracy()
-    #convergence()
+    # accuracy()
+    convergence()
     #values()
     # get_acc_g()
 
