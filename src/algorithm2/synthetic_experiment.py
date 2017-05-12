@@ -14,7 +14,7 @@ from util import prob_binary_convert, accu_G
 
 n_runs = 10
 
-work_dir = '../../data/'
+work_dir = '../../data/synthetic/'
 
 
 def adapter_input(Psi):
@@ -188,7 +188,7 @@ def accuracy():
                np.average(pinv_accu_f)
             ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary2.csv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy_binary.csv', index=False)
 
 
 def convergence():
@@ -220,7 +220,7 @@ def convergence():
 
         print('p: {}, G accu: {}, std: {}'.format(p, np.average(runs), np.std(runs)))
 
-    pd.DataFrame(res).to_csv('synthetic_convergence.csv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'synthetic_convergence.csv', index=False)
 
 
 def values():
@@ -248,7 +248,7 @@ def values():
         res['error'].append(np.std(G_accu))
         print('V: {}, accu: {:1.4f}'.format(V, np.average(G_accu)))
 
-    pd.DataFrame(res).to_csv('synthetic_values.csv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'synthetic_values.csv', index=False)
 
 
 def get_acc_g():
