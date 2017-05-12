@@ -16,6 +16,7 @@ n_runs = 10
 
 work_dir = '../../data/'
 
+
 def adapter_input(Psi):
     Psi_new = {}
     for obj_ind, obj_data in enumerate(Psi):
@@ -51,7 +52,7 @@ def accuracy():
     density = 0.5
     # TO DO
 
-    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
+    mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
     res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
            'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [],
@@ -65,7 +66,7 @@ def accuracy():
         mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
         inv_accu_f, pinv_accu_f = [], [], [], [], [], [], []
         for run in range(n_runs):
-            Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)[1]
+            Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
 
             # MV
             mv_p = majority_voting(Psi)
@@ -187,7 +188,7 @@ def accuracy():
                np.average(pinv_accu_f)
             ))
 
-    pd.DataFrame(res).to_csv('synthetic_accuracy_binary', index=False)
+    pd.DataFrame(res).to_csv('synthetic_accuracy_binary2.csv', index=False)
 
 
 def convergence():
@@ -235,7 +236,7 @@ def values():
     accuracy = 0.9
     conf_prob = 0.2
     Vs = [2, 4, 8, 16, 32, 64, 128]
-    params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
+    params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     res = {'G accuracy': [], 'error': [], 'number of distinct values per object': Vs}
     for V in Vs:
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, accuracy)
@@ -264,7 +265,7 @@ def get_acc_g():
     density = 0.5
     # TO DO
 
-    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 0}
+    mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     conf_probs = [0.2, 0.3, 0.4]
     s_acc_list = [0.6, 0.7, 0.8, 0.9, 1.]
     res = {'conf_probs': [], 'acc_g': [], 'acc_g_std': [], 's_acc': []}
@@ -289,8 +290,8 @@ def get_acc_g():
 
 
 if __name__ == '__main__':
-    # accuracy()
+    accuracy()
     # convergence()
-    values()
+    # values()
     # get_acc_g()
 
