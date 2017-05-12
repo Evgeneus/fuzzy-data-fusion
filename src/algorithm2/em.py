@@ -35,15 +35,12 @@ def expectation_maximization(N, M, Psi):
             # a pass to compute value confidences
             for s, val in Psi[obj]:
                 for v in C.keys():
-                    try:
-                        if v == val:
-                            C[v] += math.log(A[s])
-                        else:
-                            if A[s] == 1.:
-                                A[s] = 0.95
-                            C[v] += math.log((1-A[s])/(V-1))
-                    except:
-                        exit(1)
+                    if v == val:
+                        C[v] += math.log(A[s])
+                    else:
+                        if A[s] == 1.:
+                            A[s] = 0.95
+                        C[v] += math.log((1-A[s])/(V-1))
 
             # compute probs
             # normalize
