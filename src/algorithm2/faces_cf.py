@@ -7,7 +7,7 @@ from mcmc import mcmc
 from f_mcmc import f_mcmc
 from util import accu_G
 
-n_runs = 200
+n_runs = 1000
 
 
 def load_data():
@@ -55,25 +55,27 @@ def load_data():
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
 
-    print '#confusions: {}'.format(conf_counter)
+    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
 def accuracy():
-    N, M, Psi, GT, Cl = load_data()[:-1]
+    N, M, Psi, GT, Cl, GT_G = load_data()
     res = {'accuracy': [],
            'std': [],
            'methods': ['mv', 'em', 'mcmc',
                        'mv_f', 'em_f', 'mcmc_f']}
-    runs = [[], [], [], [], [], [], [], []]
-    mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
+    runs = [[], [], [], [], [], [], [], [], []]
+    accu_G_list = []
+    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
-        f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
+        f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        accu_G_list.append(accu_G(f_mcmc_G, GT_G))
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
@@ -91,7 +93,6 @@ def accuracy():
                 obj_with_conflicts.append(obj_id)
 
         for obj in range(M):
-            # if len(Psi[obj]) > 0:
             if obj in obj_with_conflicts:
                 mv_hits.append(mv_p[obj][GT[obj]])
                 em_hits.append(em_p[obj][GT[obj]])
@@ -109,7 +110,7 @@ def accuracy():
         runs[4].append(np.average(em_f_hits))
         runs[5].append(np.average(mcmc_f_hits))
 
-
+    print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[1]), np.std(runs[1])))
@@ -132,27 +133,9 @@ def accuracy():
     res['std'].append(np.std(runs[4]))
     res['std'].append(np.std(runs[5]))
 
-    # for obj in range(M):
-    #     for s, val in Psi[obj]:
-    #         if obj in Cl and val == GT[Cl[obj]['other']]:
-    #             print(GT[obj], f_mcmc_G[obj][s])
-
+    # Save results in a CSV
     #pd.DataFrame(res).to_csv(work_dir + 'face_accuracy.csv', index=False)
 
 
-def get_acc_g():
-    n_runs = 50
-    accu_G_list = []
-    mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
-    N, M, Psi, GT, Cl, GT_G = load_data()
-    for run in range(n_runs):
-        f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
-        accu_G_list.append(accu_G(f_mcmc_G, GT_G))
-
-    print 'G Accu: {}'.format(np.mean(accu_G_list))
-    print 'G Accu std: {}'.format(np.std(accu_G_list))
-
-
 if __name__ == '__main__':
-    get_acc_g()
     accuracy()
