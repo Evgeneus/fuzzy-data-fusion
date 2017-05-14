@@ -8,7 +8,7 @@ import pandas as pd
 from util import accu_G
 
 
-work_dir = '/home/bykau/Dropbox/Fuzzy/'
+work_dir = '../../data/flight/'
 
 n_runs = 10
 
@@ -50,7 +50,7 @@ def load_dataset():
     Psi = []
     M = 0
     Ns = []
-    with open(work_dir + 'data.txt') as f:
+    with open(work_dir + 'raw_data/data.txt') as f:
         for line in f:
             obj_votes = []
             vals = line.strip().split('\t')
@@ -61,17 +61,22 @@ def load_dataset():
                     obj_votes.append((s, 'O'+str(M)+'_'+vals[s]))
             Psi.append(obj_votes)
             M += 1
+            # TEMP
+            if M==1000:
+                break
 
     # there is a varying number of sources per object (apparently, a data quality issue), so we choose the max number of
     # sources.
     N = max(Ns)
 
     GT = {}
-    with open(work_dir + 'truth_sample.txt') as f:
+    with open(work_dir + 'raw_data/truth_sample.txt') as f:
         for line in f:
             vals = line.strip().split('\t')
             if len(vals) == 2:
-                GT[int(vals[0])] = 'O'+vals[0]+'_'+vals[1]
+                # TEMP
+                if int(vals[0]) < 1000:
+                    GT[int(vals[0])] = 'O'+vals[0]+'_'+vals[1]
     return N, M, Psi, GT
 
 
@@ -100,12 +105,13 @@ def accuracy():
     N, M, Psi, GT = load_dataset()
 
     # inject confusions
-    conf_probs = [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+    # conf_probs = [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
+    conf_probs = [0.35, 0.4]
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
-    res = {'mv':[], 'em': [], 'mcmc': [], 'f_mcmc':[], 'confusion probability': conf_probs,
-           'mv_std': [], 'em_std': [], 'mcmc_std': [], 'f_mcmc_std': [], 'G': [], 'G_std': []}
+    res = {'mv':[], 'em': [], 'mcmc': [], 'confusion probability': conf_probs,
+           'mv_std': [], 'em_std': [], 'mcmc_std': [], 'acc_g': [], 'acc_g_std': []}
     for conf_prob in conf_probs:
-        runs = [[], [], [], [], []]
+        runs = [[], [], [], []]
         for run in range(n_runs):
             GT_G, Cl, cPsi = confuse(Psi, 1-conf_prob, GT)
 
@@ -122,41 +128,35 @@ def accuracy():
             mcmc_t = time.time() - start
 
             start = time.time()
-            f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, cPsi, Cl, mcmc_params)
+            f_mcmc_G, Psi_fussy = f_mcmc(N, M, cPsi, Cl, mcmc_params)
             f_mcmc_t = time.time() - start
 
             mv_accu = np.average([mv_p[obj][GT[obj]] for obj in GT.keys()])
             em_accu = np.average([em_p[obj][GT[obj]] for obj in GT.keys()])
             mcmc_accu = np.average([mcmc_p[obj][GT[obj]] for obj in GT.keys()])
-            f_mcmc_accu = np.average([f_mcmc_p[obj][GT[obj]] for obj in GT.keys()])
+
 
             runs[0].append(mv_accu)
             runs[1].append(em_accu)
             runs[2].append(mcmc_accu)
-            runs[3].append(f_mcmc_accu)
-            runs[4].append(accu_G(f_mcmc_G, GT_G))
+            runs[3].append(accu_G(f_mcmc_G, GT_G))
 
         res['mv'].append(np.average(runs[0]))
         res['em'].append(np.average(runs[1]))
         res['mcmc'].append(np.average(runs[2]))
-        res['f_mcmc'].append(np.average(runs[3]))
-        res['G'].append(np.average(runs[4]))
+        res['acc_g'].append(np.average(runs[3]))
 
         res['mv_std'].append(np.std(runs[0]))
         res['em_std'].append(np.std(runs[1]))
         res['mcmc_std'].append(np.std(runs[2]))
-        res['f_mcmc_std'].append(np.std(runs[3]))
-        res['G_std'].append(np.average(runs[4]))
+        res['acc_g_std'].append(np.average(runs[3]))
 
-        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}'.format(conf_prob,
-                                                                                                      mv_accu,
-                                                                                                      em_accu,
-                                                                                                      mcmc_accu,
-                                                                                                      f_mcmc_accu
-                                                                                                      )
-              )
+        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\t'.format(conf_prob,
+                                                                     mv_accu,
+                                                                     em_accu,
+                                                                     mcmc_accu))
 
-    pd.DataFrame(res).to_csv(work_dir + 'flight_accuracy.csv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'experiments_results/flight_accuracy.csv', index=False)
 
 
 def efficiency():
@@ -166,7 +166,9 @@ def efficiency():
     N, M, Psi, GT = load_dataset()
 
     # inject confusions
-    Ncs = [10, 100, 1000, 10000]
+    # Ncs = [10, 100, 1000, 10000]
+    # TEMP
+    Ncs = [10]
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
     res = {'mv': [],
            'mv std': [],
@@ -183,19 +185,19 @@ def efficiency():
             GT_G, Cl, cPsi = confuse(Psi, 0.8, GT, Nc)
 
             start = time.time()
-            mv_p = majority_voting(cPsi)
+            majority_voting(cPsi)
             times[0].append(time.time() - start)
 
             start = time.time()
-            em_A, em_p = expectation_maximization(N, M, cPsi)
+            expectation_maximization(N, M, cPsi)
             times[1].append(time.time() - start)
 
             start = time.time()
-            mcmc_A, mcmc_p = mcmc(N, M, cPsi, mcmc_params)
+            mcmc(N, M, cPsi, mcmc_params)
             times[2].append(time.time() - start)
 
             start = time.time()
-            f_mcmc_A, f_mcmc_p, f_mcmc_G = f_mcmc(N, M, cPsi, Cl, mcmc_params)
+            f_mcmc(N, M, cPsi, Cl, mcmc_params)
             times[3].append(time.time() - start)
 
         res['mv'].append(np.average(times[0]))
@@ -209,20 +211,20 @@ def efficiency():
         res['f_mcmc std'].append(np.std(times[3]))
 
         print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}'.format(Nc,
-                                                                                                      np.average(times[0]),
-                                                                                                      np.average(times[1]),
-                                                                                                      np.average(times[2]),
-                                                                                                      np.average(times[3])
-                                                                                                      )
+                                                                              np.average(times[0]),
+                                                                              np.average(times[1]),
+                                                                              np.average(times[2]),
+                                                                              np.average(times[3])
+                                                                              )
               )
 
-    pd.DataFrame(res).to_csv(work_dir + 'flight_efficiency.csv', index=False)
+    pd.DataFrame(res).to_csv(work_dir + 'experiments_results/flight_efficiency.csv', index=False)
 
 
 if __name__ == '__main__':
-    #accuracy()
-    efficiency()
-    #properties()
+    accuracy()
+    # efficiency()
+    # properties()
 
 
 
