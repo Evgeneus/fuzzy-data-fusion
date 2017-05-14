@@ -66,53 +66,57 @@ def accuracy():
         mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
         inv_accu_f, pinv_accu_f = [], [], [], [], [], [], []
         for run in range(n_runs):
-            Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
-
             # MV
             mv_p = majority_voting(Psi)
             mv_b = prob_binary_convert(mv_p)
-            mv_pf = majority_voting(Psi_fussy)
-            mv_bf = prob_binary_convert(mv_pf)
 
             # EM
             em_A, em_p = expectation_maximization(N, M, Psi)
             em_b = prob_binary_convert(em_p)
-            em_Af, em_pf = expectation_maximization(N, M, Psi_fussy)
-            em_bf = prob_binary_convert(em_pf)
 
             # MCMC
             mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
             mcmc_b = prob_binary_convert(mcmc_p)
-            mcmc_Af, mcmc_pf = mcmc(N, M, Psi_fussy, mcmc_params)
-            mcmc_bf = prob_binary_convert(mcmc_pf)
-
 
             data = adapter_input(Psi)
-            data_f = adapter_input(Psi_fussy)
             # SUMS
             sums_belief = sums(N, data)
             sums_b = adapter_output(sums_belief, data)
-
-            sums_belief_f = sums(N, data_f)
-            sums_bf = adapter_output(sums_belief_f, data_f)
 
             # AVG LOG
             avlog_belief = average_log(N, data)
             avlog_b = adapter_output(avlog_belief, data)
 
-            avlog_belief_f = average_log(N, data_f)
-            avlog_bf = adapter_output(avlog_belief_f, data_f)
-
             # INVESTMENT
             inv_belief = investment(N, data)
             inv_b = adapter_output(inv_belief, data)
 
-            inv_belief_f = investment(N, data_f)
-            inv_bf = adapter_output(inv_belief_f, data_f)
-
             # POOLED INVESTMENT
             pinv_belief = pooled_investment(N, data)
             pinv_b = adapter_output(pinv_belief, data)
+
+            # FUZZY FUSION Psi
+            # From now Psi is the same as Psi_fussy due to Python
+            Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
+            data_f = adapter_input(Psi_fussy)
+
+            mv_pf = majority_voting(Psi_fussy)
+            mv_bf = prob_binary_convert(mv_pf)
+
+            em_Af, em_pf = expectation_maximization(N, M, Psi_fussy)
+            em_bf = prob_binary_convert(em_pf)
+
+            mcmc_Af, mcmc_pf = mcmc(N, M, Psi_fussy, mcmc_params)
+            mcmc_bf = prob_binary_convert(mcmc_pf)
+
+            sums_belief_f = sums(N, data_f)
+            sums_bf = adapter_output(sums_belief_f, data_f)
+
+            avlog_belief_f = average_log(N, data_f)
+            avlog_bf = adapter_output(avlog_belief_f, data_f)
+
+            inv_belief_f = investment(N, data_f)
+            inv_bf = adapter_output(inv_belief_f, data_f)
 
             pinv_belief_f = pooled_investment(N, data_f)
             pinv_bf = adapter_output(pinv_belief_f, data_f)

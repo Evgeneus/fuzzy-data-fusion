@@ -1,14 +1,8 @@
 import numpy as np
 import math
 from numpy.random import beta
-from util import fPsi, log_likelihood
+from util import fPsi
 from collections import defaultdict
-import copy
-from generator import synthesize
-from em import expectation_maximization
-
-
-work_dir = '/Users/bykau/Desktop/Fuzzy/'
 
 
 def f_mcmc(N, M, Psi, Cl, params):
@@ -183,7 +177,7 @@ def f_mcmc(N, M, Psi, Cl, params):
             f_mcmc_G[obj][s][1] /= total
 
     # Psi Fussy
-    Psi_fussy = copy.deepcopy(Psi)
+    Psi_fussy = Psi
     for obj in f_mcmc_G.keys():
         for s in f_mcmc_G[obj].keys():
             p_confused = f_mcmc_G[obj][s][0]
