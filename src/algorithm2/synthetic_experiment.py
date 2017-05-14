@@ -46,7 +46,7 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 500
+    M = 5000
     # number of values per object
     V = 50
     # synthetically generated observations
