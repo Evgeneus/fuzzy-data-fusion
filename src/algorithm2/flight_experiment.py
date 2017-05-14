@@ -292,10 +292,9 @@ def efficiency():
     N, M, Psi, GT = load_dataset()
 
     # inject confusions
-    # Ncs = [10, 100, 1000, 10000]
-    # TEMP
-    Ncs = [10]
-    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
+    Ncs = [10, 100, 1000, 10000]
+    # mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
+    mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     res = {'mv': [],
            'mv std': [],
            'em': [],
@@ -304,9 +303,17 @@ def efficiency():
            'mcmc std': [],
            'f_mcmc': [],
            'f_mcmc std': [],
+           'sums': [],
+           'sums std': [],
+           'avlog': [],
+           'avlog std': [],
+           'inv': [],
+           'inv std': [],
+           'pinv': [],
+           'pinv std': [],
            'number of objects with confusions': Ncs}
     for Nc in Ncs:
-        times = [[], [], [], []]
+        times = [[], [], [], [], [], [], [], [], []]
         for run in range(n_runs):
             GT_G, Cl, cPsi = confuse(Psi, 0.8, GT, Nc)
 
@@ -326,21 +333,51 @@ def efficiency():
             f_mcmc(N, M, cPsi, Cl, mcmc_params)
             times[3].append(time.time() - start)
 
+            data = adapter_input(cPsi)
+            start = time.time()
+            sums(N, data)
+            times[4].append(time.time() - start)
+
+            start = time.time()
+            average_log(N, data)
+            times[5].append(time.time() - start)
+
+            start = time.time()
+            investment(N, data)
+            times[6].append(time.time() - start)
+
+            start = time.time()
+            pooled_investment(N, data)
+            times[7].append(time.time() - start)
+
         res['mv'].append(np.average(times[0]))
         res['em'].append(np.average(times[1]))
         res['mcmc'].append(np.average(times[2]))
         res['f_mcmc'].append(np.average(times[3]))
+        res['sums'].append(np.average(times[4]))
+        res['avlog'].append(np.average(times[5]))
+        res['inv'].append(np.average(times[6]))
+        res['pinv'].append(np.average(times[7]))
 
         res['mv std'].append(np.std(times[0]))
         res['em std'].append(np.std(times[1]))
         res['mcmc std'].append(np.std(times[2]))
         res['f_mcmc std'].append(np.std(times[3]))
+        res['sums std'].append(np.std(times[4]))
+        res['avlog std'].append(np.std(times[5]))
+        res['inv std'].append(np.std(times[6]))
+        res['pinv std'].append(np.std(times[7]))
 
-        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}'.format(Nc,
+        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}\t{}'
+              '\tsums: {:1.4f}\tavlog: {:1.4f}\tinv: {:1.4f}\tpinv: {:1.4f}'.format(Nc,
                                                                               np.average(times[0]),
                                                                               np.average(times[1]),
                                                                               np.average(times[2]),
-                                                                              np.average(times[3])
+                                                                              np.average(times[3]),
+                                                                              np.average(times[4]),
+                                                                              np.average(times[5]),
+                                                                              np.average(times[6]),
+                                                                              np.average(times[7]),
                                                                               )
               )
 
@@ -348,8 +385,8 @@ def efficiency():
 
 
 if __name__ == '__main__':
-    accuracy()
-    # efficiency()
+    # accuracy()
+    efficiency()
     # properties()
 
 
