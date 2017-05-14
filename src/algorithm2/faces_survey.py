@@ -4,6 +4,7 @@ from mv import majority_voting
 from f_mcmc import f_mcmc
 from mcmc import mcmc
 import numpy as np
+from copy import deepcopy
 
 work_dir = '../../data/faces_survey/'
 n_runs = 500
@@ -26,7 +27,7 @@ def load_data():
     face1 = face1[face1.User != 'Ground Truth']
     face2 = face2[face2.User != 'Ground Truth']
     face3 = face3[face3.User != 'Ground Truth']
-    Psi = [[] for x in range(M)]
+    Psi = [[] for _ in range(M)]
     offset = 0
     users = {}
     for f in [face1, face2, face3]:
@@ -68,20 +69,10 @@ def load_data():
         for s, val in Psi[obj]:
             if obj in Cl and val == GT[Cl[obj]['other']]:
                 n_conf += 1
-                # print(obj, users[s], GT[obj], val)
     print('# of confusions: {}'.format(n_conf))
 
-    # # add two sources which always provide true values
-    # for obj in range(0, M, 2):
-    #     Psi[obj].append((N, GT[obj]))
-    #     Psi[obj].append((N+1, GT[obj]))
-    # for obj in range(1, M, 2):
-    #     Psi[obj].append((N + 2, GT[obj]))
-    #     Psi[obj].append((N+3, GT[obj]))
-    # N += 4
-
     # compute a cleaned set of observations
-    cleaned_Psi = [[] for obj in range(M)]
+    cleaned_Psi = [[] for _ in range(M)]
     for obj in range(M):
         for s, val in Psi[obj]:
             if obj in Cl and val == GT[Cl[obj]['other']]:
@@ -98,16 +89,16 @@ def load_data():
 
 def accuracy():
     N, M, Psi, cleaned_Psi, Cl, GT = load_data()
-    res = {'accuracy': [],
-           'std': [],
-           'methods': ['mv', 'em', 'mcmc']}
+    # res = {'accuracy': [],
+    #        'std': [],
+    #        'methods': ['mv', 'em', 'mcmc']}
     mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     runs = [[], [], [], [], [], []]
     for run in range(n_runs):
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, {'N_iter': 10, 'burnin': 1, 'thin': 2})
-        Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)[1]
+        Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, mcmc_params)[1]
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
@@ -144,7 +135,7 @@ def accuracy():
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
 
-    #pd.DataFrame(res).to_csv(work_dir + 'face_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv(work_dir + 'face_accuracy.csv', index=False)
 
 
 if __name__ == '__main__':
