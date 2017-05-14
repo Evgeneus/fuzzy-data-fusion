@@ -15,7 +15,7 @@ from util import prob_binary_convert, accu_G
 
 n_runs = 10
 
-work_dir = '../../data/synthetic/'
+work_dir = '../../data/results/'
 
 
 def adapter_input(Psi):
