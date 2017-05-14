@@ -80,7 +80,6 @@ def accuracy():
     accu_G_list = []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
-        print 'run n {}'.format(run)
         # PROBABILISTIC OUTPUT
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
