@@ -1,5 +1,6 @@
 from collections import defaultdict
 import numpy as np
+from copy import deepcopy
 from mv import majority_voting
 from em import expectation_maximization
 from mcmc import mcmc
@@ -45,13 +46,11 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 5000
+    M = 500
     # number of values per object
     V = 50
     # synthetically generated observations
     density = 0.5
-    # TO DO
-
     mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
     res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
@@ -97,7 +96,7 @@ def accuracy():
 
             # FUZZY FUSION Psi
             # From now Psi is the same as Psi_fussy due to Python
-            Psi_fussy = f_mcmc(N, M, Psi, Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
+            Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
             data_f = adapter_input(Psi_fussy)
 
             mv_pf = majority_voting(Psi_fussy)
