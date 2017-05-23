@@ -7,15 +7,13 @@ Knowing What to Believe. In COLING.
 '''
 
 
-import copy
-import random
-from common import get_alg_accuracy
+import numpy as np
 
 max_rounds = 20
 eps = 10e-3
 
 
-def get_trustw(data, belief, sources, trustw_prev):
+def get_trustw(data, belief, sources):
     trustw_new = []
     for s in sources:
         claim_beliefs = 0.
@@ -35,7 +33,7 @@ def get_trustw(data, belief, sources, trustw_prev):
     return trustw_new
 
 
-def get_belief(data, trustw_list, sources):
+def get_belief(data, trustw_list):
     belief = {}
     for obj_index in data.keys():
         obj_data = data[obj_index]
@@ -56,17 +54,16 @@ def get_belief(data, trustw_list, sources):
     return belief
 
 
-def sums(data=None, gt=None, accuracy_truth=None, s_number=None):
+def sums(s_number, data):
     sources = range(s_number)
-    trustw_list = [random.uniform(0.8, 0.95) for i in range(s_number)]
+    trustw_list = [np.random.uniform(0.7, 1.0) for _ in range(s_number)]
     trustw_delta = 0.3
     iter_number = 0
     while trustw_delta > eps and iter_number < max_rounds:
-        belief = get_belief(data=data, trustw_list=trustw_list, sources=sources)
-        trustw_prev = copy.copy(trustw_list)
-        trustw_list = get_trustw(data=data, belief=belief, sources=sources, trustw_prev=trustw_prev)
+        belief = get_belief(data=data, trustw_list=trustw_list)
+        trustw_prev = trustw_list[:]
+        trustw_list = get_trustw(data=data, belief=belief, sources=sources)
         trustw_delta = max([abs(k-l) for k, l in zip(trustw_prev, trustw_list)])
         iter_number += 1
-    alg_accuracy = get_alg_accuracy(data=data, gt=gt, belief=belief)
 
-    return alg_accuracy
+    return belief

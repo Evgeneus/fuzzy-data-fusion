@@ -7,7 +7,6 @@ Knowing What to Believe. In COLING.
 '''
 
 import random
-from common import get_alg_accuracy
 
 max_rounds = 100
 eps = 10e-3
@@ -72,13 +71,13 @@ def get_belief(data, trustw_list, s_obs_count):
     return belief
 
 
-def pooled_investment(data=None, gt=None, accuracy_truth=None, s_number=None):
+def pooled_investment(s_number, data):
     sources = range(s_number)
     s_obs_count = dict(zip(sources, [0]*s_number))
     for obj in data.values():
         for s in obj[0]:
             s_obs_count[s] += 1
-    trustw_list = [random.uniform(0.8, 0.95) for i in range(s_number)]
+    trustw_list = [random.uniform(0.7, 1.) for _ in range(s_number)]
     trustw_delta = 0.3
     iter_number = 0
     while trustw_delta > eps and iter_number < max_rounds:
@@ -88,6 +87,4 @@ def pooled_investment(data=None, gt=None, accuracy_truth=None, s_number=None):
         trustw_delta = max([abs(k-l) for k, l in zip(trustw_prev, trustw_list)])
         iter_number += 1
 
-    alg_accuracy = get_alg_accuracy(data=data, gt=gt, belief=belief)
-
-    return alg_accuracy
+    return belief
