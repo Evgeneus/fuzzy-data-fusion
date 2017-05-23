@@ -120,6 +120,7 @@ def accuracy():
         pinv_accu, mv_accu_p, em_accu_p, mcmc_accu_p = [], [], [], [], [], [], [], [], [], []
         mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
         inv_accu_f, pinv_accu_f, mv_accu_f_p, em_accu_f_p, mcmc_accu_f_p = [], [], [], [], [], [], [], [], [], []
+        accu_G_list = []
         for run in range(n_runs):
             GT_G, Cl, Psi = confuse(Psi_t, 1-conf_prob, GT)
 
@@ -154,7 +155,10 @@ def accuracy():
 
             # FUZZY FUSION Psi
             # From now Psi is the same as Psi_fussy due to Python
-            Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
+            f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl,   mcmc_params)
+            g_accu = accu_G(f_mcmc_G, GT_G)
+            print g_accu
+            accu_G_list.append(g_accu)
             data_f = adapter_input(Psi_fussy)
 
             mv_pf = majority_voting(Psi_fussy)
@@ -246,6 +250,7 @@ def accuracy():
         res['mcmc_p'].append(np.average(mcmc_accu_p))
         res['mcmc_f_p'].append(np.average(mcmc_accu_f_p))
 
+        print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
         print 'BINARY:'
         print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
               'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}, pinv: {:1.4f}'
@@ -282,7 +287,44 @@ def accuracy():
                       np.average(em_accu_f_p),
                       np.average(mcmc_accu_f_p)
                       ))
-    pd.DataFrame(res).to_csv(work_dir + 'experiments_results/flight_accuracy.csv', index=False)
+
+        print 'BINARY:'
+        print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
+              'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}, pinv: {:1.4f}'
+              .format(conf_prob,
+                      np.std(mv_accu),
+                      np.std(em_accu),
+                      np.std(mcmc_accu),
+                      np.std(sums_accu),
+                      np.std(avlog_accu),
+                      np.std(inv_accu),
+                      np.std(pinv_accu)
+                      ))
+        print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, '
+              'sums_f: {:1.4f}, avlog_f: {:1.4f}, inv_f: {:1.4f}, pinv_f: {:1.4f}'
+              .format(conf_prob,
+                      np.std(mv_accu_f),
+                      np.std(em_accu_f),
+                      np.std(mcmc_accu_f),
+                      np.std(sums_accu_f),
+                      np.std(avlog_accu_f),
+                      np.std(inv_accu_f),
+                      np.std(pinv_accu_f)
+                      ))
+        print 'PROBABILISTIC:'
+        print('confusion probability: {}, mv_p: {:1.4f}, em_p: {:1.4f}, mcmc_p: {:1.4f}'
+              .format(conf_prob,
+                      np.std(mv_accu_p),
+                      np.std(em_accu_p),
+                      np.std(mcmc_accu_p)
+                      ))
+        print('confusion probability: {}, mv_f_p: {:1.4f}, em:_f_p {:1.4f}, mcmc_f_p: {:1.4f}'
+              .format(conf_prob,
+                      np.std(mv_accu_f_p),
+                      np.std(em_accu_f_p),
+                      np.std(mcmc_accu_f_p)
+                      ))
+    pd.DataFrame(res).to_csv('flight_accuracy.csv', index=False)
 
 
 def efficiency():
@@ -292,9 +334,10 @@ def efficiency():
     N, M, Psi, GT = load_dataset()
 
     # inject confusions
-    Ncs = [10, 100, 1000, 10000]
-    # mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
-    mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
+    # Ncs = [10, 100, 1000, 10000]
+    Ncs = [10000]
+    mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2, 'FV': 3}
+    # mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     res = {'mv': [],
            'mv std': [],
            'em': [],
@@ -313,8 +356,10 @@ def efficiency():
            'pinv std': [],
            'number of objects with confusions': Ncs}
     for Nc in Ncs:
-        times = [[], [], [], [], [], [], [], [], []]
+        print 'Nc: {}'.format(Nc)
+        times = [[], [], [], [], [], [], [], []]
         for run in range(n_runs):
+            print 'run: {}'.format(run)
             GT_G, Cl, cPsi = confuse(Psi, 0.8, GT, Nc)
 
             start = time.time()
@@ -350,26 +395,37 @@ def efficiency():
             pooled_investment(N, data)
             times[7].append(time.time() - start)
 
-        res['mv'].append(np.average(times[0]))
-        res['em'].append(np.average(times[1]))
-        res['mcmc'].append(np.average(times[2]))
-        res['f_mcmc'].append(np.average(times[3]))
-        res['sums'].append(np.average(times[4]))
-        res['avlog'].append(np.average(times[5]))
-        res['inv'].append(np.average(times[6]))
-        res['pinv'].append(np.average(times[7]))
+            res['mv'].append(np.average(times[0]))
+            res['em'].append(np.average(times[1]))
+            res['mcmc'].append(np.average(times[2]))
+            res['f_mcmc'].append(np.average(times[3]))
+            res['sums'].append(np.average(times[4]))
+            res['avlog'].append(np.average(times[5]))
+            res['inv'].append(np.average(times[6]))
+            res['pinv'].append(np.average(times[7]))
 
-        res['mv std'].append(np.std(times[0]))
-        res['em std'].append(np.std(times[1]))
-        res['mcmc std'].append(np.std(times[2]))
-        res['f_mcmc std'].append(np.std(times[3]))
-        res['sums std'].append(np.std(times[4]))
-        res['avlog std'].append(np.std(times[5]))
-        res['inv std'].append(np.std(times[6]))
-        res['pinv std'].append(np.std(times[7]))
+            res['mv std'].append(np.std(times[0]))
+            res['em std'].append(np.std(times[1]))
+            res['mcmc std'].append(np.std(times[2]))
+            res['f_mcmc std'].append(np.std(times[3]))
+            res['sums std'].append(np.std(times[4]))
+            res['avlog std'].append(np.std(times[5]))
+            res['inv std'].append(np.std(times[6]))
+            res['pinv std'].append(np.std(times[7]))
 
-        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}\t{}'
-              '\tsums: {:1.4f}\tavlog: {:1.4f}\tinv: {:1.4f}\tpinv: {:1.4f}'.format(Nc,
+            print(
+            '{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}\tsums: {:1.4f}\tavlog: {:1.4f}\tinv: {:1.4f}\tpinv: {:1.4f}'.format(
+                Nc,
+                np.average(times[0]),
+                np.average(times[1]),
+                np.average(times[2]),
+                np.average(times[3]),
+                np.average(times[4]),
+                np.average(times[5]),
+                np.average(times[6]),
+                np.average(times[7])
+                ))
+        print('{}\tmv: {:1.4f}\tem: {:1.4f}\tmcmc: {:1.4f}\tf_mcmc: {:1.4f}\tsums: {:1.4f}\tavlog: {:1.4f}\tinv: {:1.4f}\tpinv: {:1.4f}'.format(Nc,
                                                                               np.average(times[0]),
                                                                               np.average(times[1]),
                                                                               np.average(times[2]),
@@ -377,17 +433,16 @@ def efficiency():
                                                                               np.average(times[4]),
                                                                               np.average(times[5]),
                                                                               np.average(times[6]),
-                                                                              np.average(times[7]),
-                                                                              )
-              )
+                                                                              np.average(times[7])
+                                                                              ))
 
     pd.DataFrame(res).to_csv(work_dir + 'experiments_results/flight_efficiency.csv', index=False)
 
 
 if __name__ == '__main__':
-    # accuracy()
-    efficiency()
+    try:
+        accuracy()
+    except:
+        accuracy()
+    # efficiency()
     # properties()
-
-
-

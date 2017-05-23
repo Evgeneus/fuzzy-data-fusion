@@ -16,6 +16,7 @@ n_runs = 50
 
 
 def load_data():
+    test = [[], []]
     M = 48
     GT_df = pd.read_csv('../../data/faces_crowdflower/gt.csv')
     GT = dict(zip(GT_df['obj_id'].values, GT_df['GT'].values))
@@ -56,6 +57,9 @@ def load_data():
             if vote == other_GT:
                 GT_G[obj_id][s_id] = 0
                 conf_counter += 1
+                print 'obj: {}, other: {}'.format(obj_id, other_id)
+                test[0].append(obj_id)
+                test[1].append(other_id)
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
@@ -233,7 +237,7 @@ def accuracy():
         res['std'].append(np.std(run))
 
     # Save results in a CSV
-    pd.DataFrame(res).to_csv('../../data/results/face_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv('../../data/results/face_accuracy.csv', index=False)
 
 
 if __name__ == '__main__':
