@@ -274,10 +274,10 @@ def get_acc_g():
     res = {'conf_probs': [], 'acc_g': [], 'acc_g_std': [], 's_acc': []}
     for conf_prob in conf_probs:
         for s_acc in s_acc_list:
-            GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, s_acc)
             accu_G_list = []
             for run in range(n_runs):
-                f_mcmc_G, Psi_fussy = f_mcmc(N, M, Psi, Cl, mcmc_params)
+                GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, s_acc)
+                f_mcmc_G, _ = f_mcmc(N, M, Psi, Cl, mcmc_params)
                 accu_G_list.append(accu_G(f_mcmc_G, GT_G))
 
             res['acc_g'].append(np.mean(accu_G_list))
@@ -293,8 +293,18 @@ def get_acc_g():
 
 
 if __name__ == '__main__':
-    accuracy()
+    '''
+    Gt_G = {
+            obj_id: {source_id: g_val, source_id2: g_val2, ..},
+            ...
+            },
+    Psi = [
+           obj_id: [ [s_id1, val1], [s_id2, val2],..],
+           ...
+           ]
+    '''
+    # accuracy()
     # convergence()
     # values()
-    # get_acc_g()
+    get_acc_g()
 
