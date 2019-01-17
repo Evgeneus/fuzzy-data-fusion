@@ -11,6 +11,9 @@ def synthesize(N, M, V, density, conf_prob, s_acc):
     :param accuracy:
     :param conf_prob:
     :return:
+
+    Psi: observations without confusions
+    c_Psi: observations with simulated confusions
     """
     # generate ground truth
     GT = {}
@@ -46,14 +49,20 @@ def synthesize(N, M, V, density, conf_prob, s_acc):
     for obj in range(M):
         if obj in Cl:
             for s, val in Psi[obj]:
-                # check that a confused source hasn't voted already on the 'other' object
-                if np.random.rand() >=  conf_prob and s not in [x[0] for x in c_Psi[Cl[obj]['other']]]:
+                # check if source should confuse objects and hasn't voted already voted on the 'other' object in the cluster
+                # -> generate a confusion
+                # TO Document:
+                if (np.random.rand() >= conf_prob) and (s not in [x[0] for x in c_Psi[Cl[obj]['other']]]):
                     c_Psi[Cl[obj]['other']].append((s, val))
                     GT_G[Cl[obj]['other']][s] = 0
-                else:
+                elif (s not in [x[0] for x in c_Psi[obj]]):
                     c_Psi[obj].append((s, val))
                     GT_G[obj][s] = 1
+                elif (s in [x[0] for x in c_Psi[obj]]) and (s not in [x[0] for x in c_Psi[Cl[obj]['other']]]):
+                    c_Psi[Cl[obj]['other']].append((s, val))
+                    GT_G[Cl[obj]['other']][s] = 0
         else:
+            # never get into this part if the object not into a cluster
             for s, val in Psi[obj]:
                 c_Psi[obj].append((s, val))
                 GT_G[obj][s] = 1
@@ -68,5 +77,6 @@ def synthesize(N, M, V, density, conf_prob, s_acc):
                 others = range(V)
                 others.remove(GT[obj])
                 c_Psi[obj].append((s, np.random.choice(others)))
+            GT_G[obj][s] = 1
 
     return GT, GT_G, Cl, c_Psi
