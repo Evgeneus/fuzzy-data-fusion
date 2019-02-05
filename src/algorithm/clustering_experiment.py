@@ -2,6 +2,7 @@ from src.algorithm.PICA.Dataset import *
 from copy import deepcopy
 from mv import majority_voting
 from em import expectation_maximization
+from f_mcmc import f_mcmc
 from util import prob_binary_convert, accu_G
 
 
@@ -24,13 +25,26 @@ def load_data(file_name):
     Psi = [[] for _ in range(M)]
     for v_ in data.labels:
         Psi[v_.imageIdx].append((v_.labelerId, v_.label))
-    Cl = {0: {'other': 1, 'id': 0},
-          1: {'other': 0, 'id': 1},
-          2: {'other': 3, 'id': 2},
-          3: {'other': 4, 'id': 3},
-          4: {'other': 3, 'id': 4},
-          5: {'other': 6, 'id': 5},
-          6: {'other': 5, 'id': 6},
+    # Cl = {0: {'other': 1, 'id': 0},
+    #       1: {'other': 0, 'id': 1},
+    #       2: {'other': 3, 'id': 2},
+    #       3: {'other': 2, 'id': 3},
+    #       4: {'other': 5, 'id': 4},
+    #       5: {'other': 4, 'id': 5},
+    #       }
+    # Cl = {0: {'other': 5, 'id': 0},
+    #       1: {'other': 4, 'id': 1},
+    #       2: {'other': 3, 'id': 2},
+    #       3: {'other': 2, 'id': 3},
+    #       4: {'other': 1, 'id': 4},
+    #       5: {'other': 0, 'id': 5},
+    #       }
+    Cl = {0: {'other': 4, 'id': 0},
+          1: {'other': 3, 'id': 1},
+          2: {'other': 5, 'id': 2},
+          3: {'other': 1, 'id': 3},
+          4: {'other': 0, 'id': 4},
+          5: {'other': 2, 'id': 5},
           }
 
     return N, M, Psi, Cl, data.gt
@@ -65,15 +79,28 @@ def permutedAcc(bin_output, num_possible_values, gt):
 
 
 def run(N, M, Psi, Cl, num_possible_values, gt):
-    # mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
-
     # MV
-    mv_p = majority_voting(Psi)
-    mv_b = prob_binary_convert(mv_p)
+    # mv_p = majority_voting(Psi)
+    # mv_b = prob_binary_convert(mv_p)
 
-    acc_mv = permutedAcc(mv_b, num_possible_values, gt)
+    # Fussy MCMC
+    mcmc_params = {'N_iter': 40, 'burnin': 5, 'thin': 3, 'FV': 4}
+    f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), deepcopy(Cl), mcmc_params)
 
-    return acc_mv
+
+
+    # # MV + CONF
+    # mv_f_p = majority_voting(Psi_fussy)
+    # mv_f_b = prob_binary_convert(mv_f_p)
+
+    # EM + CONF
+    em_A, em_p = expectation_maximization(N, M, Psi_fussy)
+    em_f_b = prob_binary_convert(em_p)
+
+
+    acc = permutedAcc(em_f_b, num_possible_values, gt)
+
+    return acc
 
 
 if __name__=='__main__':
@@ -81,7 +108,12 @@ if __name__=='__main__':
   for file_name in range(100):  # Run 100 simulations
     N, M, Psi, Cl, gt = load_data(file_name)
     num_possible_values = 3
-    acc = run(N, M, Psi, Cl, num_possible_values, gt)
+    # if fuzzy mcmc do a crucial wrong swamp
+    try:
+        acc = run(N, M, deepcopy(Psi), Cl, num_possible_values, gt)
+    except:
+        acc = run(N, M, deepcopy(Psi), Cl, num_possible_values, gt)
+
 
     acc_list.append(acc)
   print(sum(acc_list)/len(acc_list))
