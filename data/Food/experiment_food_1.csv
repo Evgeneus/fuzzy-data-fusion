@@ -1,0 +1,16 @@
+question_n,pic_url,gt,gt_conf,v1,v2,v3,v4,v5
+1,https://i.imgur.com/cK2bM8r.jpg,Artichokes,Cardoons,Avocado,Artichokes,Beetroot,Cardoons,Fig
+2,https://i.imgur.com/gt1lk5H.jpg,Dates,Prunes,Prunes,Garlic,Dates,Fennel,Clementine
+3,https://i.imgur.com/cRzsvbP.jpg,Momos,Ravioli,Carrot,Key lime pie,Tater tots,Ravioli,Momos
+4,https://i.imgur.com/hevIVzo.jpg,Muffin,Cupcake,Cupcake,Muffin,Key lime pie,Twinkies,Cornbread
+5,https://i.imgur.com/Nzsd35w.jpg,Nectarines,Peaches,Butternut Squash,Peaches,Apple,Apricot,Nectarines
+6,https://i.imgur.com/bLd4xwT.jpg,Pancake,Crêpe,Pancake,Crêpe,Cornbread,Crabcake,Fortune cookies
+7,https://i.imgur.com/iHoF1Rl.jpg,Plantains,Bananas,Guava,Honeydew melon,Bananas,Mango,Plantains
+8,https://i.imgur.com/DsJv7kK.jpg,Soybeans,Chickpeas,Soybeans,Nut,Pea,Peanut,Chickpeas
+9,https://i.imgur.com/39PfcpA.jpg,Spaghetti,Noodles,Noodles,Spaghetti,Cioppino,Lasagna,Goulash
+10,https://i.imgur.com/rCIHDx1.jpg,Sweet Potatoes,Yams,Sweet Potatoes,Garlic,Yams,Dates,Fig
+11,https://i.imgur.com/dqFUfJd.jpg,Zucchini,Cucumber,Cucumber,Garlic,Prunes,Zucchini,Artichokes
+12,https://i.imgur.com/QNzKFNi.jpg,Baklava,,Noodles,Burgers,Barbecue ribs,Buffalo wings,Baklava
+13,https://i.imgur.com/U68RlWe.jpg,Olives,,Raisin,Radish,Olives,Yam,Strawberry
+14,https://i.imgur.com/JFxP0au.jpg,Paella,,Paella,Noodles,Barbecue ribs,Nachos,Buffalo wings
+15,https://i.imgur.com/2wRydn6.jpg,Steak,,Pizza,Steak,Raisin,Barbecue ribs,Buffalo wings
