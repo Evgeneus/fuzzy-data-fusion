@@ -1,0 +1,31 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+1,Belgium,Germany,0,10,0,0
+2,Costa rica,Thailand,0,10,0,0
+3,Denmark,Switzerland,1,10,2,0
+4,Haiti,Liechtenstein,0,10,0,0
+5,Hungary,Italy,0,10,0,0
+6,Indonesia,Monaco,1,10,3,1
+7,Ireland,Ivory coast,1,10,4,0
+8,Moldova,Romania,1,10,4,0
+9,New zealand,Australia,1,10,1,0
+10,Norway,Iceland,0,10,0,0
+11,Paraguay,Croatia,1,10,1,0
+12,Senegal,Mali,1,10,1,0
+13,Slovenia,Russia,0,10,0,0
+14,Azerbaijan,,0,10,0,0
+15,Malta,,0,10,0,0
+16,Latvia,,0,10,0,0
+17,Mexico,,0,10,0,0
+18,Brazil,,0,10,0,0
+19,Kazakhstan,,0,10,0,0
+20,Usa,,0,10,0,0
+21,Greenland,,0,10,0,0
+22,Israel,,0,10,0,0
+23,Aruba,,0,10,0,0
+24,Guatemala,,0,10,0,0
+25,Egypt,,0,10,0,0
+26,Bolivia,,0,10,0,0
+27,Nigeria,,0,10,0,0
+28,Colombia,,0,10,0,0
+29,Korea,,0,10,0,0
+30,Armenia,,0,10,0,0
