@@ -17,8 +17,8 @@ n_runs = 50
 
 def load_data():
     test = [[], []]
-    f1_df = pd.read_csv('../data/Flags/flags1_res.csv')
-    f2_df = pd.read_csv('../data/Flags/flags2_res.csv')
+    f1_df = pd.read_csv('../data/Flags/flags1_res.csv', delimiter=';')
+    f2_df = pd.read_csv('../data/Flags/flags2_res.csv', delimiter=';')
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
@@ -56,14 +56,15 @@ def load_data():
             if vote == other_GT:
                 GT_G[obj_id][s_id] = 0
                 conf_counter += 1
-                print 'obj: {}, other: {}'.format(obj_id, other_id)
+                # print 'obj: {}, other: {}'.format(obj_id, other_id)
                 test[0].append(obj_id)
                 test[1].append(other_id)
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
 
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(20*13))
+    num_votes_per_object = 20
+    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(num_votes_per_object*26))
     print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
