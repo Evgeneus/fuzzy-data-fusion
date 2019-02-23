@@ -1,0 +1,51 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+1,Skate Kitchen,Mid90s,0,20,0,2
+2,Beautiful Boy,Ben is Back,0,20,0,1
+3,Puppet Master: The Littlest Reich,The Happytime Murders,0,20,0,1
+4,Smallfoot,Abominable,0,20,0,0
+5,Upgrade,Venom,0,20,0,0
+6,Sink or Swim,Swimming with Men,0,20,0,2
+7,"Love, Simon",Alex Strangelove,0,20,0,0
+8,Crowhurst,The Mercy,1,20,1,0
+9,Rough Night,Girls Trip,1,20,1,1
+10,Darkest Hour,Dunkirk,0,20,0,0
+11,Churchill,Darkest Hour,0,20,0,0
+12,Anthropoid,The Man with the Iron Heart,0,20,0,0
+13,The Jungle Book,Mowgli: Legend of the Jungle,1,20,11,0
+14,Batman v Superman: Dawn of Justice,Captain America: Civil War,0,20,0,0
+15,Zootopia,Sing,0,20,0,0
+16,Captain Fantastic,The Glass Castle,0,20,0,0
+17,Christine,Kate Plays Christine,1,20,1,0
+18,Other People,The Hollars,0,20,0,1
+19,Coming Through the Rye,Rebel in the Rye,1,20,1,1
+20,Freaks of Nature,Scouts Guide to the Zombie Apocalypse,1,20,1,0
+21,Spectre,Mission: Impossible – Rogue Nation,1,20,1,0
+22,The Martian,Approaching the Unknown,0,20,0,0
+23,Marguerite,Florence Foster Jenkins,0,20,0,0
+24,The Beauty Inside,Every Day,0,20,0,1
+25,Moonwalkers,Operation Avalanche,0,20,0,1
+26,Labyrinth of Lies,The People vs. Fritz Bauer,0,20,0,1
+27,Unfriended,Friend Request,1,20,5,0
+28,This Is Where I Leave You,August: Osage County,1,20,1,6
+29,Life After Beth,Burying the Ex,0,20,0,0
+30,The Equalizer,John Wick,0,20,0,1
+31,Hercules,The Legend of Hercules,1,20,1,0
+32,The Machine,Automata,1,20,1,1
+33,The Double,Enemy,0,20,0,0
+34,This Is the End,The World's End,1,20,3,1
+35,Oblivion,After Earth,1,20,2,1
+36,Olympus Has Fallen,White House Down,1,20,3,0
+37,The Other Son,"Like Father, Like Son",0,20,0,0
+38,Upside Down,Patema Inverted,0,20,0,0
+39,"Tomorrow, when the War Began",Red Dawn,0,20,0,0
+40,Battleship,Pacific Rim,0,20,0,0
+41,Zero Dark Thirty,Seal Team Six: The Raid on Osama Bin Laden,1,20,2,2
+42,Mirror Mirror,Snow White and the Huntsman,1,20,4,0
+43,The Girl,Hitchcock,0,20,0,3
+44,Quartet,A Late Quartet,1,20,2,0
+45,Extraterrestrial,Seeking a Friend for the End of the World,0,20,0,1
+46,The Raid,Dredd,0,20,0,2
+47,No Strings Attached,Friends with Benefits,0,20,0,1
+48,Skyline,Battle: Los Angeles,0,20,0,2
+49,Despicable Me,Megamind,0,20,0,0
+50,The A-Team,The Losers,1,20,1,0
