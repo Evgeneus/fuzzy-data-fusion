@@ -1,0 +1,11 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+1,Cardoons,Artichokes,1,10,5,0
+2,Prunes,Dates,1,10,1,0
+3,Ravioli,Momos,1,10,1,0
+4,Cupcake,Muffin,1,10,2,0
+5,Peaches,Nectarines,1,10,1,1
+6,Crêpe,Pancake,1,20,10,1
+7,Chickpeas,Soybeans,1,20,3,6
+8,Noodles,Spaghetti,1,20,15,0
+9,Yams,Sweet Potatoes,1,20,6,0
+10,Cucumber,Zucchini,0,10,0,0
