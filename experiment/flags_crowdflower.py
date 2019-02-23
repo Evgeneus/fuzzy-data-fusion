@@ -12,7 +12,7 @@ from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 50
+n_runs = 100
 
 
 def load_data():
@@ -90,7 +90,20 @@ def accuracy():
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
-        accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+
+
+        # compute G ACCuracy only on clusters where we belief confusions might happen
+        f_mcmc_G_clust, GT_G_clust = {}, {}
+        num_of_clusters = 13
+        for obj_id in range(num_of_clusters):
+            f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
+            f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
+            GT_G_clust[obj_id] = GT_G[obj_id]
+            GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
+        accu_G_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
+
+        # accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
@@ -151,9 +164,10 @@ def accuracy():
         inv_f_hits = []
         pinv_f_hits = []
 
+        # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
         for obj_id, obj in enumerate(mv_p):
-            if len(obj) > 1:
+            if len(obj) > 1 and (obj_id < num_of_clusters or M/2 <= obj_id < M/2+num_of_clusters):
                 obj_with_conflicts.append(obj_id)
 
         for obj in range(M):
