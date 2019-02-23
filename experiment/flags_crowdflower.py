@@ -12,7 +12,7 @@ from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 100
+n_runs = 50
 
 
 def load_data():
