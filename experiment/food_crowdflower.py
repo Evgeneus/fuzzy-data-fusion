@@ -62,8 +62,7 @@ def load_data():
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
 
-    num_votes_per_object = 20
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(num_votes_per_object*26))
+    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 

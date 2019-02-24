@@ -1,11 +1,11 @@
 question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
-1,Artichokes,Cardoons,0,10,0,1
-2,Dates,Prunes,1,10,5,1
-3,Momos,Ravioli,1,10,4,0
-4,Muffin,Cupcake,1,10,5,1
-5,Nectarines,Peaches,1,10,5,2
-6,Pancake,Crêpe,1,10,2,0
-7,Soybeans,Chickpeas,0,10,0,4
-8,Spaghetti,Noodles,1,10,3,0
-9,Sweet Potatoes,Yams,1,10,2,0
-10,Zucchini,Cucumber,1,20,9,0
+1,Artichokes,Cardoons,0,30,0,2
+2,Dates,Prunes,1,30,10,1
+3,Momos,Ravioli,1,30,8,1
+4,Muffin,Cupcake,1,30,15,3
+5,Nectarines,Peaches,1,30,15,8
+6,Pancake,Crêpe,1,30,4,0
+7,Soybeans,Chickpeas,1,30,3,9
+8,Spaghetti,Noodles,1,30,5,0
+9,Sweet Potatoes,Yams,1,30,5,2
+10,Zucchini,Cucumber,1,40,23,1
