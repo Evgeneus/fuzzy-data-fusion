@@ -48,6 +48,8 @@ def load_data():
         for index, row in obj_data.iterrows():
             s_id = source_dict[row['_worker_id']]
             vote = row['crowd_ans']
+            if vote == "I don't know":
+                continue
             Psi[obj_id].append((s_id, vote))
 
             other_id = Cl[obj_id]['other']
