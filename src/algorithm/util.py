@@ -68,6 +68,32 @@ def accu_G(f_mcmc_G, GT_G):
     return tp/total
 
 
+def precision_recall(f_mcmc_G, GT_G):
+    # '0' IS POSITIVE, CONFUSION
+    tp = tn = fp = fn = 0.
+    for obj in GT_G.keys():
+        for s in GT_G[obj]:
+            gt = GT_G[obj][s]
+            val = f_mcmc_G[obj][s].index(max(f_mcmc_G[obj][s]))
+            gt = 1 - gt
+            val = 1 - val
+            if gt and not val:
+                fn += 1
+            if not gt and val:
+                fp += 1
+            if gt and val:
+                tp += 1
+            if not gt and not val:
+                tn += 1
+    try:
+        recall = tp / (tp + fn)
+        precision = tp / (tp + fp)
+    except ZeroDivisionError:
+        print('ZeroDivisionError -> recall, precision, fbeta = 0., 0., 0')
+        recall = precision = 0.
+    return precision, recall
+
+
 def prob_binary_convert(data):
     data_b = []
     for obj in data:
