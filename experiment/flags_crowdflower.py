@@ -5,7 +5,7 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
@@ -81,7 +81,7 @@ def accuracy():
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
     runs = [[] for _ in range(20)]
-    accu_G_list = []
+    accu_G_list, G_precision_list, G_recall_list = [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
         # PROBABILISTIC OUTPUT
@@ -90,7 +90,9 @@ def accuracy():
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
-
+        precision, recall = precision_recall(f_mcmc_G, GT_G)
+        G_precision_list.append(precision)
+        G_recall_list.append(recall)
 
         # compute G ACCuracy only on clusters where we belief confusions might happen
         f_mcmc_G_clust, GT_G_clust = {}, {}
@@ -101,7 +103,6 @@ def accuracy():
             GT_G_clust[obj_id] = GT_G[obj_id]
             GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
         accu_G_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
-
         # accu_G_list.append(accu_G(f_mcmc_G, GT_G))
 
         mv_f_p = majority_voting(Psi_fussy)
@@ -223,6 +224,8 @@ def accuracy():
         runs[19].append(np.average(pinv_f_hits))
 
     print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
+    print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
+    print('G recall: {:1.4f}+-{:1.4f}'.format(np.average(G_recall_list), np.std(G_recall_list)))
     print 'PROBABILISTIC OUTPUT'
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))

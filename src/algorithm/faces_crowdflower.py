@@ -5,7 +5,7 @@ from em import expectation_maximization
 from mv import majority_voting
 from mcmc import mcmc
 from f_mcmc import f_mcmc
-from util import accu_G, prob_binary_convert
+from util import accu_G, prob_binary_convert, precision_recall
 from sums import sums
 from average_log import average_log
 from investment import investment
@@ -39,7 +39,7 @@ def load_data():
 
     conf_counter = 0
     total_votes = 0
-    Psi = [[] for obj in range(M)]
+    Psi = [[] for _ in range(M)]
     for obj_id in range(M):
         if obj_id < 24:
             obj_data = f1_df.loc[f1_df['question_n'] == obj_id+1]
@@ -81,7 +81,7 @@ def accuracy():
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
     runs = [[] for _ in range(20)]
-    accu_G_list = []
+    accu_G_list, G_precision_list, G_recall_list = [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
         # PROBABILISTIC OUTPUT
@@ -90,7 +90,11 @@ def accuracy():
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        precision, recall = precision_recall(f_mcmc_G, GT_G)
+        G_precision_list.append(precision)
+        G_recall_list.append(recall)
         accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
@@ -209,6 +213,8 @@ def accuracy():
         runs[19].append(np.average(pinv_f_hits))
 
     print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
+    print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
+    print('G recall: {:1.4f}+-{:1.4f}'.format(np.average(G_recall_list), np.std(G_recall_list)))
     print 'PROBABILISTIC OUTPUT'
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
