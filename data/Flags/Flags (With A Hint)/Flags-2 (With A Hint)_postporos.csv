@@ -1,0 +1,9 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+5,Italy,Hungary,0,10,0,0
+6,Monaco,Indonesia,1,10,2,0
+7,Ivory coast,Ireland,1,10,3,0
+9,Australia,New zealand,1,10,1,0
+12,Mali,Senegal,0,10,0,0
+14,Greece,,0,10,0,0
+15,United kingdom,,0,10,0,0
+16,India,,0,10,0,0

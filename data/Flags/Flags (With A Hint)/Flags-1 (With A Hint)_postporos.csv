@@ -1,0 +1,11 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+3,Denmark,Switzerland,0,10,0,0
+6,Indonesia,Monaco,1,10,3,2
+7,Ireland,Ivory coast,1,10,4,0
+8,Moldova,Romania,1,10,1,1
+9,New zealand,Australia,0,10,0,0
+11,Paraguay,Croatia,0,10,0,0
+12,Senegal,Mali,0,10,0,0
+21,Greenland,,0,10,0,3
+22,Israel,,0,10,0,0
+23,Aruba,,0,10,0,0
