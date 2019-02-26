@@ -12,19 +12,29 @@ from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 50
+n_runs = 200
 
 
-def load_data():
+def load_data(votes_per_obj):
+    M = 60  # number of objects
     test = [[], []]
-    f1_df = pd.read_csv('../data/Flags/flags1_res.csv', delimiter=';')
-    f2_df = pd.read_csv('../data/Flags/flags2_res.csv', delimiter=';')
+    f1_df_ = pd.read_csv('../data/Flags/flags1_res.csv', delimiter=';')
+    f1_df = pd.DataFrame([], columns=f1_df_.columns)
+    for question_n in f1_df_['question_n'].unique():
+        d = f1_df_[f1_df_['question_n'] == question_n].sample(votes_per_obj)
+        f1_df = pd.concat([f1_df, d], ignore_index=True)
+
+    f2_df_ = pd.read_csv('../data/Flags/flags2_res.csv', delimiter=';')
+    f2_df = pd.DataFrame([], columns=f2_df_.columns)
+    for question_n in f2_df_['question_n'].unique():
+        d = f2_df_[f2_df_['question_n'] == question_n].sample(votes_per_obj)
+        f2_df = pd.concat([f2_df, d], ignore_index=True)
+
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
     source_dict = dict(zip(sources, range(len(sources))))
     N = len(source_dict)  # number of sources
-    M = 60  # number of objects
 
     Cl, GT = {}, {}
     for i in range(M / 2):
@@ -69,8 +79,8 @@ def load_data():
     return [N, M, Psi, GT, Cl, GT_G]
 
 
-def accuracy():
-    N, M, Psi, GT, Cl, GT_G = load_data()
+def accuracy(votes_per_obj=5):
+    # N, M, Psi, GT, Cl, GT_G = load_data()
     res = {'accuracy': [],
            'std': [],
            'methods': ['mv_p', 'em_p', 'mcmc_p',
@@ -84,6 +94,14 @@ def accuracy():
     accu_G_list, G_precision_list, G_recall_list = [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
+        N, M, Psi, GT, Cl, GT_G = load_data(votes_per_obj)
+
+        from collections import defaultdict
+        d = defaultdict(int)
+        for obj in Psi:
+            for s in obj:
+                d[s[0]] += 1
+
         # PROBABILISTIC OUTPUT
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
@@ -222,6 +240,7 @@ def accuracy():
         runs[17].append(np.average(avlog_f_hits))
         runs[18].append(np.average(inv_f_hits))
         runs[19].append(np.average(pinv_f_hits))
+        print('G Accu: {:1.4f}'.format(accu_G_list[-1]))
 
     print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
     print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
@@ -254,13 +273,15 @@ def accuracy():
         res['std'].append(np.std(run))
 
     # Save results in a CSV
-    pd.DataFrame(res).to_csv('../data/results/flags_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv('../data/results/flags_accuracy.csv', index=False)
 
 
 if __name__ == '__main__':
     # if fuzzy mcmc do a crucial wrong swamp
+    votes_per_obj = 3
+    print('votes_per_obj = {}'.format(votes_per_obj))
     try:
-        accuracy()
+        accuracy(votes_per_obj)
     except:
         print('empty..')
-        accuracy()
+        accuracy(votes_per_obj)

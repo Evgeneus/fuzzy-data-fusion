@@ -38,6 +38,7 @@ def load_data():
         GT_G[obj] = {}
 
     conf_counter = 0
+    err_counter = 0.
     total_votes = 0
     Psi = [[] for _ in range(M)]
     for obj_id in range(M):
@@ -51,6 +52,8 @@ def load_data():
             if vote == "I don't know":
                 continue
             Psi[obj_id].append((s_id, vote))
+            if vote != GT[obj_id]:
+                err_counter += 1
 
             other_id = Cl[obj_id]['other']
             other_GT = GT[other_id]
