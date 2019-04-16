@@ -1,17 +1,17 @@
 from collections import defaultdict
-import numpy as np
 from copy import deepcopy
-from mv import majority_voting
-from em import expectation_maximization
-from mcmc import mcmc
-from f_mcmc import f_mcmc
-from generator import synthesize
+import numpy as np
 import pandas as pd
-from sums import sums
-from average_log import average_log
-from investment import investment
-from pooled_investment import pooled_investment
-from util import prob_binary_convert, accu_G
+from src.algorithm.mv import majority_voting
+from src.algorithm.em import expectation_maximization
+from src.algorithm.mcmc import mcmc
+from src.algorithm.f_mcmc import f_mcmc
+from src.algorithm.generator import synthesize
+from src.algorithm.sums import sums
+from src.algorithm.average_log import average_log
+from src.algorithm.investment import investment
+from src.algorithm.pooled_investment import pooled_investment
+from src.algorithm.util import prob_binary_convert, accu_G
 
 n_runs = 10
 
@@ -96,7 +96,7 @@ def accuracy():
 
             # FUZZY FUSION Psi
             # From now Psi is the same as Psi_fussy due to Python
-            Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})[1]
+            _, Psi_fussy, _ = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
             data_f = adapter_input(Psi_fussy)
 
             mv_pf = majority_voting(Psi_fussy)
@@ -201,7 +201,7 @@ def convergence():
     # number of sources
     N = 30
     # number of objects
-    M = 5000
+    M = 500
     # number of values per object
     V = 30
     # synthetically generated observations
@@ -215,7 +215,7 @@ def convergence():
         params = {'N_iter': p[0], 'burnin': p[1], 'thin': p[2], 'FV': 0}
         runs = []
         for run in range(n_runs):
-            f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)[0]
+            f_mcmc_G, _, _ = f_mcmc(N, M, Psi, Cl, params)
             G_accu = np.average(accu_G(f_mcmc_G, GT_G))
             runs.append(G_accu)
         res['G accuracy'].append(np.average(runs))
@@ -245,7 +245,7 @@ def values():
         GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, accuracy)
         G_accu = []
         for run in range(n_runs):
-            f_mcmc_G = f_mcmc(N, M, Psi, Cl, params)[0]
+            f_mcmc_G, _, _ = f_mcmc(N, M, Psi, Cl, params)
             G_accu = np.average(accu_G(f_mcmc_G, GT_G))
         res['G accuracy'].append(np.average(G_accu))
         res['error'].append(np.std(G_accu))
@@ -277,7 +277,7 @@ def get_acc_g():
             accu_G_list = []
             for run in range(n_runs):
                 GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, s_acc)
-                f_mcmc_G, _ = f_mcmc(N, M, Psi, Cl, mcmc_params)
+                f_mcmc_G, _, _ = f_mcmc(N, M, Psi, Cl, mcmc_params)
                 accu_G_list.append(accu_G(f_mcmc_G, GT_G))
 
             res['acc_g'].append(np.mean(accu_G_list))

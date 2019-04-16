@@ -78,7 +78,7 @@ def accuracy():
                        'sums', 'avlog', 'inv', 'pinv',
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
-    runs = [[] for _ in range(20)]
+    runs = [[] for _ in range(22)]
     accu_G_list, G_precision_list, G_recall_list = [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
@@ -87,7 +87,7 @@ def accuracy():
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
-        f_mcmc_G, Psi_fussy = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        f_mcmc_G, Psi_fussy, mcmc_conf_p = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         precision, recall = precision_recall(f_mcmc_G, GT_G)
         accu_G_list.append(accu_G(f_mcmc_G, GT_G))
         G_precision_list.append(precision)
@@ -107,6 +107,8 @@ def accuracy():
         mv_f_b = prob_binary_convert(mv_f_p)
         em_f_b = prob_binary_convert(em_f_p)
         mcmc_f_b = prob_binary_convert(mcmc_f_p)
+        # our algorithm MCMC-C
+        mcmc_conf_b = prob_binary_convert(mcmc_conf_p)
 
         # SUMS
         sums_belief = sums(N, data)
@@ -152,6 +154,8 @@ def accuracy():
         avlog_f_hits = []
         inv_f_hits = []
         pinv_f_hits = []
+        mcmc_conf_p_hist = []
+        mcmc_conf_b_hist = []
 
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
@@ -169,6 +173,8 @@ def accuracy():
                 mv_f_hits.append(mv_f_p[obj][GT[obj]])
                 em_f_hits.append(em_f_p[obj][GT[obj]])
                 mcmc_f_hits.append(mcmc_f_p[obj][GT[obj]])
+
+                mcmc_conf_p_hist.append(mcmc_conf_p[obj][GT[obj]])
 
                 # BINARY OUTPUT
                 mv_b_hits.append(mv_b[obj][GT[obj]])
@@ -190,6 +196,8 @@ def accuracy():
                 pinv_hits.append(pinv_b[obj][GT[obj]])
                 pinv_f_hits.append(pinv_bf[obj][GT[obj]])
 
+                mcmc_conf_b_hist.append(mcmc_conf_b[obj][GT[obj]])
+
         runs[0].append(np.average(mv_hits))
         runs[1].append(np.average(em_hits))
         runs[2].append(np.average(mcmc_hits))
@@ -210,6 +218,8 @@ def accuracy():
         runs[17].append(np.average(avlog_f_hits))
         runs[18].append(np.average(inv_f_hits))
         runs[19].append(np.average(pinv_f_hits))
+        runs[20].append(np.average(mcmc_f_hits))
+        runs[21].append(np.average(mcmc_f_b_hits))
 
     print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
     print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
@@ -221,7 +231,9 @@ def accuracy():
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[4]), np.std(runs[4])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
+    print('*mcmc_conf_p*: {:1.4f}+-{:1.4f}'.format(np.average(runs[20]), np.std(runs[20])))
     print 'BINARY OUTPUT'
+    print('*mcmc_conf_b*: {:1.4f}+-{:1.4f}'.format(np.average(runs[21]), np.std(runs[21])))
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[6]), np.std(runs[6])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[9]), np.std(runs[9])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[7]), np.std(runs[7])))
@@ -242,7 +254,7 @@ def accuracy():
         res['std'].append(np.std(run))
 
     # Save results in a CSV
-    pd.DataFrame(res).to_csv('../data/results/food_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv('../data/results/food_accuracy.csv', index=False)
 
 
 if __name__ == '__main__':

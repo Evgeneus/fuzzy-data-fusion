@@ -191,5 +191,4 @@ def f_mcmc(N, M, Psi, Cl, params):
                         Psi_fussy[other_obj_id].append((s, value))
                         break
 
-    # return f_mcmc_A, f_mcmc_p, f_mcmc_G
-    return f_mcmc_G, Psi_fussy
+    return f_mcmc_G, Psi_fussy, f_mcmc_p
