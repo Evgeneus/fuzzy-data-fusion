@@ -10,7 +10,7 @@ from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
-from src.algorithm.synthetic_experiment import adapter_input, adapter_output
+from synthetic_experiment import adapter_input, adapter_output
 
 n_runs = 50
 
