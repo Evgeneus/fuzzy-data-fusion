@@ -88,10 +88,11 @@ def precision_recall(f_mcmc_G, GT_G):
     try:
         recall = tp / (tp + fn)
         precision = tp / (tp + fp)
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
     except ZeroDivisionError:
         print('ZeroDivisionError -> recall, precision, fbeta = 0., 0., 0')
         recall = precision = 0.
-    return precision, recall
+    return precision, recall, accuracy
 
 
 def prob_binary_convert(data):

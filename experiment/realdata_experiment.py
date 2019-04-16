@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 from copy import deepcopy
 from src.algorithm.em import expectation_maximization
@@ -10,64 +9,13 @@ from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
+from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food
 from synthetic_experiment import adapter_input, adapter_output
 
 n_runs = 50
 
 
-def load_data():
-    test = [[], []]
-    f1_df = pd.read_csv('../data/Food/food1_res.csv', delimiter=';')
-    f2_df = pd.read_csv('../data/Food/food2_res.csv', delimiter=';')
-    s_f1 = set(f1_df['_worker_id'].values)
-    s_f2 = set(f2_df['_worker_id'].values)
-    sources = s_f1 | s_f2
-    source_dict = dict(zip(sources, range(len(sources))))
-    N = len(source_dict)  # number of sources
-    M = 20  # number of objects
-
-    Cl, GT = {}, {}
-    for i in range(M / 2):
-        GT[i] = f1_df[f1_df['question_n'] == i+1]['gt'].values[0]
-        GT[i + M/2] = f2_df[f2_df['question_n'] == i+1]['gt'].values[0]
-        Cl.update({i: {'id': i, 'other': i + M/2}})
-        Cl.update({i + M/2: {'id': i + M/2, 'other': i}})
-
-    GT_G = {}
-    for obj in range(M):
-        GT_G[obj] = {}
-
-    conf_counter = 0
-    total_votes = 0
-    Psi = [[] for _ in range(M)]
-    for obj_id in range(M):
-        if obj_id < M/2:
-            obj_data = f1_df.loc[f1_df['question_n'] == obj_id+1]
-        else:
-            obj_data = f2_df.loc[f2_df['question_n'] == obj_id-M/2+1]
-        for index, row in obj_data.iterrows():
-            s_id = source_dict[row['_worker_id']]
-            vote = row['crowd_ans']
-            Psi[obj_id].append((s_id, vote))
-
-            other_id = Cl[obj_id]['other']
-            other_GT = GT[other_id]
-            if vote == other_GT:
-                GT_G[obj_id][s_id] = 0
-                conf_counter += 1
-                # print 'obj: {}, other: {}'.format(obj_id, other_id)
-                test[0].append(obj_id)
-                test[1].append(other_id)
-            else:
-                GT_G[obj_id][s_id] = 1
-            total_votes += 1
-
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
-    print '#total votes: {}'.format(total_votes)
-    return [N, M, Psi, GT, Cl, GT_G]
-
-
-def accuracy():
+def accuracy(load_data):
     N, M, Psi, GT, Cl, GT_G = load_data()
     res = {'accuracy': [],
            'std': [],
@@ -79,7 +27,7 @@ def accuracy():
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
     runs = [[] for _ in range(22)]
-    accu_G_list, G_precision_list, G_recall_list = [], [], []
+    G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
         # PROBABILISTIC OUTPUT
@@ -88,10 +36,24 @@ def accuracy():
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy, mcmc_conf_p = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
-        precision, recall = precision_recall(f_mcmc_G, GT_G)
-        accu_G_list.append(accu_G(f_mcmc_G, GT_G))
+        precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
         G_precision_list.append(precision)
         G_recall_list.append(recall)
+        G_accu_b_list.append(G_accu_b)
+
+        # only for 'flags' dataset
+        if 'flags' in load_data.__name__:
+            # compute G ACCuracy only on clusters where we belief confusions might happen
+            f_mcmc_G_clust, GT_G_clust = {}, {}
+            num_of_clusters = 13
+            for obj_id in range(num_of_clusters):
+                f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
+                f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
+                GT_G_clust[obj_id] = GT_G[obj_id]
+                GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
+            G_accu_p_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
+        else:
+            G_accu_p_list.append(accu_G(f_mcmc_G, GT_G))
 
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
@@ -160,8 +122,13 @@ def accuracy():
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
         for obj_id, obj in enumerate(mv_p):
-            if len(obj) > 1:
-                obj_with_conflicts.append(obj_id)
+            # only for 'flags' dataset
+            if 'flags' in load_data.__name__:
+                if len(obj) > 1 and (obj_id < num_of_clusters or M/2 <= obj_id < M/2+num_of_clusters):
+                    obj_with_conflicts.append(obj_id)
+            else:
+                if len(obj) > 1:
+                    obj_with_conflicts.append(obj_id)
 
         for obj in range(M):
             if obj in obj_with_conflicts:
@@ -221,7 +188,8 @@ def accuracy():
         runs[20].append(np.average(mcmc_f_hits))
         runs[21].append(np.average(mcmc_f_b_hits))
 
-    print('G Accu: {:1.4f}+-{:1.4f}'.format(np.average(accu_G_list), np.std(accu_G_list)))
+    print('G Accu prob: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_p_list), np.std(G_accu_p_list)))
+    print('G Accu bin: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_b_list), np.std(G_accu_b_list)))
     print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
     print('G recall: {:1.4f}+-{:1.4f}'.format(np.average(G_recall_list), np.std(G_recall_list)))
     print 'PROBABILISTIC OUTPUT'
@@ -254,13 +222,29 @@ def accuracy():
         res['std'].append(np.std(run))
 
     # Save results in a CSV
-    # pd.DataFrame(res).to_csv('../data/results/food_accuracy.csv', index=False)
+    # pd.DataFrame(res).to_csv('../data/results/accuracy_.csv', index=False)
 
 
 if __name__ == '__main__':
+    datasets = ['faces', 'flags', 'food', 'plots']
+
+    dataset_name = datasets[3]
+    if dataset_name == 'faces':
+        load_data = load_data_faces
+    elif dataset_name == 'flags':
+        load_data = load_data_flags
+    elif dataset_name == 'food':
+        load_data = load_data_food
+    elif dataset_name == 'plots':
+        load_data = load_data_plots
+    else:
+        print('Dataset not selected')
+        exit(1)
+    print('Dataset: {}'.format(dataset_name))
+
     # if fuzzy mcmc do a crucial wrong swamp
     try:
-        accuracy()
+        accuracy(load_data)
     except:
         print('empty..')
-        accuracy()
+        accuracy(load_data)
