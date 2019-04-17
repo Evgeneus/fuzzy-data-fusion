@@ -4,11 +4,12 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, adapter_psi_dawid, adapter_prob_dawid
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
+from src.algorithm.dawid_skene import dawid_skene
 from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food
 from synthetic_experiment import adapter_input, adapter_output
 
@@ -26,7 +27,7 @@ def accuracy(load_data):
                        'sums', 'avlog', 'inv', 'pinv',
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
-    runs = [[] for _ in range(22)]
+    runs = [[] for _ in range(24)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
@@ -59,6 +60,11 @@ def accuracy(load_data):
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
 
+        # Dawis and Skene
+        Psi_dawid = adapter_psi_dawid(Psi)
+        values_prob, _, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+        ds_p = adapter_prob_dawid(values_prob, classes)
+
         # BINARY OUTPUT
         data = adapter_input(Psi)
         data_f = adapter_input(Psi_fussy)
@@ -69,8 +75,8 @@ def accuracy(load_data):
         mv_f_b = prob_binary_convert(mv_f_p)
         em_f_b = prob_binary_convert(em_f_p)
         mcmc_f_b = prob_binary_convert(mcmc_f_p)
-        # our algorithm MCMC-C
-        mcmc_conf_b = prob_binary_convert(mcmc_conf_p)
+        ds_b = prob_binary_convert(ds_p)
+        mcmc_conf_b = prob_binary_convert(mcmc_conf_p)  # our algorithm MCMC-C
 
         # SUMS
         sums_belief = sums(N, data)
@@ -118,6 +124,7 @@ def accuracy(load_data):
         pinv_f_hits = []
         mcmc_conf_p_hist = []
         mcmc_conf_b_hist = []
+        ds_p_hits, ds_b_hits = [], []
 
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
@@ -136,6 +143,7 @@ def accuracy(load_data):
                 mv_hits.append(mv_p[obj][GT[obj]])
                 em_hits.append(em_p[obj][GT[obj]])
                 mcmc_hits.append(mcmc_p[obj][GT[obj]])
+                ds_p_hits.append(ds_p[obj][GT[obj]])
 
                 mv_f_hits.append(mv_f_p[obj][GT[obj]])
                 em_f_hits.append(em_f_p[obj][GT[obj]])
@@ -147,6 +155,7 @@ def accuracy(load_data):
                 mv_b_hits.append(mv_b[obj][GT[obj]])
                 em_b_hits.append(em_b[obj][GT[obj]])
                 mcmc_b_hits.append(mcmc_b[obj][GT[obj]])
+                ds_b_hits.append(ds_b[obj][GT[obj]])
                 mv_f_b_hits.append(mv_f_b[obj][GT[obj]])
                 em_f_b_hits.append(em_f_b[obj][GT[obj]])
                 mcmc_f_b_hits.append(mcmc_f_b[obj][GT[obj]])
@@ -187,6 +196,8 @@ def accuracy(load_data):
         runs[19].append(np.average(pinv_f_hits))
         runs[20].append(np.average(mcmc_f_hits))
         runs[21].append(np.average(mcmc_f_b_hits))
+        runs[22].append(np.average(ds_p_hits))
+        runs[23].append(np.average(ds_b_hits))
 
     print('G Accu prob: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_p_list), np.std(G_accu_p_list)))
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_b_list), np.std(G_accu_b_list)))
@@ -197,6 +208,7 @@ def accuracy(load_data):
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[1]), np.std(runs[1])))
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[4]), np.std(runs[4])))
+    print('D&S: {:1.4f}+-{:1.4f}'.format(np.average(runs[22]), np.std(runs[22])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
     print('*mcmc_conf_p*: {:1.4f}+-{:1.4f}'.format(np.average(runs[20]), np.std(runs[20])))
@@ -206,6 +218,7 @@ def accuracy(load_data):
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[9]), np.std(runs[9])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[7]), np.std(runs[7])))
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[10]), np.std(runs[10])))
+    print('D&S: {:1.4f}+-{:1.4f}'.format(np.average(runs[23]), np.std(runs[23])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[8]), np.std(runs[8])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[11]), np.std(runs[11])))
     print('sums: {:1.4f}+-{:1.4f}'.format(np.average(runs[12]), np.std(runs[12])))

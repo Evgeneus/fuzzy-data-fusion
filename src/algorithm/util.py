@@ -1,4 +1,5 @@
 import math
+import numpy as np
 from collections import defaultdict
 
 def log_likelihood(GT, M, Psi, A, p):
@@ -105,3 +106,24 @@ def prob_binary_convert(data):
         binary[index_max] = 1.
         data_b.append(defaultdict(int, zip(sources, binary)))
     return data_b
+
+
+## Dawid and Skene
+def adapter_psi_dawid(Psi):
+    Psi_dawid = {}
+    for item_id in range(len(Psi)):
+        Psi_dawid[item_id] = {}
+        for worker_id, val in Psi[item_id]:
+            Psi_dawid[item_id][worker_id] = [val]
+    return Psi_dawid
+
+
+def adapter_prob_dawid(values_prob, classes):
+    ds_p = []
+    for item_prob in values_prob:
+        ids = np.nonzero(item_prob)[0]
+        d = defaultdict(int)
+        for id in ids:
+            d[classes[id]] = item_prob[id]
+        ds_p.append(d)
+    return ds_p
