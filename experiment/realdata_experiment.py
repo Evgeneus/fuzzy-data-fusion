@@ -27,7 +27,7 @@ def accuracy(load_data):
                        'sums', 'avlog', 'inv', 'pinv',
                        'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
                        ]}
-    runs = [[] for _ in range(24)]
+    runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     for run in range(n_runs):
@@ -65,6 +65,10 @@ def accuracy(load_data):
         values_prob, _, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
         ds_p = adapter_prob_dawid(values_prob, classes)
 
+        Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
+        values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
+        ds_p_f = adapter_prob_dawid(values_prob_f, classes)
+
         # BINARY OUTPUT
         data = adapter_input(Psi)
         data_f = adapter_input(Psi_fussy)
@@ -76,6 +80,7 @@ def accuracy(load_data):
         em_f_b = prob_binary_convert(em_f_p)
         mcmc_f_b = prob_binary_convert(mcmc_f_p)
         ds_b = prob_binary_convert(ds_p)
+        ds_b_f = prob_binary_convert(ds_p_f)
         mcmc_conf_b = prob_binary_convert(mcmc_conf_p)  # our algorithm MCMC-C
 
         # SUMS
@@ -125,6 +130,7 @@ def accuracy(load_data):
         mcmc_conf_p_hist = []
         mcmc_conf_b_hist = []
         ds_p_hits, ds_b_hits = [], []
+        ds_p_f_hits, ds_b_f_hits = [], []
 
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
@@ -144,6 +150,7 @@ def accuracy(load_data):
                 em_hits.append(em_p[obj][GT[obj]])
                 mcmc_hits.append(mcmc_p[obj][GT[obj]])
                 ds_p_hits.append(ds_p[obj][GT[obj]])
+                ds_p_f_hits.append(ds_p_f[obj][GT[obj]])
 
                 mv_f_hits.append(mv_f_p[obj][GT[obj]])
                 em_f_hits.append(em_f_p[obj][GT[obj]])
@@ -156,6 +163,7 @@ def accuracy(load_data):
                 em_b_hits.append(em_b[obj][GT[obj]])
                 mcmc_b_hits.append(mcmc_b[obj][GT[obj]])
                 ds_b_hits.append(ds_b[obj][GT[obj]])
+                ds_b_f_hits.append(ds_b_f[obj][GT[obj]])
                 mv_f_b_hits.append(mv_f_b[obj][GT[obj]])
                 em_f_b_hits.append(em_f_b[obj][GT[obj]])
                 mcmc_f_b_hits.append(mcmc_f_b[obj][GT[obj]])
@@ -198,6 +206,8 @@ def accuracy(load_data):
         runs[21].append(np.average(mcmc_f_b_hits))
         runs[22].append(np.average(ds_p_hits))
         runs[23].append(np.average(ds_b_hits))
+        runs[24].append(np.average(ds_p_f_hits))
+        runs[25].append(np.average(ds_b_f_hits))
 
     print('G Accu prob: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_p_list), np.std(G_accu_p_list)))
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_b_list), np.std(G_accu_b_list)))
@@ -209,6 +219,7 @@ def accuracy(load_data):
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[1]), np.std(runs[1])))
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[4]), np.std(runs[4])))
     print('D&S: {:1.4f}+-{:1.4f}'.format(np.average(runs[22]), np.std(runs[22])))
+    print('D&S_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[24]), np.std(runs[24])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
     print('*mcmc_conf_p*: {:1.4f}+-{:1.4f}'.format(np.average(runs[20]), np.std(runs[20])))
@@ -219,6 +230,7 @@ def accuracy(load_data):
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[7]), np.std(runs[7])))
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[10]), np.std(runs[10])))
     print('D&S: {:1.4f}+-{:1.4f}'.format(np.average(runs[23]), np.std(runs[23])))
+    print('D&S_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[25]), np.std(runs[25])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[8]), np.std(runs[8])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[11]), np.std(runs[11])))
     print('sums: {:1.4f}+-{:1.4f}'.format(np.average(runs[12]), np.std(runs[12])))
