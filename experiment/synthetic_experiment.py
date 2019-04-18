@@ -11,7 +11,8 @@ from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
-from src.algorithm.util import prob_binary_convert, accu_G
+from src.algorithm.util import prob_binary_convert, accu_G, adapter_psi_dawid, adapter_prob_dawid
+from src.algorithm.dawid_skene import dawid_skene
 
 n_runs = 10
 
@@ -46,24 +47,27 @@ def accuracy():
     # number of sources
     N = 30
     # number of objects
-    M = 5000
+    M = 100
     # number of values per object
     V = 50
     # synthetically generated observations
     density = 0.5
+    crowd_accuracy = 0.9
     mcmc_params = {'N_iter': 10, 'burnin': 2, 'thin': 3, 'FV': 0}
     conf_probs = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4]
     res = {'sums': [], 'mv': [], 'em': [], 'mcmc': [],
            'sums_f': [], 'mv_f': [], 'em_f': [], 'mcmc_f': [],
            'conf_probs': conf_probs, 'avlog': [], 'avlog_f': [],
-           'inv': [], 'inv_f': [], 'pinv': [], 'pinv_f': []}
+           'inv': [], 'inv_f': [], 'pinv': [], 'pinv_f': [], 'ds': [], 'ds_f': []}
+    print('Crowd Accuracy: {}, Num of classes: {}'.format(crowd_accuracy, V))
     for conf_prob in conf_probs:
-        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, None)
+        GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1-conf_prob, crowd_accuracy)
 
         mv_accu, em_accu, mcmc_accu, sums_accu, avlog_accu, inv_accu, \
         pinv_accu = [], [], [], [], [], [], []
         mv_accu_f, em_accu_f, mcmc_accu_f, sums_accu_f, avlog_accu_f, \
         inv_accu_f, pinv_accu_f = [], [], [], [], [], [], []
+        ds_accu, ds_accu_f = [], []
         for run in range(n_runs):
             # MV
             mv_p = majority_voting(Psi)
@@ -72,6 +76,12 @@ def accuracy():
             # EM
             em_A, em_p = expectation_maximization(N, M, Psi)
             em_b = prob_binary_convert(em_p)
+
+            # Dawis and Skene
+            Psi_dawid = adapter_psi_dawid(Psi)
+            values_prob, _, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+            ds_p = adapter_prob_dawid(values_prob, classes)
+            ds_b = prob_binary_convert(ds_p)
 
             # MCMC
             mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
@@ -105,6 +115,11 @@ def accuracy():
             em_Af, em_pf = expectation_maximization(N, M, Psi_fussy)
             em_bf = prob_binary_convert(em_pf)
 
+            Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
+            values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
+            ds_p_f = adapter_prob_dawid(values_prob_f, classes)
+            ds_b_f = prob_binary_convert(ds_p_f)
+
             mcmc_Af, mcmc_pf = mcmc(N, M, Psi_fussy, mcmc_params)
             mcmc_bf = prob_binary_convert(mcmc_pf)
 
@@ -132,6 +147,9 @@ def accuracy():
             em_accu.append(np.average([em_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             em_accu_f.append(np.average([em_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
+            ds_accu.append(np.average([ds_b[obj][GT[obj]] for obj in obj_with_conflicts]))
+            ds_accu_f.append(np.average([ds_b_f[obj][GT[obj]] for obj in obj_with_conflicts]))
+
             mcmc_accu.append(np.average([mcmc_b[obj][GT[obj]] for obj in obj_with_conflicts]))
             mcmc_accu_f.append(np.average([mcmc_bf[obj][GT[obj]] for obj in obj_with_conflicts]))
 
@@ -153,6 +171,9 @@ def accuracy():
         res['em'].append(np.average(em_accu))
         res['em_f'].append(np.average(em_accu_f))
 
+        res['ds'].append(np.average(ds_accu))
+        res['ds_f'].append(np.average(ds_accu_f))
+
         res['mcmc'].append(np.average(mcmc_accu))
         res['mcmc_f'].append(np.average(mcmc_accu_f))
 
@@ -168,28 +189,31 @@ def accuracy():
         res['pinv'].append(np.average(pinv_accu))
         res['pinv_f'].append(np.average(pinv_accu_f))
 
-        print('confusion probability: {}, mv: {:1.4f}, em: {:1.4f}, mcmc: {:1.4f}, '
-              'sums: {:1.4f}, avlog: {:1.4f}, inv: {:1.4f}, pinv: {:1.4f}'
+        print('ORG|conf prob: {}, mv: {:1.3f}, em: {:1.3f}, D&S: {:1.3f}, mcmc: {:1.3f}, '
+              'sums: {:1.3f}, avlog: {:1.3f}, inv: {:1.3f}, pinv: {:1.3f}'
               .format(conf_prob,
                np.average(mv_accu),
                np.average(em_accu),
+               np.average(ds_accu),
                np.average(mcmc_accu),
                np.average(sums_accu),
                np.average(avlog_accu),
                np.average(inv_accu),
                np.average(pinv_accu)
             ))
-        print('confusion probability: {}, mv_f: {:1.4f}, em:_f {:1.4f}, mcmc_f: {:1.4f}, '
-              'sums_f: {:1.4f}, avlog_f: {:1.4f}, inv_f: {:1.4f}, pinv_f: {:1.4f}'
+        print('COR|conf prob: {}, mv: {:1.3f}, em: {:1.3f}, D&S: {:1.3f}, mcmc: {:1.3f}, '
+              'sums: {:1.3f}, avlog: {:1.3f}, inv: {:1.3f}, pinv: {:1.3f}'
               .format(conf_prob,
                np.average(mv_accu_f),
                np.average(em_accu_f),
+               np.average(ds_accu_f),
                np.average(mcmc_accu_f),
                np.average(sums_accu_f),
                np.average(avlog_accu_f),
                np.average(inv_accu_f),
                np.average(pinv_accu_f)
             ))
+        print('-----------------------')
 
     pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy_binary.csv', index=False)
 
@@ -303,8 +327,8 @@ if __name__ == '__main__':
            ...
            ]
     '''
-    # accuracy()
+    accuracy()
     # convergence()
     # values()
-    get_acc_g()
+    # get_acc_g()
 
