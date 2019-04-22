@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from copy import deepcopy
 from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
@@ -24,7 +25,9 @@ def accuracy(load_data):
                        'mv_b', 'em_b', 'mcmc_b',
                        'mv_f_b', 'em_f_b', 'mcmc_f_b',
                        'sums', 'avlog', 'inv', 'pinv',
-                       'sums_f', 'avlog_f', 'inv_f', 'pinv_f'
+                       'sums_f', 'avlog_f', 'inv_f', 'pinv_f',
+                       'mcmc_conf_p', 'mcmc_conf_b', 'D&S_p',
+                       'D&S_b', 'D&S_f_p', 'D&S_f_b'
                        ]}
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
