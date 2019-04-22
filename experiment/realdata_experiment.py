@@ -17,7 +17,6 @@ n_runs = 50
 
 
 def accuracy(load_data):
-    N, M, Psi, GT, Cl, GT_G = load_data()
     res = {'accuracy': [],
            'std': [],
            'methods': ['mv_p', 'em_p', 'mcmc_p',
@@ -30,13 +29,21 @@ def accuracy(load_data):
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
-    for run in range(n_runs):
+    run = 0
+    while run < n_runs:
+        N, M, Psi, GT, Cl, GT_G = load_data()
         # PROBABILISTIC OUTPUT
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy, mcmc_conf_p = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
+            print('empty fussion, repeat')
+            continue
+        else:
+            run += 1
+        print(run)
         precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
         G_precision_list.append(precision)
         G_recall_list.append(recall)
@@ -253,7 +260,7 @@ def accuracy(load_data):
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
 
-    dataset_name = datasets[3]
+    dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
     elif dataset_name == 'flags':
@@ -267,9 +274,5 @@ if __name__ == '__main__':
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    # if fuzzy mcmc do a crucial wrong swamp
-    try:
-        accuracy(load_data)
-    except:
-        print('empty..')
-        accuracy(load_data)
+    accuracy(load_data)
+
