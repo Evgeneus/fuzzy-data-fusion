@@ -11,15 +11,15 @@ from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.dawid_skene import dawid_skene
-from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food
+from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem
 from synthetic_experiment import adapter_input, adapter_output
 
 n_runs = 50
 
 
-def accuracy(load_data):
+def accuracy(load_data, Truncater=None):
     res = {'accuracy': [],
-           'std': [],
+           'accuracy_std': [],
            'methods': ['mv_p', 'em_p', 'mcmc_p',
                        'mv_f_p', 'em_f_p', 'mcmc_f_p',
                        'mv_b', 'em_b', 'mcmc_b',
@@ -34,7 +34,7 @@ def accuracy(load_data):
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     run = 0
     while run < n_runs:
-        N, M, Psi, GT, Cl, GT_G = load_data()
+        N, M, Psi, GT, Cl, GT_G = load_data(Truncater)
         # PROBABILISTIC OUTPUT
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
@@ -46,6 +46,7 @@ def accuracy(load_data):
             continue
         else:
             run += 1
+        print(run)
         precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
         G_precision_list.append(precision)
         G_recall_list.append(recall)
@@ -253,7 +254,8 @@ def accuracy(load_data):
 
     for run in runs:
         res['accuracy'].append(np.average(run))
-        res['std'].append(np.std(run))
+        res['accuracy_std'].append(np.std(run))
+    pass
 
     # Save results in a CSV
     # pd.DataFrame(res).to_csv('../data/results/accuracy_.csv', index=False)
@@ -276,5 +278,11 @@ if __name__ == '__main__':
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    accuracy(load_data)
+    for votes_per_item in [3, 10, 'All']:
+        print('Votes: ', votes_per_item)
+        if votes_per_item == 'All':
+            accuracy(load_data)
+        else:
+            Truncater = TruncaterVotesItem(votes_per_item)
+            accuracy(load_data, Truncater)
 

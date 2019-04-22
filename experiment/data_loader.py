@@ -1,13 +1,19 @@
 import pandas as pd
 
 
-def load_data_faces():
+def load_data_faces(truncater=None):
     test = [[], []]
     M = 48
     GT_df = pd.read_csv('../data/faces_crowdflower/gt.csv')
     GT = dict(zip(GT_df['obj_id'].values, GT_df['GT'].values))
     f1_df = pd.read_csv('../data/faces_crowdflower/f1_cf.csv')
     f2_df = pd.read_csv('../data/faces_crowdflower/f2_cf.csv')
+    ## remove rows with "I don't know" votes
+    f1_df = f1_df[f1_df['vote'] != "I don't know"]
+    f2_df = f2_df[f2_df['vote'] != "I don't know"]
+    if truncater is not None:
+        f1_df = truncater.do_trancate(f1_df)
+        f2_df = truncater.do_trancate(f2_df)
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
@@ -34,8 +40,6 @@ def load_data_faces():
         for index, row in obj_data.iterrows():
             s_id = source_dict[row['_worker_id']]
             vote = row['vote']
-            if vote == "I don't know":
-                continue
             Psi[obj_id].append((s_id, vote))
 
             other_id = Cl[obj_id]['other']
@@ -50,15 +54,21 @@ def load_data_faces():
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
 
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
-    print '#total votes: {}'.format(total_votes)
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
+    # print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
-def load_data_flags():
+def load_data_flags(truncater=None):
     test = [[], []]
     f1_df = pd.read_csv('../data/Flags/flags1_res.csv', delimiter=';')
     f2_df = pd.read_csv('../data/Flags/flags2_res.csv', delimiter=';')
+    ## remove rows with "I don't know" votes
+    f1_df = f1_df[f1_df['crowd_ans'] != "I don't know"]
+    f2_df = f2_df[f2_df['crowd_ans'] != "I don't know"]
+    if truncater is not None:
+        f1_df = truncater.do_trancate(f1_df)
+        f2_df = truncater.do_trancate(f2_df)
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
@@ -102,17 +112,19 @@ def load_data_flags():
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
-
-    num_votes_per_object = 20
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(num_votes_per_object*26))
-    print '#total votes: {}'.format(total_votes)
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(num_votes_per_object*26))
+    # print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
-def load_data_food():
+def load_data_food(truncater=None):
     test = [[], []]
     f1_df = pd.read_csv('../data/Food/food1_res.csv', delimiter=';')
     f2_df = pd.read_csv('../data/Food/food2_res.csv', delimiter=';')
+    if truncater is not None:
+        f1_df = truncater.do_trancate(f1_df)
+        f2_df = truncater.do_trancate(f2_df)
+
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
@@ -155,16 +167,21 @@ def load_data_food():
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
-
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
-    print '#total votes: {}'.format(total_votes)
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
+    # print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
-def load_data_plots():
+def load_data_plots(truncater=None):
     test = [[], []]
     f1_df = pd.read_csv('../data/Plots/plots1_res.csv', delimiter=';')
     f2_df = pd.read_csv('../data/Plots/plots2_res.csv', delimiter=';')
+    ## remove rows with "I don't know" votes
+    f1_df = f1_df[f1_df['crowd_ans'] != "I don't know"]
+    f2_df = f2_df[f2_df['crowd_ans'] != "I don't know"]
+    if truncater is not None:
+        f1_df = truncater.do_trancate(f1_df)
+        f2_df = truncater.do_trancate(f2_df)
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
     sources = s_f1 | s_f2
@@ -194,8 +211,6 @@ def load_data_plots():
         for index, row in obj_data.iterrows():
             s_id = source_dict[row['_worker_id']]
             vote = row['crowd_ans']
-            if vote == "I don't know":
-                continue
             Psi[obj_id].append((s_id, vote))
 
             other_id = Cl[obj_id]['other']
@@ -209,7 +224,24 @@ def load_data_plots():
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
-
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
-    print '#total votes: {}'.format(total_votes)
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
+    # print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
+
+
+class TruncaterVotesItem:
+    def __init__(self, votes_per_item):
+        self.votes_per_item = votes_per_item
+
+    def do_trancate(self, df):
+        df_new = pd.DataFrame()
+        for item_id in df['question_n'].unique():
+            df_new = df_new.append(df.loc[df['question_n'] == item_id].sample(self.votes_per_item), ignore_index=True)
+        return df_new
+
+
+# def truncate_votes_per_worker(df, votes_per_worker):
+#     df_new = pd.DataFrame()
+#     for worker_id in df['_worker_id'].unique():
+#         df_new = df_new.append(df.loc[df['_worker_id'] == worker_id].sample(votes_per_worker), ignore_index=True)
+#     return df_new
