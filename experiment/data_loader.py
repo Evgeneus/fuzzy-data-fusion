@@ -121,6 +121,9 @@ def load_data_food(truncater=None):
     test = [[], []]
     f1_df = pd.read_csv('../data/Food/food1_res.csv', delimiter=';')
     f2_df = pd.read_csv('../data/Food/food2_res.csv', delimiter=';')
+    ## remove rows with "I don't know" votes
+    f1_df = f1_df[f1_df['crowd_ans'] != "I don't know"]
+    f2_df = f2_df[f2_df['crowd_ans'] != "I don't know"]
     if truncater is not None:
         f1_df = truncater.do_trancate(f1_df)
         f2_df = truncater.do_trancate(f2_df)

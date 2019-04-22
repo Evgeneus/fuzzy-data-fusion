@@ -255,7 +255,6 @@ def accuracy(load_data, Truncater=None):
     for run in runs:
         res['accuracy'].append(np.average(run))
         res['accuracy_std'].append(np.std(run))
-    pass
 
     # Save results in a CSV
     # pd.DataFrame(res).to_csv('../data/results/accuracy_.csv', index=False)
