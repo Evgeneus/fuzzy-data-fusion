@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from copy import deepcopy
@@ -17,18 +18,7 @@ from synthetic_experiment import adapter_input, adapter_output
 n_runs = 50
 
 
-def accuracy(load_data, Truncater=None):
-    res = {'accuracy': [],
-           'accuracy_std': [],
-           'methods': ['mv_p', 'em_p', 'mcmc_p',
-                       'mv_f_p', 'em_f_p', 'mcmc_f_p',
-                       'mv_b', 'em_b', 'mcmc_b',
-                       'mv_f_b', 'em_f_b', 'mcmc_f_b',
-                       'sums', 'avlog', 'inv', 'pinv',
-                       'sums_f', 'avlog_f', 'inv_f', 'pinv_f',
-                       'mcmc_conf_p', 'mcmc_conf_b', 'D&S_p',
-                       'D&S_b', 'D&S_f_p', 'D&S_f_b'
-                       ]}
+def accuracy(load_data, votes_per_item, Truncater=None):
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
@@ -219,10 +209,15 @@ def accuracy(load_data, Truncater=None):
         runs[24].append(np.average(ds_p_f_hits))
         runs[25].append(np.average(ds_b_f_hits))
 
-    print('G Accu prob: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_p_list), np.std(G_accu_p_list)))
-    print('G Accu bin: {:1.4f}+-{:1.4f}'.format(np.average(G_accu_b_list), np.std(G_accu_b_list)))
-    print('G precision: {:1.4f}+-{:1.4f}'.format(np.average(G_precision_list), np.std(G_precision_list)))
-    print('G recall: {:1.4f}+-{:1.4f}'.format(np.average(G_recall_list), np.std(G_recall_list)))
+    G_acc_p, G_acc_p_std = np.average(G_accu_p_list), np.std(G_accu_p_list)
+    G_acc_b, G_acc_b_std = np.average(G_accu_b_list), np.std(G_accu_b_list)
+    G_precision, G_precision_std = np.average(G_precision_list), np.std(G_precision_list)
+    G_recall, G_recall_std = np.average(G_recall_list), np.std(G_recall_list)
+
+    print('G Accu prob: {:1.4f}+-{:1.4f}'.format(G_acc_p, G_acc_p_std))
+    print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_b, G_acc_b_std))
+    print('G precision: {:1.4f}+-{:1.4f}'.format(G_precision, G_precision_std))
+    print('G recall: {:1.4f}+-{:1.4f}'.format(G_recall, G_recall_std))
     print 'PROBABILISTIC OUTPUT'
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
@@ -252,12 +247,62 @@ def accuracy(load_data, Truncater=None):
     print('pinv: {:1.4f}+-{:1.4f}'.format(np.average(runs[15]), np.std(runs[15])))
     print('pinv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[19]), np.std(runs[19])))
 
-    for run in runs:
-        res['accuracy'].append(np.average(run))
-        res['accuracy_std'].append(np.std(run))
+    ## *** Making dataFrame of results ***
+    method_list = ['mv_p', 'em_p', 'mcmc_p',
+               'mv_f_p', 'em_f_p', 'mcmc_f_p',
+               'mv_b', 'em_b', 'mcmc_b',
+               'mv_f_b', 'em_f_b', 'mcmc_f_b',
+               'sums_b', 'avlog_b', 'inv_b', 'pinv_b',
+               'sums_f_b', 'avlog_f_b', 'inv_f_b', 'pinv_f_b',
+               'mcmc_conf_p', 'mcmc_conf_b', 'D&S_p',
+               'D&S_b', 'D&S_f_p', 'D&S_f_b'
+               ]
+    method_indexes = {
+        'mv': {'p': method_list.index('mv_p'), 'b': method_list.index('mv_b')},
+        'mv_f': {'p': method_list.index('mv_f_p'), 'b': method_list.index('mv_f_b')},
+        'em': {'p': method_list.index('em_p'), 'b': method_list.index('em_b')},
+        'em_f': {'p': method_list.index('em_f_p'), 'b': method_list.index('em_f_b')},
+        'mcmc': {'p': method_list.index('mcmc_p'), 'b': method_list.index('mcmc_b')},
+        'mcmc_f': {'p': method_list.index('mcmc_f_p'), 'b': method_list.index('mcmc_f_b')},
+        'D&S': {'p': method_list.index('D&S_p'), 'b': method_list.index('D&S_b')},
+        'D&S_f': {'p': method_list.index('D&S_f_p'), 'b': method_list.index('D&S_f_b')},
+        'sums': {'b': method_list.index('sums_b')},
+        'sums_f': {'b': method_list.index('sums_f_b')},
+        'avlog': {'b': method_list.index('avlog_b')},
+        'avlog_f': {'b': method_list.index('avlog_f_b')},
+        'inv': {'b': method_list.index('inv_b')},
+        'inv_f': {'b': method_list.index('inv_f_b')},
+        'pinv': {'b': method_list.index('pinv_b')},
+        'pinv_f': {'b': method_list.index('pinv_f_b')},
+        'mcmc_conf': {'p': method_list.index('mcmc_conf_b'), 'b': method_list.index('mcmc_conf_p')}
+    }
+    columns = ['votes_per_item', 'method', 'accuracy_conf', 'accuracy_conf_std', 'accuracy_prob_conf',
+               'accuracy_prob_conf_std', 'precision_conf', 'precision_std', 'recall_conf', 'recall_conf_std',
+               'accuracy', 'accuracy_std', 'accuracy_prob', 'accuracy_prob_std']
+    data = []
+    for method, m_ in method_indexes.items():
+        if method == 'mcmc_conf':
+            p, b = m_['p'], m_['b']
+            data.append([votes_per_item, method, G_acc_b, G_acc_b_std, G_acc_p, G_acc_p_std, G_precision, G_precision_std,
+                         G_recall, G_recall_std, np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p])])
+        elif 'p' in m_.keys():
+            p, b = m_['p'], m_['b']
+            data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
+                         np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p])])
+        else:
+            b = m_['b']
+            data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
+                         np.average(runs[b]), np.std(runs[b]), None, None])
 
-    # Save results in a CSV
-    # pd.DataFrame(res).to_csv('../data/results/accuracy_.csv', index=False)
+    ## Save results in a CSV
+    df = pd.DataFrame(data, columns=columns)
+    path = '../data/results/accuracy_votes_per_item.csv'
+    if os.path.isfile(path):
+        df_prev = pd.read_csv(path)
+        df_new = df_prev.append(df, ignore_index=True)
+        df_new.to_csv(path, index=False)
+    else:
+        df.to_csv(path, index=False)
 
 
 if __name__ == '__main__':
@@ -277,11 +322,11 @@ if __name__ == '__main__':
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    for votes_per_item in [3, 10, 'All']:
+    for votes_per_item in [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
         print('Votes: ', votes_per_item)
         if votes_per_item == 'All':
-            accuracy(load_data)
+            accuracy(load_data, votes_per_item)
         else:
             Truncater = TruncaterVotesItem(votes_per_item)
-            accuracy(load_data, Truncater)
+            accuracy(load_data, votes_per_item, Truncater)
 
