@@ -6,7 +6,8 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, adapter_psi_dawid, adapter_prob_dawid
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
+    adapter_psi_dawid, adapter_prob_dawid, invert
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
@@ -296,6 +297,9 @@ def accuracy(load_data, votes_per_item, Truncater=None):
 
     ## Save results in a CSV
     df = pd.DataFrame(data, columns=columns)
+    votes_per_item = [len(i) for i in invert(N, M, Psi)]
+    df['votes_per_worker_mean'] = np.mean(votes_per_item)
+    df['votes_per_worker_std'] = np.std(votes_per_item)
     path = '../data/results/accuracy_votes_per_item.csv'
     if os.path.isfile(path):
         df_prev = pd.read_csv(path)
