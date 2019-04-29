@@ -7,7 +7,7 @@ from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
 from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
-    adapter_psi_dawid, adapter_prob_dawid, invert
+    adapter_psi_dawid, adapter_prob_dawid, invert, ds_acc_pre_rec
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
@@ -22,6 +22,7 @@ n_runs = 50
 def accuracy(load_data, votes_per_item, Truncater=None):
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
+    G_acc_b_DS, G_precision_DS_list, G_recall_DS_list = [], [], []
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     run = 0
     while run < n_runs:
@@ -63,7 +64,11 @@ def accuracy(load_data, votes_per_item, Truncater=None):
 
         # Dawis and Skene
         Psi_dawid = adapter_psi_dawid(Psi)
-        values_prob, _, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+        values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+        ds_conf_acc, ds_conf_recall, ds_conf_precision = ds_acc_pre_rec(ErrM, classes, GT_G)
+        G_acc_b_DS.append(ds_conf_acc)
+        G_precision_DS_list.append(ds_conf_recall)
+        G_recall_DS_list.append(ds_conf_precision)
         ds_p = adapter_prob_dawid(values_prob, classes)
 
         Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
@@ -210,15 +215,26 @@ def accuracy(load_data, votes_per_item, Truncater=None):
         runs[24].append(np.average(ds_p_f_hits))
         runs[25].append(np.average(ds_b_f_hits))
 
+    ## confusion detection MCMC-CONF
     G_acc_p, G_acc_p_std = np.average(G_accu_p_list), np.std(G_accu_p_list)
     G_acc_b, G_acc_b_std = np.average(G_accu_b_list), np.std(G_accu_b_list)
     G_precision, G_precision_std = np.average(G_precision_list), np.std(G_precision_list)
     G_recall, G_recall_std = np.average(G_recall_list), np.std(G_recall_list)
 
-    print('G Accu prob: {:1.4f}+-{:1.4f}'.format(G_acc_p, G_acc_p_std))
+    ## confusion detection D&S
+    G_acc_ds, G_acc_ds_std = np.average(G_acc_b_DS), np.std(G_acc_b_DS)
+    G_ds_precision, G_ds_precision_std = np.average(G_precision_DS_list), np.std(G_precision_DS_list)
+    G_ds_recall, G_ds_recall_std = np.average(G_recall_DS_list), np.std(G_recall_DS_list)
+
+    print 'MCMC-CONF'
+    print('G Accu prob: {:1.4f}+-{:1.4f}'.format(G_acc_p, G_acc_ds_std))
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_b, G_acc_b_std))
     print('G precision: {:1.4f}+-{:1.4f}'.format(G_precision, G_precision_std))
     print('G recall: {:1.4f}+-{:1.4f}'.format(G_recall, G_recall_std))
+    print 'D&S'
+    print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_ds, G_acc_b_std))
+    print('G precision: {:1.4f}+-{:1.4f}'.format(G_ds_precision, G_ds_precision_std))
+    print('G recall: {:1.4f}+-{:1.4f}'.format(G_ds_recall, G_ds_recall_std))
     print 'PROBABILISTIC OUTPUT'
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
@@ -279,21 +295,30 @@ def accuracy(load_data, votes_per_item, Truncater=None):
     }
     columns = ['votes_per_item', 'method', 'accuracy_conf', 'accuracy_conf_std', 'accuracy_prob_conf',
                'accuracy_prob_conf_std', 'precision_conf', 'precision_std', 'recall_conf', 'recall_conf_std',
-               'accuracy', 'accuracy_std', 'accuracy_prob', 'accuracy_prob_std']
+               'accuracy', 'accuracy_std', 'accuracy_prob', 'accuracy_prob_std',
+               'ds_accuracy_conf', 'ds_accuracy_conf_std', 'ds_precision_conf', 'ds_precision_std',
+               'ds_recall_conf', 'ds_recall_conf_std']
     data = []
     for method, m_ in method_indexes.items():
         if method == 'mcmc_conf':
             p, b = m_['p'], m_['b']
             data.append([votes_per_item, method, G_acc_b, G_acc_b_std, G_acc_p, G_acc_p_std, G_precision, G_precision_std,
-                         G_recall, G_recall_std, np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p])])
+                         G_recall, G_recall_std, np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p]),
+                         None, None, None, None, None, None])
         elif 'p' in m_.keys():
             p, b = m_['p'], m_['b']
-            data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
-                         np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p])])
+            if method is not 'D&S':
+                data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
+                             np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p]),
+                             None, None, None, None, None, None])
+            else:
+                data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
+                             np.average(runs[b]), np.std(runs[b]), np.average(runs[p]), np.std(runs[p]),
+                             G_acc_ds, G_acc_ds_std, G_ds_precision, G_ds_precision_std, G_ds_recall, G_ds_recall_std])
         else:
             b = m_['b']
             data.append([votes_per_item, method, None, None, None, None, None, None, None, None,
-                         np.average(runs[b]), np.std(runs[b]), None, None])
+                         np.average(runs[b]), np.std(runs[b]), None, None, None, None, None, None, None, None])
 
     ## Save results in a CSV
     df = pd.DataFrame(data, columns=columns)

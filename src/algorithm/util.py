@@ -2,6 +2,7 @@ import math
 import numpy as np
 from collections import defaultdict
 
+
 def log_likelihood(GT, M, Psi, A, p):
     """
     Computes the log likelihood of the Psi using A and p.
@@ -127,3 +128,7 @@ def adapter_prob_dawid(values_prob, classes):
             d[classes[id]] = item_prob[id]
         ds_p.append(d)
     return ds_p
+
+
+def ds_acc_pre_rec(ErrM, classes, G_GT):
+    return -1, -1, -1
