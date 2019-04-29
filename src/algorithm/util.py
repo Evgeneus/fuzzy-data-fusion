@@ -88,9 +88,9 @@ def precision_recall(f_mcmc_G, GT_G):
             if not gt and not val:
                 tn += 1
     try:
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
         recall = tp / (tp + fn)
         precision = tp / (tp + fp)
-        accuracy = (tp + tn) / (tp + tn + fp + fn)
     except ZeroDivisionError:
         print('ZeroDivisionError -> recall, precision, fbeta = 0., 0., 0')
         recall = precision = 0.
@@ -130,5 +130,20 @@ def adapter_prob_dawid(values_prob, classes):
     return ds_p
 
 
-def ds_acc_pre_rec(ErrM, classes, G_GT):
-    return -1, -1, -1
+def get_ds_G(ErrM, classes, ds_p, Psi):
+    M = sum(ErrM)
+    M = M / M.sum(axis=1)[:, np.newaxis]
+    ds_classes = [max(stats, key=stats.get) for stats in ds_p]
+    ds_G = {}
+    for obj_id, data in enumerate(Psi):
+        ds_G[obj_id] = {}
+        for s_id, val in data:
+            ds_class = ds_classes[obj_id]
+            ds_class_id = classes.index(ds_class)
+            val_id = classes.index(val)
+            if (ds_class_id != val_id) and M[ds_class_id][val_id] >= 0.5:
+                ds_G[obj_id][s_id] = [1, 0]
+            else:
+                ds_G[obj_id][s_id] = [0, 1]
+    return ds_G
+

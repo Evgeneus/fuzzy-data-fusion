@@ -7,7 +7,7 @@ from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
 from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
-    adapter_psi_dawid, adapter_prob_dawid, invert, ds_acc_pre_rec
+    adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
@@ -16,7 +16,7 @@ from src.algorithm.dawid_skene import dawid_skene
 from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem
 from synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 50
+n_runs = 5
 
 
 def accuracy(load_data, votes_per_item, Truncater=None):
@@ -65,11 +65,13 @@ def accuracy(load_data, votes_per_item, Truncater=None):
         # Dawis and Skene
         Psi_dawid = adapter_psi_dawid(Psi)
         values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
-        ds_conf_acc, ds_conf_recall, ds_conf_precision = ds_acc_pre_rec(ErrM, classes, GT_G)
+        ds_p = adapter_prob_dawid(values_prob, classes)
+        ## D&S accuracy in confusion detection
+        ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
+        ds_conf_precision, ds_conf_recall, ds_conf_acc = precision_recall(ds_G, GT_G)
         G_acc_b_DS.append(ds_conf_acc)
         G_precision_DS_list.append(ds_conf_recall)
         G_recall_DS_list.append(ds_conf_precision)
-        ds_p = adapter_prob_dawid(values_prob, classes)
 
         Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
         values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
@@ -235,6 +237,7 @@ def accuracy(load_data, votes_per_item, Truncater=None):
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_ds, G_acc_b_std))
     print('G precision: {:1.4f}+-{:1.4f}'.format(G_ds_precision, G_ds_precision_std))
     print('G recall: {:1.4f}+-{:1.4f}'.format(G_ds_recall, G_ds_recall_std))
+    print('\n')
     print 'PROBABILISTIC OUTPUT'
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
