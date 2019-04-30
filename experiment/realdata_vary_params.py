@@ -16,7 +16,7 @@ from src.algorithm.dawid_skene import dawid_skene
 from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem
 from synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 5
+n_runs = 50
 
 
 def accuracy(load_data, votes_per_item, Truncater=None):
@@ -268,10 +268,10 @@ def accuracy(load_data, votes_per_item, Truncater=None):
     print('pinv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[19]), np.std(runs[19])))
 
     ## *** Making dataFrame of results ***
-    method_list = ['mv_p', 'em_p', 'mcmc_p',
-               'mv_f_p', 'em_f_p', 'mcmc_f_p',
-               'mv_b', 'em_b', 'mcmc_b',
-               'mv_f_b', 'em_f_b', 'mcmc_f_b',
+    method_list = ['mv_p', 'truth_finder_p', 'mcmc_p',
+               'mv_f_p', 'truth_finder_f_p', 'mcmc_f_p',
+               'mv_b', 'truth_finder_b', 'mcmc_b',
+               'mv_f_b', 'truth_finder_f_b', 'mcmc_f_b',
                'sums_b', 'avlog_b', 'inv_b', 'pinv_b',
                'sums_f_b', 'avlog_f_b', 'inv_f_b', 'pinv_f_b',
                'mcmc_conf_p', 'mcmc_conf_b', 'D&S_p',
@@ -280,8 +280,8 @@ def accuracy(load_data, votes_per_item, Truncater=None):
     method_indexes = {
         'mv': {'p': method_list.index('mv_p'), 'b': method_list.index('mv_b')},
         'mv_f': {'p': method_list.index('mv_f_p'), 'b': method_list.index('mv_f_b')},
-        'em': {'p': method_list.index('em_p'), 'b': method_list.index('em_b')},
-        'em_f': {'p': method_list.index('em_f_p'), 'b': method_list.index('em_f_b')},
+        'truth_finder': {'p': method_list.index('truth_finder_p'), 'b': method_list.index('truth_finder_b')},
+        'truth_finder_f': {'p': method_list.index('truth_finder_f_p'), 'b': method_list.index('truth_finder_f_b')},
         'mcmc': {'p': method_list.index('mcmc_p'), 'b': method_list.index('mcmc_b')},
         'mcmc_f': {'p': method_list.index('mcmc_f_p'), 'b': method_list.index('mcmc_f_b')},
         'D&S': {'p': method_list.index('D&S_p'), 'b': method_list.index('D&S_b')},
