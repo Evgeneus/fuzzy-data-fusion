@@ -94,6 +94,12 @@ class Dataset():
     print "Transformation of labels: " + str(best_perm)
     return acc, ce
 
+  def notPermutedAcc(self):
+    # Compute observed labels based on greatest probability
+    observed = np.argmax(self.probZ, axis=0)
+    acc = self.percent_correct(observed)
+    return acc
+
   # Computed without permuting labels
   def std_percent_correct(self):
       # Compute observed labels based on greatest probability
