@@ -2,6 +2,7 @@ import math
 import numpy as np
 from collections import defaultdict
 from src.algorithm.PICA.Dataset import Label, Dataset
+from random import randrange
 
 
 def log_likelihood(GT, M, Psi, A, p):
@@ -184,3 +185,16 @@ def adapter_psi_pica(numLabelers, numImages, Psi, GT, gamma=1, isDSM=True):
     # Initialize Dataset object
     return Dataset(numLabels, numLabelers, numImages, numCharacters, gamma,
                    alphabet, priorZ, labels, probZ, Labelers, hasGT, gt, isDSM)
+
+
+def make_random_clusters(M):
+    Cl = {}
+    obj_ids = list(range(M))
+    for obj_id in range(M):
+        rand_obj_id = obj_id
+        while rand_obj_id == obj_id:
+            rand_id = randrange(len(obj_ids))
+            rand_obj_id = obj_ids[rand_id]
+        rand_obj_id = obj_ids.pop(rand_id)
+        Cl[obj_id] = {'id': obj_id, 'other': rand_obj_id}
+    return Cl
