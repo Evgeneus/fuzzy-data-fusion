@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from collections import defaultdict
+from src.algorithm.PICA.Dataset import Label, Dataset
 
 
 def log_likelihood(GT, M, Psi, A, p):
@@ -147,3 +148,39 @@ def get_ds_G(ErrM, classes, ds_p, Psi):
                 ds_G[obj_id][s_id] = [0, 1]
     return ds_G
 
+
+def adapter_psi_pica(numLabelers, numImages, Psi, GT, gamma=1, isDSM=True):
+    if isDSM:
+        from src.algorithm.PICA.SinkProp.Labeler import Labeler
+    else:
+        from src.algorithm.PICA.Stochastic.Labeler import Labeler
+
+    alphabet = set()
+    for obj_data in Psi:
+        alphabet |= set(zip(*obj_data)[1])
+    alphabet = list(alphabet)
+    numCharacters = len(alphabet)
+    label_labelID_map = dict(zip(alphabet, range(numCharacters)))
+    labels = []
+    for obj_id, obj_data in enumerate(Psi):
+        for s_id, val in obj_data:
+            labels.append(Label(obj_id, s_id, label_labelID_map[val]))
+    numLabels = len(labels)
+    probZ = np.zeros((numCharacters, numImages))
+    priorA = np.identity(numCharacters)
+    Labelers = [Labeler(priorA) for i in range(numLabelers)]
+
+    ## Z priors
+    priorZ = np.empty((numCharacters, numImages))
+    for x in range(numCharacters):
+        priorZ[x][:] = 1. / numCharacters
+
+    ## transform ground truth labels
+    hasGT = True
+    gt = []
+    for obj_id in range(numImages):
+        gt.append(label_labelID_map[GT[obj_id]])  # Only store label
+
+    # Initialize Dataset object
+    return Dataset(numLabels, numLabelers, numImages, numCharacters, gamma,
+                   alphabet, priorZ, labels, probZ, Labelers, hasGT, gt, isDSM)

@@ -5,16 +5,18 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, adapter_psi_dawid, adapter_prob_dawid
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
+    adapter_psi_dawid, adapter_prob_dawid, adapter_psi_pica
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.dawid_skene import dawid_skene
+from src.algorithm.PICA.EM import *
 from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food
 from synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 50
+n_runs = 3
 
 
 def accuracy(load_data):
@@ -35,6 +37,26 @@ def accuracy(load_data):
     run = 0
     while run < n_runs:
         N, M, Psi, GT, Cl, GT_G = load_data()
+
+        # from src.algorithm.generator import synthesize
+        # # number of sources
+        # N = 30
+        # # number of objects
+        # M = 100
+        # # number of values per object
+        # V = 3
+        # # synthetically generated observations
+        # density = 0.5
+        # crowd_accuracy = 0.8
+        # conf_prob = 0.3
+        # GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, crowd_accuracy)
+        #
+        # ## PICA
+        # data_pica = adapter_psi_pica(N, M, Psi, GT)
+        # EM(data_pica)
+        # acc = data_pica.notPermutedAcc()
+        # print(acc)
+
         # PROBABILISTIC OUTPUT
         mv_p = majority_voting(Psi)
         em_A, em_p = expectation_maximization(N, M, Psi)
