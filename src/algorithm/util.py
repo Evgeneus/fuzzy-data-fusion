@@ -150,6 +150,28 @@ def get_ds_G(ErrM, classes, ds_p, Psi):
     return ds_G
 
 
+def do_conf_ranks_ds(ErrM, classes):
+    M = sum(ErrM)
+    M = M / M.sum(axis=1)[:, np.newaxis]
+    conf_classes = []
+    for class_id, data in enumerate(M):
+        data[class_id] = 0.
+        argmax_id = data.argmax()
+        if data[argmax_id] == 0:
+            continue
+        conf_classes.append(np.array([classes[class_id], classes[argmax_id], data[argmax_id]]))
+    conf_ranks = np.array(sorted(conf_classes, key=lambda x: x[2], reverse=True))
+    return conf_ranks
+
+
+def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl):
+    conf_classes = []
+    for obj_id in range(M):
+        conf_classes.append(np.array([GT[obj_id], GT[Cl[obj_id]['other']], Cl_conf_scores[obj_id]]))
+    conf_ranks = np.array(sorted(conf_classes, key=lambda x: x[2], reverse=True))
+    return conf_ranks
+
+
 def adapter_psi_pica(numLabelers, numImages, Psi, GT, gamma=1, isDSM=True):
     if isDSM:
         from src.algorithm.PICA.SinkProp.Labeler import Labeler

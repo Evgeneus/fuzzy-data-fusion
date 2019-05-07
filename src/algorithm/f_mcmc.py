@@ -191,4 +191,5 @@ def f_mcmc(N, M, Psi, Cl, params):
                         Psi_fussy[other_obj_id].append((s, value))
                         break
 
-    return f_mcmc_G, Psi_fussy, f_mcmc_p
+    Cl_conf_scores = [float(j)/(i+j) for i, j in nPi]
+    return f_mcmc_G, Psi_fussy, f_mcmc_p, Cl_conf_scores

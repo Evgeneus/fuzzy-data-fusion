@@ -106,7 +106,7 @@ def accuracy():
 
             # FUZZY FUSION Psi
             # From now Psi is the same as Psi_fussy due to Python
-            _, Psi_fussy, _ = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+            _, Psi_fussy, _, _ = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
             data_f = adapter_input(Psi_fussy)
 
             mv_pf = majority_voting(Psi_fussy)
@@ -239,7 +239,7 @@ def convergence():
         params = {'N_iter': p[0], 'burnin': p[1], 'thin': p[2], 'FV': 0}
         runs = []
         for run in range(n_runs):
-            f_mcmc_G, _, _ = f_mcmc(N, M, Psi, Cl, params)
+            f_mcmc_G, _, _, _ = f_mcmc(N, M, Psi, Cl, params)
             G_accu = np.average(accu_G(f_mcmc_G, GT_G))
             runs.append(G_accu)
         res['G accuracy'].append(np.average(runs))
@@ -290,7 +290,6 @@ def get_acc_g():
     V = 50
     # synthetically generated observations
     density = 0.5
-    # TO DO
 
     mcmc_params = {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4}
     conf_probs = [0.2, 0.3, 0.4]

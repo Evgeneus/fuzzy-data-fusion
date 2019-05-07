@@ -7,7 +7,7 @@ from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
 from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
-    adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G
+    adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G, do_conf_ranks_ds, do_conf_ranks_fmcmc
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
@@ -32,7 +32,9 @@ def accuracy(load_data, votes_per_item, Truncater=None):
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
-        f_mcmc_G, Psi_fussy, mcmc_conf_p = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        f_mcmc_G, Psi_fussy, mcmc_conf_p, Cl_conf_scores = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
+
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
             continue
@@ -67,6 +69,8 @@ def accuracy(load_data, votes_per_item, Truncater=None):
         values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
         ds_p = adapter_prob_dawid(values_prob, classes)
         ## D&S accuracy in confusion detection
+        conf_ranks_df = do_conf_ranks_ds(ErrM, classes)  # ranked pairs of classes that might be confused
+
         ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
         ds_conf_precision, ds_conf_recall, ds_conf_acc = precision_recall(ds_G, GT_G)
         G_acc_b_DS.append(ds_conf_acc)
@@ -354,7 +358,7 @@ if __name__ == '__main__':
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    for votes_per_item in [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
+    for votes_per_item in ['All', 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
         print('Votes: ', votes_per_item)
         if votes_per_item == 'All':
             accuracy(load_data, votes_per_item)

@@ -38,19 +38,6 @@ def accuracy(load_data):
     while run < n_runs:
         N, M, Psi, GT, Cl, GT_G = load_data()
 
-        # from src.algorithm.generator import synthesize
-        # # number of sources
-        # N = 30
-        # # number of objects
-        # M = 100
-        # # number of values per object
-        # V = 3
-        # # synthetically generated observations
-        # density = 0.5
-        # crowd_accuracy = 0.8
-        # conf_prob = 0.3
-        # GT, GT_G, Cl, Psi = synthesize(N, M, V, density, 1 - conf_prob, crowd_accuracy)
-        #
         # ## PICA
         # data_pica = adapter_psi_pica(N, M, Psi, GT)
         # EM(data_pica)
@@ -62,7 +49,7 @@ def accuracy(load_data):
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
-        f_mcmc_G, Psi_fussy, mcmc_conf_p = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        f_mcmc_G, Psi_fussy, mcmc_conf_p, _ = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
             continue
