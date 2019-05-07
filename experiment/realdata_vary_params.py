@@ -6,14 +6,14 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, load_gt_conf_ranks,\
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, conf_ranks_acc_pr_rec, \
     adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G, do_conf_ranks_ds, do_conf_ranks_fmcmc
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.dawid_skene import dawid_skene
-from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem
+from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem, load_gt_conf_ranks
 from synthetic_experiment import adapter_input, adapter_output
 
 n_runs = 50
@@ -52,6 +52,8 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
         f_mcmc_G, Psi_fussy, mcmc_conf_p, Cl_conf_scores = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
+        # conf_ranks_acc_pr_rec(gt_conf_ranks, conf_ranks_fmcmc)
+
 
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
@@ -362,7 +364,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
 
-    dataset_name = datasets[3]
+    dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
     elif dataset_name == 'flags':

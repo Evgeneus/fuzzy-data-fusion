@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def load_data_faces(truncater=None):
@@ -230,6 +231,18 @@ def load_data_plots(truncater=None):
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
     return [N, M, Psi, GT, Cl, GT_G]
+
+
+def load_gt_conf_ranks(df1, df2):
+    df1['conf_score'] = np.log(df1['num_votes']) * df1['num_conf'] / (df1['num_votes'])
+    df1['clusters'] = df1[['gt', 'gt_conf']].apply(lambda x: '-'.join(x), axis=1)
+    df2['conf_score'] = np.log(df2['num_votes']) * df2['num_conf'] / (df2['num_votes'])
+    df2['clusters'] = df2[['gt', 'gt_conf']].apply(lambda x: '-'.join(x), axis=1)
+    df1 = df1[df1['conf_score'] > 0.]
+    df2 = df2[df2['conf_score'] > 0.]
+    gt_conf_ranks = np.vstack((df1[['clusters', 'conf_score']].values, df2[['clusters', 'conf_score']].values))
+    gt_conf_ranks = np.array(sorted(gt_conf_ranks, key=lambda x: x[1], reverse=True))
+    return gt_conf_ranks
 
 
 class TruncaterVotesItem:
