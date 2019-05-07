@@ -54,16 +54,17 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
         f_mcmc_G, Psi_fussy, mcmc_conf_p, Cl_conf_scores = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
-        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
-        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
-        conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
-
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
             continue
         else:
             run += 1
         print(run)
+        ## cluster detection evaluation
+        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
+        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
+        conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
+
         precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
         G_precision_list.append(precision)
         G_recall_list.append(recall)
@@ -257,10 +258,10 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     G_ds_precision, G_ds_precision_std = np.average(G_precision_DS_list), np.std(G_precision_DS_list)
     G_ds_recall, G_ds_recall_std = np.average(G_recall_DS_list), np.std(G_recall_DS_list)
 
-    ## precision in cluster detection
-    print('Precision in Cluster Detection')
-    print('MCMC-CONF: {}'.format(conf_ranks_pr_fmcmc_sum / n_runs))
-    print('D&S      : {}'.format(conf_ranks_pr_ds_sum / n_runs))
+    # ## precision in cluster detection
+    # print('Precision in Cluster Detection')
+    # print('MCMC-CONF: {}'.format(conf_ranks_pr_fmcmc_sum / n_runs))
+    # print('D&S      : {}'.format(conf_ranks_pr_ds_sum / n_runs))
 
     print('Confusion Detection')
     print('MCMC-CONF')
@@ -310,7 +311,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     ## add D&S
     data_cl += list(zip([votes_per_item] * gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0] + 1)),
                         conf_ranks_pr_ds_sum / n_runs, ['D&S'] * gt_conf_ranks.shape[0]))
-    # ## Save results in a CSV
+    ## Save results in a CSV
     df_cl = pd.DataFrame(data_cl, columns=['votes_per_item', 'top-k', 'precision', 'method'])
     path = '../data/results/{}_cluster_detection.csv'.format(dataset_name)
     if os.path.isfile(path):
@@ -319,7 +320,6 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         df_new.to_csv(path, index=False)
     else:
         df_cl.to_csv(path, index=False)
-
 
     ## *** Making dataFrame of results (confusion detection and correction) ***
     method_list = ['mv_p', 'truth_finder_p', 'mcmc_p',
