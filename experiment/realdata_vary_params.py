@@ -6,7 +6,7 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, \
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, load_gt_conf_ranks,\
     adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G, do_conf_ranks_ds, do_conf_ranks_fmcmc
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
@@ -19,7 +19,25 @@ from synthetic_experiment import adapter_input, adapter_output
 n_runs = 50
 
 
-def accuracy(load_data, votes_per_item, Truncater=None):
+def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
+    ## load ground truth for clusters of classes that might be confused
+    if dataset_name == 'faces':
+        ## TODO: FACES
+        df1 = pd.read_csv('../data/faces_crowdflower/f1_cf.csv')
+        df2 = pd.read_csv('../data/faces_crowdflower/f2_cf.csv')
+    elif dataset_name == 'flags':
+        df1 = pd.read_csv('../data/Flags/flags1_res_postporos.csv')
+        df2 = pd.read_csv('../data/Flags/flags2_res_postporos.csv')
+    elif dataset_name == 'food':
+        df1 = pd.read_csv('../data/Food/food1_res_postporos.csv')
+        df2 = pd.read_csv('../data/Food/food2_res_postporos.csv')
+    elif dataset_name == 'plots':
+        df1 = pd.read_csv('../data/Plots/plots1_res_postporos.csv')
+        df2 = pd.read_csv('../data/Plots/plots2_res_postporos.csv')
+    else:
+        exit(1)
+    gt_conf_ranks = load_gt_conf_ranks(df1, df2)
+
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     G_acc_b_DS, G_precision_DS_list, G_recall_DS_list = [], [], []
@@ -344,7 +362,7 @@ def accuracy(load_data, votes_per_item, Truncater=None):
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
 
-    dataset_name = datasets[2]
+    dataset_name = datasets[3]
     if dataset_name == 'faces':
         load_data = load_data_faces
     elif dataset_name == 'flags':
@@ -361,8 +379,8 @@ if __name__ == '__main__':
     for votes_per_item in ['All', 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
         print('Votes: ', votes_per_item)
         if votes_per_item == 'All':
-            accuracy(load_data, votes_per_item)
+            accuracy(load_data, dataset_name, votes_per_item)
         else:
             Truncater = TruncaterVotesItem(votes_per_item)
-            accuracy(load_data, votes_per_item, Truncater)
+            accuracy(load_data, dataset_name, votes_per_item, Truncater)
 

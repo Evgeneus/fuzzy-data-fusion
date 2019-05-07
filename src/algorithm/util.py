@@ -172,6 +172,16 @@ def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl):
     return conf_ranks
 
 
+def load_gt_conf_ranks(df1, df2):
+    df1['conf_score'] = np.log(df1['num_votes']) * df1['num_conf'] / (df1['num_votes'])
+    df2['conf_score'] = np.log(df2['num_votes']) * df2['num_conf'] / (df2['num_votes'])
+    df1 = df1[df1['conf_score'] > 0.]
+    df2 = df2[df2['conf_score'] > 0.]
+    gt_conf_ranks = np.vstack((df1[['gt', 'gt_conf', 'conf_score']].values, df2[['gt', 'gt_conf', 'conf_score']].values))
+    gt_conf_ranks = np.array(sorted(gt_conf_ranks, key=lambda x: x[2], reverse=True))
+    return gt_conf_ranks
+
+
 def adapter_psi_pica(numLabelers, numImages, Psi, GT, gamma=1, isDSM=True):
     if isDSM:
         from src.algorithm.PICA.SinkProp.Labeler import Labeler
