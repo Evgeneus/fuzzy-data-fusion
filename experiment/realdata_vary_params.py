@@ -6,7 +6,7 @@ from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
 from src.algorithm.f_mcmc import f_mcmc
-from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, conf_ranks_acc_pr_rec, \
+from src.algorithm.util import accu_G, prob_binary_convert, precision_recall, conf_ranks_precision, \
     adapter_psi_dawid, adapter_prob_dawid, invert, get_ds_G, do_conf_ranks_ds, do_conf_ranks_fmcmc
 from src.algorithm.sums import sums
 from src.algorithm.average_log import average_log
@@ -20,7 +20,7 @@ n_runs = 50
 
 
 def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
-    ## load ground truth for clusters of classes that might be confused
+        ## load ground truth of clusters having confusable classes
     if dataset_name == 'faces':
         ## TODO: FACES
         df1 = pd.read_csv('../data/faces_crowdflower/f1_cf.csv')
@@ -41,6 +41,9 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     G_acc_b_DS, G_precision_DS_list, G_recall_DS_list = [], [], []
+    ## data structure for statistics of precion in detecting clusters having confusable classes
+    conf_ranks_pr_fmcmc_sum = [0] * gt_conf_ranks.shape[0]
+    conf_ranks_pr_ds_sum = [0] * gt_conf_ranks.shape[0]
     mcmc_params = {'N_iter': 10, 'burnin': 1, 'thin': 2}
     run = 0
     while run < n_runs:
@@ -52,8 +55,8 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
         f_mcmc_G, Psi_fussy, mcmc_conf_p, Cl_conf_scores = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
-        # conf_ranks_acc_pr_rec(gt_conf_ranks, conf_ranks_fmcmc)
-
+        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
+        conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
 
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
@@ -84,12 +87,14 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
 
-        # Dawis and Skene
+        ## Dawis and Skene
         Psi_dawid = adapter_psi_dawid(Psi)
         values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
         ds_p = adapter_prob_dawid(values_prob, classes)
         ## D&S accuracy in confusion detection
-        conf_ranks_df = do_conf_ranks_ds(ErrM, classes)  # ranked pairs of classes that might be confused
+        conf_ranks_ds = do_conf_ranks_ds(ErrM, classes)  # ranked pairs of classes that might be confused
+        conf_ranks_pr_ds = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_ds[:, 0])
+        conf_ranks_pr_ds_sum += conf_ranks_pr_ds
 
         ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
         ds_conf_precision, ds_conf_recall, ds_conf_acc = precision_recall(ds_G, GT_G)
@@ -252,17 +257,23 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     G_ds_precision, G_ds_precision_std = np.average(G_precision_DS_list), np.std(G_precision_DS_list)
     G_ds_recall, G_ds_recall_std = np.average(G_recall_DS_list), np.std(G_recall_DS_list)
 
-    print 'MCMC-CONF'
+    ## precision in cluster detection
+    print('Precision in Cluster Detection')
+    print('MCMC-CONF: {}'.format(conf_ranks_pr_fmcmc_sum / n_runs))
+    print('D&S      : {}'.format(conf_ranks_pr_ds_sum / n_runs))
+
+    print('Confusion Detection')
+    print('MCMC-CONF')
     print('G Accu prob: {:1.4f}+-{:1.4f}'.format(G_acc_p, G_acc_ds_std))
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_b, G_acc_b_std))
     print('G precision: {:1.4f}+-{:1.4f}'.format(G_precision, G_precision_std))
     print('G recall: {:1.4f}+-{:1.4f}'.format(G_recall, G_recall_std))
-    print 'D&S'
+    print('D&S')
     print('G Accu bin: {:1.4f}+-{:1.4f}'.format(G_acc_ds, G_acc_b_std))
     print('G precision: {:1.4f}+-{:1.4f}'.format(G_ds_precision, G_ds_precision_std))
     print('G recall: {:1.4f}+-{:1.4f}'.format(G_ds_recall, G_ds_recall_std))
     print('\n')
-    print 'PROBABILISTIC OUTPUT'
+    print('PROBABILISTIC OUTPUT')
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[0]), np.std(runs[0])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[3]), np.std(runs[3])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[1]), np.std(runs[1])))
@@ -272,7 +283,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[2]), np.std(runs[2])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[5]), np.std(runs[5])))
     print('*mcmc_conf_p*: {:1.4f}+-{:1.4f}'.format(np.average(runs[20]), np.std(runs[20])))
-    print 'BINARY OUTPUT'
+    print('BINARY OUTPUT')
     print('*mcmc_conf_b*: {:1.4f}+-{:1.4f}'.format(np.average(runs[21]), np.std(runs[21])))
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[6]), np.std(runs[6])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[9]), np.std(runs[9])))

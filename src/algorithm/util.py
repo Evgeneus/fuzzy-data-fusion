@@ -172,8 +172,12 @@ def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl):
     return conf_ranks
 
 
-def conf_ranks_acc_pr_rec(gt_conf_ranks, conf_ranks):
-    pass
+def conf_ranks_precision(gt_conf_ranks, conf_ranks):
+    precision_list = []
+    for i in range(1, len(gt_conf_ranks) + 1):
+        precision = np.intersect1d(conf_ranks[:i], gt_conf_ranks[:i]).shape[0] / float(i)
+        precision_list.append(precision)
+    return np.array(precision_list)
 
 
 def adapter_psi_pica(numLabelers, numImages, Psi, GT, gamma=1, isDSM=True):

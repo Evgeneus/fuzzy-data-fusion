@@ -234,6 +234,8 @@ def load_data_plots(truncater=None):
 
 
 def load_gt_conf_ranks(df1, df2):
+    df1.dropna(subset=['gt_conf'], how='all', inplace=True)
+    df2.dropna(subset=['gt_conf'], how='all', inplace=True)
     df1['conf_score'] = np.log(df1['num_votes']) * df1['num_conf'] / (df1['num_votes'])
     df1['clusters'] = df1[['gt', 'gt_conf']].apply(lambda x: '-'.join(x), axis=1)
     df2['conf_score'] = np.log(df2['num_votes']) * df2['num_conf'] / (df2['num_votes'])
