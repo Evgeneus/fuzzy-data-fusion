@@ -302,7 +302,26 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     print('pinv: {:1.4f}+-{:1.4f}'.format(np.average(runs[15]), np.std(runs[15])))
     print('pinv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[19]), np.std(runs[19])))
 
-    ## *** Making dataFrame of results ***
+    ## *** Making dataFrame of results (precision in cluster detection) ***
+    data_cl = []
+    ## add MCMC-CONF
+    data_cl += list(zip([votes_per_item]*gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0]+1)),
+                        conf_ranks_pr_fmcmc_sum / n_runs, ['mcmc_conf']*gt_conf_ranks.shape[0]))
+    ## add D&S
+    data_cl += list(zip([votes_per_item] * gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0] + 1)),
+                        conf_ranks_pr_ds_sum / n_runs, ['D&S'] * gt_conf_ranks.shape[0]))
+    # ## Save results in a CSV
+    df_cl = pd.DataFrame(data_cl, columns=['votes_per_item', 'top-k', 'precision', 'method'])
+    path = '../data/results/{}_cluster_detection.csv'.format(dataset_name)
+    if os.path.isfile(path):
+        df_prev = pd.read_csv(path)
+        df_new = df_prev.append(df_cl, ignore_index=True)
+        df_new.to_csv(path, index=False)
+    else:
+        df_cl.to_csv(path, index=False)
+
+
+    ## *** Making dataFrame of results (confusion detection and correction) ***
     method_list = ['mv_p', 'truth_finder_p', 'mcmc_p',
                'mv_f_p', 'truth_finder_f_p', 'mcmc_f_p',
                'mv_b', 'truth_finder_b', 'mcmc_b',
@@ -389,7 +408,7 @@ if __name__ == '__main__':
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    for votes_per_item in ['All', 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
+    for votes_per_item in [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
         print('Votes: ', votes_per_item)
         if votes_per_item == 'All':
             accuracy(load_data, dataset_name, votes_per_item)
