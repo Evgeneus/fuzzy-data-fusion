@@ -60,8 +60,33 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         else:
             run += 1
         print(run)
+
+        ## Dawis and Skene
+        Psi_dawid = adapter_psi_dawid(Psi)
+        values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+        ds_p = adapter_prob_dawid(values_prob, classes)
+        ## D&S accuracy in confusion detection
+        conf_ranks_ds = do_conf_ranks_ds(ErrM, classes, ds_p, Psi)  # ranked pairs of classes that might be confused
+        conf_ranks_pr_ds = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_ds[:, 0])
+        conf_ranks_pr_ds_sum += conf_ranks_pr_ds
+        try:
+            ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
+        except ValueError:
+            print('VALUE ERROR')
+            run -= 1
+            continue
+
+        ds_conf_precision, ds_conf_recall, ds_conf_acc = precision_recall(ds_G, GT_G)
+        G_acc_b_DS.append(ds_conf_acc)
+        G_precision_DS_list.append(ds_conf_recall)
+        G_recall_DS_list.append(ds_conf_precision)
+
+        Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
+        values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
+        ds_p_f = adapter_prob_dawid(values_prob_f, classes)
+
         ## cluster detection evaluation
-        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl)  # ranked pairs of classes that might be confused
+        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl, Psi)  # ranked pairs of classes that might be confused
         conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
         conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
 
@@ -87,25 +112,6 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
-
-        ## Dawis and Skene
-        Psi_dawid = adapter_psi_dawid(Psi)
-        values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
-        ds_p = adapter_prob_dawid(values_prob, classes)
-        ## D&S accuracy in confusion detection
-        conf_ranks_ds = do_conf_ranks_ds(ErrM, classes)  # ranked pairs of classes that might be confused
-        conf_ranks_pr_ds = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_ds[:, 0])
-        conf_ranks_pr_ds_sum += conf_ranks_pr_ds
-
-        ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
-        ds_conf_precision, ds_conf_recall, ds_conf_acc = precision_recall(ds_G, GT_G)
-        G_acc_b_DS.append(ds_conf_acc)
-        G_precision_DS_list.append(ds_conf_recall)
-        G_recall_DS_list.append(ds_conf_precision)
-
-        Psi_dawid_f = adapter_psi_dawid(Psi_fussy)
-        values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
-        ds_p_f = adapter_prob_dawid(values_prob_f, classes)
 
         # BINARY OUTPUT
         data = adapter_input(Psi)
@@ -397,18 +403,22 @@ if __name__ == '__main__':
     dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
+        votes_per_item_list = [3, 'All']
     elif dataset_name == 'flags':
         load_data = load_data_flags
+        votes_per_item_list = [3, 5, 7, 9, 11, 13, 15, 17, 19, 'All']
     elif dataset_name == 'food':
         load_data = load_data_food
+        votes_per_item_list = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']
     elif dataset_name == 'plots':
         load_data = load_data_plots
+        votes_per_item_list = [3, 5, 7, 9, 11, 13, 'All']
     else:
         print('Dataset not selected')
         exit(1)
     print('Dataset: {}'.format(dataset_name))
 
-    for votes_per_item in [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']:
+    for votes_per_item in votes_per_item_list:
         print('Votes: ', votes_per_item)
         if votes_per_item == 'All':
             accuracy(load_data, dataset_name, votes_per_item)

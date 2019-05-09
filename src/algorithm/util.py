@@ -150,7 +150,9 @@ def get_ds_G(ErrM, classes, ds_p, Psi):
     return ds_G
 
 
-def do_conf_ranks_ds(ErrM, classes):
+def do_conf_ranks_ds(ErrM, classes, ds_p, Psi):
+    ds_aggregated_classes = [max(stats, key=stats.get) for stats in ds_p]
+    num_votes_on_obj = [len(v_) for v_ in Psi]
     M = sum(ErrM)
     M = M / M.sum(axis=1)[:, np.newaxis]
     conf_classes = []
@@ -159,15 +161,22 @@ def do_conf_ranks_ds(ErrM, classes):
         argmax_id = data.argmax()
         if data[argmax_id] == 0:
             continue
-        conf_classes.append(np.array([classes[class_id] + '-' + classes[argmax_id], data[argmax_id]]))
+        obj_ids = [obj_id for obj_id, cl in enumerate(ds_aggregated_classes) if cl == classes[class_id]]
+        weight = np.log(sum([num_votes_on_obj[obj_id] for obj_id in obj_ids]))
+        if data[argmax_id]*weight > 0:
+            conf_classes.append(np.array([classes[class_id] + '-' + classes[argmax_id], data[argmax_id]*weight]))
     conf_ranks = np.array(sorted(conf_classes, key=lambda x: x[1], reverse=True))
     return conf_ranks
 
 
-def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl):
+def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl, Psi):
+    ## TODO: remplement func when there are more than 1
+    num_votes_on_obj = [len(v_) for v_ in Psi]
     conf_classes = []
     for obj_id in range(M):
-        conf_classes.append(np.array([GT[obj_id] + '-' + GT[Cl[obj_id]['other']], Cl_conf_scores[obj_id]]))
+        weight = np.log(num_votes_on_obj[obj_id])
+        if Cl_conf_scores[obj_id]*weight > 0.:
+            conf_classes.append(np.array([GT[obj_id] + '-' + GT[Cl[obj_id]['other']], Cl_conf_scores[obj_id]*weight]))
     conf_ranks = np.array(sorted(conf_classes, key=lambda x: x[1], reverse=True))
     return conf_ranks
 
