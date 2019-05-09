@@ -247,6 +247,44 @@ def load_gt_conf_ranks(df1, df2):
     return gt_conf_ranks
 
 
+def load_gt_conf_ranks_faces():
+    M = 48
+    GT_df = pd.read_csv('../data/faces_crowdflower/gt.csv')
+    GT = dict(zip(GT_df['obj_id'].values, GT_df['GT'].values))
+    f1_df = pd.read_csv('../data/faces_crowdflower/f1_cf.csv')
+    f2_df = pd.read_csv('../data/faces_crowdflower/f2_cf.csv')
+    ## remove rows with "I don't know" votes
+    f1_df = f1_df[f1_df['vote'] != "I don't know"]
+    f2_df = f2_df[f2_df['vote'] != "I don't know"]
+    Cl = {}
+    for i in range(24):
+        Cl.update({i: {'id': i, 'other': i+24}})
+        Cl.update({i+24: {'id': i + 24, 'other': i}})
+
+    nPi = [[0., 0.] for _ in range(M)]
+    for obj_id in range(M):
+        if obj_id < 24:
+            obj_data = f1_df.loc[f1_df['question_n'] == obj_id+1]
+        else:
+            obj_data = f2_df.loc[f2_df['question_n'] == obj_id-24+1]
+        other_id = Cl[obj_id]['other']
+        other_GT = GT[other_id]
+        for index, row in obj_data.iterrows():
+            vote = row['vote']
+            if vote == other_GT:
+                nPi[obj_id][1] += 1  ## means a confusion
+            else:
+                nPi[obj_id][0] += 1  ## not a confusion
+    Cl_conf_scores = [np.log((i + j)) * float(j) / (i + j) for i, j in nPi]
+    gt_conf_ranks = []
+    for obj_id, conf_score in enumerate(Cl_conf_scores):
+        if conf_score == 0.:
+            continue
+        gt_conf_ranks.append([GT[obj_id] + '-' + GT[Cl[obj_id]['other']], conf_score])
+    gt_conf_ranks = np.array(sorted(gt_conf_ranks, key=lambda x: x[1], reverse=True))
+    return gt_conf_ranks
+
+
 class TruncaterVotesItem:
     def __init__(self, votes_per_item):
         self.votes_per_item = votes_per_item

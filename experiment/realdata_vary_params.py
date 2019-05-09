@@ -13,7 +13,8 @@ from src.algorithm.average_log import average_log
 from src.algorithm.investment import investment
 from src.algorithm.pooled_investment import pooled_investment
 from src.algorithm.dawid_skene import dawid_skene
-from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, TruncaterVotesItem, load_gt_conf_ranks
+from data_loader import load_data_faces, load_data_flags, load_data_plots, load_data_food, \
+    TruncaterVotesItem, load_gt_conf_ranks, load_gt_conf_ranks_faces
 from synthetic_experiment import adapter_input, adapter_output
 
 n_runs = 50
@@ -22,21 +23,21 @@ n_runs = 50
 def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         ## load ground truth of clusters having confusable classes
     if dataset_name == 'faces':
-        ## TODO: FACES
-        df1 = pd.read_csv('../data/faces_crowdflower/f1_cf.csv')
-        df2 = pd.read_csv('../data/faces_crowdflower/f2_cf.csv')
+        gt_conf_ranks = load_gt_conf_ranks_faces()
     elif dataset_name == 'flags':
         df1 = pd.read_csv('../data/Flags/flags1_res_postporos.csv')
         df2 = pd.read_csv('../data/Flags/flags2_res_postporos.csv')
+        gt_conf_ranks = load_gt_conf_ranks(df1, df2)
     elif dataset_name == 'food':
         df1 = pd.read_csv('../data/Food/food1_res_postporos.csv')
         df2 = pd.read_csv('../data/Food/food2_res_postporos.csv')
+        gt_conf_ranks = load_gt_conf_ranks(df1, df2)
     elif dataset_name == 'plots':
         df1 = pd.read_csv('../data/Plots/plots1_res_postporos.csv')
         df2 = pd.read_csv('../data/Plots/plots2_res_postporos.csv')
+        gt_conf_ranks = load_gt_conf_ranks(df1, df2)
     else:
         exit(1)
-    gt_conf_ranks = load_gt_conf_ranks(df1, df2)
 
     runs = [[] for _ in range(26)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
@@ -399,8 +400,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
-
-    dataset_name = datasets[2]
+    dataset_name = datasets[0]
     if dataset_name == 'faces':
         load_data = load_data_faces
         votes_per_item_list = [3, 'All']
