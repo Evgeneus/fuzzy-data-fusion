@@ -87,7 +87,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         ds_p_f = adapter_prob_dawid(values_prob_f, classes)
 
         ## cluster detection evaluation
-        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl, Psi)  # ranked pairs of classes that might be confused
+        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, mcmc_conf_p)  # ranked pairs of classes that might be confused
         conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
         conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
 
@@ -400,19 +400,19 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
-    dataset_name = datasets[0]
+    dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
         votes_per_item_list = [3, 'All']
     elif dataset_name == 'flags':
         load_data = load_data_flags
-        votes_per_item_list = [3, 5, 7, 9, 11, 13, 15, 17, 19, 'All']
+        votes_per_item_list = [5, 7, 9, 11, 13, 15, 17, 19, 'All']
     elif dataset_name == 'food':
         load_data = load_data_food
-        votes_per_item_list = [3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']
+        votes_per_item_list = [5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']
     elif dataset_name == 'plots':
         load_data = load_data_plots
-        votes_per_item_list = [3, 5, 7, 9, 11, 13, 'All']
+        votes_per_item_list = [5, 7, 9, 11, 13, 'All']
     else:
         print('Dataset not selected')
         exit(1)

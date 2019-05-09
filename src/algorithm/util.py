@@ -3,6 +3,7 @@ import numpy as np
 from collections import defaultdict
 from src.algorithm.PICA.Dataset import Label, Dataset
 from random import randrange
+import operator
 
 
 def log_likelihood(GT, M, Psi, A, p):
@@ -169,15 +170,22 @@ def do_conf_ranks_ds(ErrM, classes, ds_p, Psi):
     return conf_ranks
 
 
-def do_conf_ranks_fmcmc(Cl_conf_scores, M, GT, Cl, Psi):
-    ## TODO: remplement func when there are more than 1
+def do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, probs):
+    aggregated_classes = [max(p.items(), key=operator.itemgetter(1))[0] for p in probs]
     num_votes_on_obj = [len(v_) for v_ in Psi]
-    conf_classes = []
+    conf_classes = {}
     for obj_id in range(M):
-        weight = np.log(num_votes_on_obj[obj_id])
-        if Cl_conf_scores[obj_id]*weight > 0.:
-            conf_classes.append(np.array([GT[obj_id] + '-' + GT[Cl[obj_id]['other']], Cl_conf_scores[obj_id]*weight]))
-    conf_ranks = np.array(sorted(conf_classes, key=lambda x: x[1], reverse=True))
+        if Cl_conf_scores[obj_id] > 0.:
+            cluster = aggregated_classes[obj_id] + '-' + aggregated_classes[Cl[obj_id]['other']]
+            if cluster in conf_classes:
+                conf_classes[cluster][0] += Cl_conf_scores[obj_id] * num_votes_on_obj[obj_id]
+                conf_classes[cluster][1] += num_votes_on_obj[obj_id]
+            else:
+                conf_classes[cluster] = [Cl_conf_scores[obj_id] * num_votes_on_obj[obj_id], num_votes_on_obj[obj_id]]
+    conf_ranks = []
+    for cluster, d in conf_classes.items():
+        conf_ranks.append([cluster, np.log(d[1])*d[0]/float(d[1])])
+    conf_ranks = np.array(sorted(conf_ranks, key=lambda x: x[1], reverse=True))
     return conf_ranks
 
 
