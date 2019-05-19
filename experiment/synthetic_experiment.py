@@ -1,5 +1,6 @@
 from collections import defaultdict
 from copy import deepcopy
+import matplotlib.pyplot as plt
 import random
 import numpy as np
 import pandas as pd
@@ -332,7 +333,7 @@ def cluster_detection_bimodality_check():
     # confusing classes
     conf_class = {0: 1, 1: 0}
     # % of workers who does confusions
-    conf_workers_prop_list = [0.5, 0.1, 0.2, 0.3, 0.4, 0.5]
+    conf_workers_prop_list = [0.5]
     print('Crowd Accuracy: {}, Num of classes: {}'.format(crowd_accuracy, V))
     for conf_workers_prop in conf_workers_prop_list:
         Psi = generate_data_bimodality_check(item_num, V, conf_workers_prop, votes_item, votes_worker, crowd_accuracy, conf_class)
@@ -340,7 +341,20 @@ def cluster_detection_bimodality_check():
         # Dawis and Skene
         Psi_dawid = adapter_psi_dawid(Psi)
         values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
-        pass
+
+        M = [[[] for _ in range(len(ErrM))] for _ in range(V)]
+        for i in range(V):
+            for j in range(V):
+                for m in ErrM:
+                    if m[i][j] > 0:
+                        M[i][j].append(m[i][j])
+        # Plot histograms
+        fig, ax = plt.subplots(nrows=V, ncols=V, figsize=(15, 6))
+        for i in range(V):
+            for j in range(V):
+                ax[i][j].hist(M[i][j])
+                ax[i][j].set_title('%conf_workers: {}, Class {} -> {}'.format(conf_workers_prop, i, j), size=5)
+        plt.show()
 
 
 def generate_data_bimodality_check(items_num, V, conf_workers_prop, votes_item, votes_worker, acc_range, conf_class):
