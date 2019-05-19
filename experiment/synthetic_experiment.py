@@ -1,5 +1,6 @@
 from collections import defaultdict
 from copy import deepcopy
+import random
 import numpy as np
 import pandas as pd
 from src.algorithm.mv import majority_voting
@@ -315,6 +316,64 @@ def get_acc_g():
     pd.DataFrame(res).to_csv(work_dir + 'accuracy_g.csv', index=False)
 
 
+def cluster_detection_bimodality_check():
+    """
+    Vary the confusion probability on synthetic data.
+    """
+    # number of items
+    item_num = 50
+    # number of classes
+    V = 10
+    # number of votes per item
+    votes_item = 5
+    # number of votes per worker
+    votes_worker = 25
+    crowd_accuracy = [0.7, 0.9]
+    # confusing classes
+    conf_class = {0: 1, 1: 0}
+    # % of workers who does confusions
+    conf_workers_prop_list = [0.5, 0.1, 0.2, 0.3, 0.4, 0.5]
+    print('Crowd Accuracy: {}, Num of classes: {}'.format(crowd_accuracy, V))
+    for conf_workers_prop in conf_workers_prop_list:
+        Psi = generate_data_bimodality_check(item_num, V, conf_workers_prop, votes_item, votes_worker, crowd_accuracy, conf_class)
+
+        # Dawis and Skene
+        Psi_dawid = adapter_psi_dawid(Psi)
+        values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
+        pass
+
+
+def generate_data_bimodality_check(items_num, V, conf_workers_prop, votes_item, votes_worker, acc_range, conf_class):
+    workers_num = (items_num * votes_item) // votes_worker
+    item_ids = list(range(items_num))
+    worker_ids = {worker_id: votes_worker for worker_id in range(workers_num)}
+    worker_ids_acc = {worker_id: np.random.uniform(acc_range[0], acc_range[1]) for worker_id in range(workers_num)}
+    GT = {item_id: np.random.randint(0, V) for item_id in item_ids}
+    conf_workers_num = int(conf_workers_prop * workers_num)
+    conf_workers_id = set(np.random.choice(worker_ids.keys(), conf_workers_num, replace=False))
+    Psi = []
+    for item_id in item_ids:
+        item_votes = []
+        gt_item = GT[item_id]
+        worker_ids_ = worker_ids.keys()
+        random.shuffle(worker_ids_)
+        for worker_id in worker_ids_[:votes_item]:
+            if np.random.binomial(1, worker_ids_acc[worker_id]):
+                if (gt_item in conf_class) and (worker_id in conf_workers_id):  # generate confusion
+                    item_votes.append([worker_id, conf_class[gt_item]])
+                else:
+                    item_votes.append([worker_id, gt_item])
+            else:
+                wrong_vote = np.random.choice([i for i in range(V) if i != gt_item], 1)[0]
+                item_votes.append([worker_id, wrong_vote])
+            # reduce number of votes needed from a worker_id
+            worker_ids[worker_id] -= 1
+            if worker_ids[worker_id] == 0:
+                del worker_ids[worker_id]
+        Psi.append(item_votes)
+    return Psi
+
+
 if __name__ == '__main__':
     '''
     Gt_G = {
@@ -326,7 +385,8 @@ if __name__ == '__main__':
            ...
            ]
     '''
-    accuracy()
+    cluster_detection_bimodality_check()
+    # accuracy()
     # convergence()
     # values()
     # get_acc_g()
