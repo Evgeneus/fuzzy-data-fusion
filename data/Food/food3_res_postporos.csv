@@ -1,0 +1,57 @@
+question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
+1,Artichokes,Cardoons,0,10,0,0
+2,Dates,Prunes,1,10,4,0
+3,Momos,Ravioli,1,10,3,0
+4,Muffin,Cupcake,1,10,3,1
+5,Nectarines,Peaches,1,10,4,4
+6,Pancake,Crêpe,1,10,2,0
+7,Soybeans,Chickpeas,1,10,1,0
+8,Spaghetti,Noodles,0,10,0,1
+9,Sweet Potatoes,Yams,1,10,1,0
+10,Zucchini,Cucumber,0,10,0,0
+11,Baklava,,0,10,0,0
+12,Olives,,0,10,0,0
+13,Paella,,0,10,0,1
+14,Steak,,0,10,0,0
+15,Cardoons,Artichokes,1,10,3,0
+16,Prunes,Dates,0,10,0,0
+17,Ravioli,Momos,1,11,1,0
+18,Cupcake,Muffin,1,10,1,0
+19,Peaches,Nectarines,1,10,2,2
+20,Crêpe,Pancake,1,10,8,0
+21,Chickpeas,Soybeans,1,10,1,2
+22,Noodles,Spaghetti,1,10,8,0
+23,Yams,Sweet Potatoes,1,10,2,0
+24,Cucumber,Zucchini,1,10,1,0
+25,Eggplant,,0,10,0,0
+26,Lasagna,,0,10,0,1
+27,Onion,,0,10,0,0
+28,Tacos,,0,10,0,10
+29,Artichokes,Cardoons,1,10,2,1
+30,Dates,Prunes,1,10,3,1
+31,Momos,Ravioli,1,10,6,0
+32,Muffin,Cupcake,1,10,1,0
+33,Nectarines,Peaches,1,10,6,2
+34,Pancake,Crêpe,1,11,1,0
+35,Soybeans,Chickpeas,1,10,5,0
+36,Spaghetti,Noodles,0,10,0,0
+37,Sweet Potatoes,Yams,1,10,2,0
+38,Zucchini,Cucumber,1,10,1,0
+39,Baklava,,0,10,0,0
+40,Olives,,0,10,0,1
+41,Paella,,0,10,0,0
+42,Steak,,0,10,0,0
+43,Cardoons,Artichokes,1,10,6,0
+44,Prunes,Dates,0,10,0,0
+45,Ravioli,Momos,0,10,0,0
+46,Cupcake,Muffin,1,10,2,0
+47,Peaches,Nectarines,0,10,0,0
+48,Crêpe,Pancake,1,10,8,0
+49,Chickpeas,Soybeans,1,10,3,2
+50,Noodles,Spaghetti,1,10,7,0
+51,Yams,Sweet Potatoes,1,10,3,0
+52,Cucumber,Zucchini,0,10,0,0
+53,Eggplant,,0,10,0,0
+54,Lasagna,,0,10,0,0
+55,Onion,,0,10,0,3
+56,Tacos,,0,10,0,10

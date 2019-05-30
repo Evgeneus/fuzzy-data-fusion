@@ -1,0 +1,41 @@
+question_n,pic_url,gt,gt_conf,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10
+1,https://i.imgur.com/XrdoaJk.jpg,Costa rica,Thailand,Mauritania,Lesotho,Costa rica,Sri lanka,Benin,Thailand,Cote d`ivoire,Israel,Laos,Nicaragua
+2,https://i.imgur.com/6eBmFP4.jpg,Denmark,Switzerland,Bulgaria,Switzerland,Botswana,Congo,Denmark,Guinea-bissau,Angola,United kingdom,St vincent/grenadines,Syrian arab republic
+3,https://i.imgur.com/I0487hG.jpg,Haiti,Liechtenstein,Cocos islands,Afghanistan,Liechtenstein,Cuba,Turkey,Haiti,Colombia,Papua new guinea,Cambodia,Micronesia
+4,https://i.imgur.com/X4OHFw5.jpg,Hungary,Italy,Jordan,Costa rica,Yugoslavia,Hungary,Algeria,Italy,Eritrea,Estonia,Tunisia,Central african rep
+5,https://i.imgur.com/YpuD9A3.jpg,Indonesia,Monaco,Swaziland,Bolivia,Indonesia,South africa,Honduras,Turkey,Virgin islands (british),Venezuela,Monaco,Netherlands antilles
+6,https://i.imgur.com/DLRWsdt.jpg,Ireland,Ivory coast,Ivory coast,Uganda,Zaire,American samoa,Honduras,Belarus,Kuwait,Luxembourg,Ireland,Morocco
+7,https://i.imgur.com/4zSWc2z.jpg,Moldova,Romania,Sierra leone,Germany,New caledonia,Falkland islands (malvinas),Romania,Marshall islands,Moldova,United kingdom,Australia,Palau
+8,https://i.imgur.com/0Z7OPNe.jpg,New zealand,Australia,New zealand,Fiji,Cyprus,Australia,Saint lucia,Syrian arab republic,Christmas island,Grenada,Lithuania,Mexico
+9,https://i.imgur.com/HhnVkzf.jpg,Paraguay,Croatia,Croatia,Paraguay,Tunisia,Palau,United states,Tonga,East timor,Italy,Brunei darussalam,Bulgaria
+10,https://i.imgur.com/E3bvbFP.jpg,Senegal,Mali,Italy,Nepal,Virgin islands (u.s.),Philippines,Senegal,Tanzania,Cayman islands,Finland,Nauru,Mali
+11,https://i.imgur.com/X9Sc5Cr.jpg,Costa rica,Thailand,Mauritania,Lesotho,Costa rica,Sri lanka,Benin,Thailand,Cote d`ivoire,Israel,Laos,Nicaragua
+12,https://i.imgur.com/InEZura.jpg,Denmark,Switzerland,Bulgaria,Switzerland,Botswana,Congo,Denmark,Guinea-bissau,Angola,United kingdom,St vincent/grenadines,Syrian arab republic
+13,https://i.imgur.com/11NU6nA.jpg,Haiti,Liechtenstein,Cocos islands,Afghanistan,Liechtenstein,Cuba,Turkey,Haiti,Colombia,Papua new guinea,Cambodia,Micronesia
+14,https://i.imgur.com/O3lYxcZ.jpg,Hungary,Italy,Jordan,Costa rica,Yugoslavia,Hungary,Algeria,Italy,Eritrea,Estonia,Tunisia,Central african rep
+15,https://i.imgur.com/3KWe1GZ.jpg,Indonesia,Monaco,Swaziland,Bolivia,Indonesia,South africa,Honduras,Turkey,Virgin islands (british),Venezuela,Monaco,Netherlands antilles
+16,https://i.imgur.com/1u1oiem.jpg,Ireland,Ivory coast,Ivory coast,Uganda,Zaire,American samoa,Honduras,Belarus,Kuwait,Luxembourg,Ireland,Morocco
+17,https://i.imgur.com/KJqhuEm.jpg,Moldova,Romania,Sierra leone,Germany,New caledonia,Falkland islands (malvinas),Romania,Marshall islands,Moldova,United kingdom,Australia,Palau
+18,https://i.imgur.com/eYa36YI.jpg,New zealand,Australia,New zealand,Fiji,Cyprus,Australia,Saint lucia,Syrian arab republic,Christmas island,Grenada,Lithuania,Mexico
+19,https://i.imgur.com/cpspJst.jpg,Paraguay,Croatia,Croatia,Paraguay,Tunisia,Palau,United states,Tonga,East timor,Italy,Brunei darussalam,Bulgaria
+20,https://i.imgur.com/gw2Xc6Y.jpg,Senegal,Mali,Italy,Nepal,Virgin islands (u.s.),Philippines,Senegal,Tanzania,Cayman islands,Finland,Nauru,Mali
+21,https://i.imgur.com/HD1BlJz.jpg,Thailand,Costa rica,Kuwait,Costa rica,Russian federation,Equatorial guinea,Thailand,Laos,Pitcairn,Macau,Panama,Guinea
+22,https://i.imgur.com/T29QN8y.jpg,Switzerland,Denmark,Netherlands,Burkina faso,Benin,Hong kong,Trinidad and tobago,Central african rep,Switzerland,Tonga,Czech republic,Denmark
+23,https://i.imgur.com/q45Dg5Y.jpg,Liechtenstein,Haiti,Liechtenstein,Portugal,Suriname,Haiti,Yugoslavia,Pakistan,Turkmenistan,Djibouti,Greece,Guadeloupe
+24,https://i.imgur.com/pDJxemg.jpg,Italy,Hungary,Barbados,Monaco,Israel,Azerbaijan,Zambia,Tokelau,Marshall islands,Hungary,Northern mariana islands,Italy
+25,https://i.imgur.com/60gfkwz.jpg,Monaco,Indonesia,Iraq,New zealand,Finland,Samoa,Monaco,Macau,Mongolia,Indonesia,Ecuador,Suriname
+26,https://i.imgur.com/QGkFfv8.jpg,Ivory coast,Ireland,Ireland,United arab emirates,Tonga,Saint kitts and nevis,Nepal,Mali,Samoa,Aruba,Ivory coast,Germany
+27,https://i.imgur.com/2YTM7bA.jpg,Romania,Moldova,Thailand,Romania,Norfolk island,Gambia,Albania,Moldova,Martinique,Mozambique,Czech republic,Guinea-bissau
+28,https://i.imgur.com/QofA8GZ.jpg,Australia,New zealand,Yugoslavia,Djibouti,Togo,Oman,New zealand,Nepal,Iraq,Burkina faso,Russian federation,Australia
+29,https://i.imgur.com/T40Vz2N.jpg,Croatia,Paraguay,Puerto rico,Djibouti,Paraguay,Peru,Virgin islands (u.s.),Barbados,Croatia,Iraq,Eritrea,Burundi
+30,https://i.imgur.com/kokdzqB.jpg,Mali,Senegal,Norfolk island,Algeria,Nicaragua,Ukraine,Tajikistan,Mali,Papua new guinea,Vatican city state,Botswana,Senegal
+31,https://i.imgur.com/xEXV4dk.jpg,Thailand,Costa rica,Kuwait,Costa rica,Russian federation,Equatorial guinea,Thailand,Laos,Pitcairn,Macau,Panama,Guinea
+32,https://i.imgur.com/dE4HuKH.jpg,Switzerland,Denmark,Netherlands,Burkina faso,Benin,Hong kong,Trinidad and tobago,Central african rep,Switzerland,Tonga,Czech republic,Denmark
+33,https://i.imgur.com/eutlbG9.jpg,Liechtenstein,Haiti,Liechtenstein,Portugal,Suriname,Haiti,Yugoslavia,Pakistan,Turkmenistan,Djibouti,Greece,Guadeloupe
+34,https://i.imgur.com/JYChJ4H.jpg,Italy,Hungary,Barbados,Monaco,Israel,Azerbaijan,Zambia,Tokelau,Marshall islands,Hungary,Northern mariana islands,Italy
+35,https://i.imgur.com/MK1oQSn.png,Monaco,Indonesia,Iraq,New zealand,Finland,Samoa,Monaco,Macau,Mongolia,Indonesia,Ecuador,Suriname
+36,https://i.imgur.com/2tzEGRY.jpg,Ivory coast,Ireland,Ireland,United arab emirates,Tonga,Saint kitts and nevis,Nepal,Mali,Samoa,Aruba,Ivory coast,Germany
+37,https://i.imgur.com/w3h6aVq.jpg,Romania,Moldova,Thailand,Romania,Norfolk island,Gambia,Albania,Moldova,Martinique,Mozambique,Czech republic,Guinea-bissau
+38,https://i.imgur.com/9LecdnQ.jpg,Australia,New zealand,Yugoslavia,Djibouti,Togo,Oman,New zealand,Nepal,Iraq,Burkina faso,Russian federation,Australia
+39,https://i.imgur.com/BxFgNwu.jpg,Croatia,Paraguay,Puerto rico,Djibouti,Paraguay,Peru,Virgin islands (u.s.),Barbados,Croatia,Iraq,Eritrea,Burundi
+49,https://i.imgur.com/CJzdwVZ.png,Mali,Senegal,Norfolk island,Algeria,Nicaragua,Ukraine,Tajikistan,Mali,Papua new guinea,Vatican city state,Botswana,Senegal
