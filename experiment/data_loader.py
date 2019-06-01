@@ -322,7 +322,11 @@ class TruncaterVotesItem:
     def do_trancate(self, df):
         df_new = pd.DataFrame()
         for item_id in df['question_n'].unique():
-            df_new = df_new.append(df.loc[df['question_n'] == item_id].sample(self.votes_per_item), ignore_index=True)
+            try:
+                df_new = df_new.append(df.loc[df['question_n'] == item_id].sample(self.votes_per_item), ignore_index=True)
+            except:
+                df_new = df_new.append(df.loc[df['question_n'] == item_id], ignore_index=True)
+                print('Warning: not enough votes per item!')
         return df_new
 
 

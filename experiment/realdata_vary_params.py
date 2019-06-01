@@ -403,7 +403,7 @@ if __name__ == '__main__':
     dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
-        votes_per_item_list = [3, 'All']
+        votes_per_item_list = [5, 'All']
     elif dataset_name == 'flags':
         load_data = load_data_flags
         votes_per_item_list = [5, 7, 9, 11, 13, 15, 17, 19, 'All']
