@@ -64,18 +64,23 @@ def load_data_flags(truncater=None):
     test = [[], []]
     f1_df = pd.read_csv('../data/Flags/flags1_res.csv', delimiter=';')
     f2_df = pd.read_csv('../data/Flags/flags2_res.csv', delimiter=';')
+    f3_df = pd.read_csv('../data/Flags/flags3_res.csv', delimiter=';')
     ## remove rows with "I don't know" votes
     f1_df = f1_df[f1_df['crowd_ans'] != "I don't know"]
     f2_df = f2_df[f2_df['crowd_ans'] != "I don't know"]
+    f3_df = f3_df[f3_df['crowd_ans'] != "I don't know"]
     if truncater is not None:
         f1_df = truncater.do_trancate(f1_df)
         f2_df = truncater.do_trancate(f2_df)
+        f3_df = truncater.do_trancate(f3_df)
     s_f1 = set(f1_df['_worker_id'].values)
     s_f2 = set(f2_df['_worker_id'].values)
-    sources = s_f1 | s_f2
+    s_f3 = set(f3_df['_worker_id'].values)
+    sources = s_f1 | s_f2 | s_f3
     source_dict = dict(zip(sources, range(len(sources))))
     N = len(source_dict)  # number of sources
-    M = 60  # number of objects
+    M = 60  # number of objects df1+df2
+    M2 = 40  # # number of objects df3
 
     Cl, GT = {}, {}
     for i in range(M / 2):
@@ -83,20 +88,26 @@ def load_data_flags(truncater=None):
         GT[i + M/2] = f2_df[f2_df['question_n'] == i+1]['gt'].values[0]
         Cl.update({i: {'id': i, 'other': i + M/2}})
         Cl.update({i + M/2: {'id': i + M/2, 'other': i}})
+    for i in range(M, M + M2/2):
+        GT[i] = f3_df[f3_df['question_n'] == i - M + 1]['gt'].values[0]
+        GT[i + M2/2] = f3_df[f3_df['question_n'] == i - M + M2/2 + 1]['gt'].values[0]
+        Cl.update({i: {'id': i, 'other': i + M2/2}})
+        Cl.update({i + M2/2: {'id': i + M2/2, 'other': i}})
 
     GT_G = {}
-    for obj in range(M):
+    for obj in range(M + M2):
         GT_G[obj] = {}
 
     conf_counter = 0
     total_votes = 0
-    Psi = [[] for _ in range(M)]
-    # 13 number of clusters where confusions likely to happen
-    for obj_id in range(M):
+    Psi = [[] for _ in range(M+M2)]
+    for obj_id in range(M+M2):
         if obj_id < M/2:
             obj_data = f1_df.loc[f1_df['question_n'] == obj_id+1]
-        else:
+        elif obj_id >= M/2 and obj_id < M:
             obj_data = f2_df.loc[f2_df['question_n'] == obj_id-M/2+1]
+        else:
+            obj_data = f3_df.loc[f3_df['question_n'] == obj_id-M+1]
         for index, row in obj_data.iterrows():
             s_id = source_dict[row['_worker_id']]
             vote = row['crowd_ans']
@@ -107,15 +118,15 @@ def load_data_flags(truncater=None):
             if vote == other_GT:
                 GT_G[obj_id][s_id] = 0
                 conf_counter += 1
-                # print 'obj: {}, other: {}'.format(obj_id, other_id)
                 test[0].append(obj_id)
                 test[1].append(other_id)
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
-    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./(num_votes_per_object*26))
+
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
-    return [N, M, Psi, GT, Cl, GT_G]
+    return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
 def load_data_food(truncater=None):
@@ -185,14 +196,13 @@ def load_data_food(truncater=None):
             if vote == other_GT:
                 GT_G[obj_id][s_id] = 0
                 conf_counter += 1
-                # print 'obj: {}, other: {}'.format(obj_id, other_id)
                 test[0].append(obj_id)
                 test[1].append(other_id)
             else:
                 GT_G[obj_id][s_id] = 1
             total_votes += 1
-    print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
-    print '#total votes: {}'.format(total_votes)
+    # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
+    # print '#total votes: {}'.format(total_votes)
     return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
