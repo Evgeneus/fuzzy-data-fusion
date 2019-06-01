@@ -172,12 +172,8 @@ def load_data_food(truncater=None):
             obj_data = f1_df.loc[f1_df['question_n'] == obj_id+1]
         elif obj_id >= M/2 and obj_id < M:
             obj_data = f2_df.loc[f2_df['question_n'] == obj_id-M/2+1]
-        else:   ## obj_id >= 20 and obj_id < 20+28
-        # elif obj_id >= M and obj_id < M + M2 /2:   ## obj_id >= 20 and obj_id < 20+28
+        else:
             obj_data = f3_df.loc[f3_df['question_n'] == obj_id-M+1]
-        # else:  ## obj_id >= M + M2 /2 ()
-        #     pass
-
 
         for index, row in obj_data.iterrows():
             s_id = source_dict[row['_worker_id']]
@@ -197,7 +193,7 @@ def load_data_food(truncater=None):
             total_votes += 1
     print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     print '#total votes: {}'.format(total_votes)
-    return [N, M, Psi, GT, Cl, GT_G]
+    return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
 def load_data_plots(truncater=None):
