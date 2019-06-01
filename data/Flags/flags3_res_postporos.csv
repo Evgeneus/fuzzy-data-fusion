@@ -38,4 +38,4 @@ question_n,gt,gt_conf,is_conf_found,num_votes,num_conf,num_wrong
 37,Romania,Moldova,0,10,0,0
 38,Australia,New zealand,0,10,0,0
 39,Croatia,Paraguay,0,10,0,0
-49,Mali,Senegal,1,10,3,0
+40,Mali,Senegal,1,10,3,0
