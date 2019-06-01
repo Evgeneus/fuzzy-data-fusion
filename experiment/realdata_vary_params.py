@@ -17,7 +17,7 @@ from data_loader import load_data_faces, load_data_flags, load_data_plots, load_
     TruncaterVotesItem, load_gt_conf_ranks, load_gt_conf_ranks_faces
 from synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 3
+n_runs = 50
 
 
 def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
