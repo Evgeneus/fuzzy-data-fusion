@@ -406,10 +406,10 @@ if __name__ == '__main__':
         votes_per_item_list = [5, 'All']
     elif dataset_name == 'flags':
         load_data = load_data_flags
-        votes_per_item_list = [5, 7, 9, 11, 13, 15, 17, 19, 'All']
+        votes_per_item_list = [5, 7, 9, 'All']
     elif dataset_name == 'food':
         load_data = load_data_food
-        votes_per_item_list = [5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 'All']
+        votes_per_item_list = [5, 7, 9, 'All']
     elif dataset_name == 'plots':
         load_data = load_data_plots
         votes_per_item_list = [5, 7, 9, 11, 13, 'All']
