@@ -324,12 +324,12 @@ def cluster_detection_bimodality_check():
     # number of items
     item_num = 50
     # number of classes
-    V = 10
+    V = 5
     # number of votes per item
-    votes_item = 5
+    votes_item = 700
     # number of votes per worker
     votes_worker = 25
-    crowd_accuracy = [0.7, 0.9]
+    crowd_accuracy = [0.9, 1.]
     # confusing classes
     conf_class = {0: 1, 1: 0}
     # % of workers who does confusions
@@ -346,14 +346,20 @@ def cluster_detection_bimodality_check():
         for i in range(V):
             for j in range(V):
                 for m in ErrM:
-                    if m[i][j] > 0:
-                        M[i][j].append(m[i][j])
+                    M[i][j].append(m[i][j])
+                    # if m[i][j] > 0:
+                    #     M[i][j].append(m[i][j])
         # Plot histograms
-        fig, ax = plt.subplots(nrows=V, ncols=V, figsize=(15, 6))
+        fig, ax = plt.subplots(nrows=V, ncols=V, figsize=(12, 7))
+        fig.suptitle('{}% of workers who confuse between classes {} <-> {}, num of items: {}\n'
+                     'workers accuracy: {}, votes per item: {}, votes per worker: {}'.format(conf_workers_prop*100, 0, 1,
+                     item_num, crowd_accuracy, votes_item, votes_worker), size=10)
         for i in range(V):
             for j in range(V):
                 ax[i][j].hist(M[i][j])
-                ax[i][j].set_title('%conf_workers: {}, Class {} -> {}'.format(conf_workers_prop, i, j), size=5)
+                ax[i][j].tick_params(axis='both', which='major', labelsize=6)
+                # ax[i][j].set_title('%conf_workers: {}, Class {} -> {}'.format(conf_workers_prop, i, j), size=10)
+
         plt.show()
 
 
