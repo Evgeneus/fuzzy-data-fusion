@@ -68,7 +68,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         ds_p = adapter_prob_dawid(values_prob, classes)
         ## D&S accuracy in confusion detection
         conf_ranks_ds = do_conf_ranks_ds(ErrM, classes, ds_p, Psi)  # ranked pairs of classes that might be confused
-        conf_ranks_pr_ds = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_ds[:, 0])
+        conf_ranks_pr_ds = conf_ranks_precision(gt_conf_ranks, conf_ranks_ds)
         conf_ranks_pr_ds_sum += conf_ranks_pr_ds
         try:
             ds_G = get_ds_G(ErrM, classes, ds_p, Psi)
@@ -88,7 +88,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
         ## cluster detection evaluation
         conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, mcmc_conf_p)  # ranked pairs of classes that might be confused
-        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks[:, 0], conf_ranks_fmcmc[:, 0])
+        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks, conf_ranks_fmcmc)
         conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
 
         precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
@@ -389,7 +389,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     votes_per_item = [len(i) for i in invert(N, M, Psi)]
     df['votes_per_worker_mean'] = np.mean(votes_per_item)
     df['votes_per_worker_std'] = np.std(votes_per_item)
-    path = '../data/results/accuracy_votes_per_item.csv'
+    path = '../data/results/{}_accuracy_votes_per_item.csv'.format(dataset_name)
     if os.path.isfile(path):
         df_prev = pd.read_csv(path)
         df_new = df_prev.append(df, ignore_index=True)
@@ -400,7 +400,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
-    dataset_name = datasets[2]
+    dataset_name = datasets[1]
     if dataset_name == 'faces':
         load_data = load_data_faces
         votes_per_item_list = [5, 'All']

@@ -178,21 +178,69 @@ def do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, probs):
         if Cl_conf_scores[obj_id] > 0.:
             cluster = aggregated_classes[obj_id] + '-' + aggregated_classes[Cl[obj_id]['other']]
             if cluster in conf_classes:
-                conf_classes[cluster][0] += Cl_conf_scores[obj_id] * num_votes_on_obj[obj_id]
+                conf_classes[cluster][0] += Cl_conf_scores[obj_id]
                 conf_classes[cluster][1] += num_votes_on_obj[obj_id]
             else:
-                conf_classes[cluster] = [Cl_conf_scores[obj_id] * num_votes_on_obj[obj_id], num_votes_on_obj[obj_id]]
+                conf_classes[cluster] = [Cl_conf_scores[obj_id], num_votes_on_obj[obj_id]]
     conf_ranks = []
     for cluster, d in conf_classes.items():
-        conf_ranks.append([cluster, np.log(d[1])*d[0]/float(d[1])])
+        conf_ranks.append([cluster, np.log(d[1])*d[0]])
     conf_ranks = np.array(sorted(conf_ranks, key=lambda x: x[1], reverse=True))
     return conf_ranks
 
 
 def conf_ranks_precision(gt_conf_ranks, conf_ranks):
+    ## transforming gt ranks so that cluster with the same scores are equal
+    num_gt_clusters = len(gt_conf_ranks)
+    GT = [[] for _ in range(num_gt_clusters)]
+    for k in range(1, len(gt_conf_ranks) + 1):
+        k_ = j = 0
+        while k_ <= k:
+            if j >= num_gt_clusters:
+                break
+            if k_ == k:
+                if round(float(gt_conf_ranks[j][1]), 2) == round(float(gt_conf_ranks[j - 1][1]), 2):
+                    GT[k - 1].append(gt_conf_ranks[j][0])
+                    j += 1
+                else:
+                    k_ += 1
+                    break
+            else:
+                if j == 0 or round(float(gt_conf_ranks[j][1]), 2) != round(float(gt_conf_ranks[j-1][1]), 2):
+                    GT[k-1].append(gt_conf_ranks[j][0])
+                    j += 1
+                    k_ += 1
+                else:
+                    GT[k - 1].append(gt_conf_ranks[j][0])
+                    j += 1
+    ## transforming conf ranks so that cluster with the same scores are equal
+    # num_ranked_clusters = len(conf_ranks)
+    num_ranked_clusters = num_gt_clusters
+    CR = [[] for _ in range(num_ranked_clusters)]
+    for k in range(1, num_ranked_clusters + 1):
+        k_ = j = 0
+        while k_ <= k:
+            if j >= len(conf_ranks):
+                break
+            if k_ == k:
+                if round(float(conf_ranks[j][1]), 2) == round(float(conf_ranks[j - 1][1]), 2):
+                    CR[k - 1].append(conf_ranks[j][0])
+                    j += 1
+                else:
+                    k_ += 1
+                    break
+            else:
+                if j == 0 or round(float(conf_ranks[j][1]), 2) != round(float(conf_ranks[j - 1][1]), 2):
+                    CR[k - 1].append(conf_ranks[j][0])
+                    j += 1
+                    k_ += 1
+                else:
+                    CR[k - 1].append(conf_ranks[j][0])
+                    j += 1
+
     precision_list = []
-    for i in range(1, len(gt_conf_ranks) + 1):
-        precision = np.intersect1d(conf_ranks[:i], gt_conf_ranks[:i]).shape[0] / float(i)
+    for i in range(min(len(GT), len(CR))):
+        precision = np.intersect1d(GT[i], CR[i]).shape[0] / float(len(CR[i]))
         precision_list.append(precision)
     return np.array(precision_list)
 
