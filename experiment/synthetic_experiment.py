@@ -336,12 +336,42 @@ def cluster_detection_bimodality_check():
     conf_workers_prop_list = [0.5]
     print('Crowd Accuracy: {}, Num of classes: {}'.format(crowd_accuracy, V))
     for conf_workers_prop in conf_workers_prop_list:
-        Psi = generate_data_bimodality_check(item_num, V, conf_workers_prop, votes_item, votes_worker, crowd_accuracy, conf_class)
+        Psi, GT = generate_data_bimodality_check(item_num, V, conf_workers_prop, votes_item, votes_worker, crowd_accuracy, conf_class)
 
         # Dawis and Skene
         Psi_dawid = adapter_psi_dawid(Psi)
         values_prob, ErrM, classes = dawid_skene(Psi_dawid, tol=0.001, max_iter=50)
 
+        W = [[[] for _ in range(len(ErrM))] for _ in range(V)]
+        workers_num = (item_num * votes_item) // votes_worker
+        for i in range(V):
+            # get all items with GT value of i
+            item_ids = [item_id for item_id, gt in GT.items() if gt == i]
+            for j in range(V):
+                for w_id in range(workers_num):
+                    # iterate over the data
+                    c, c_total = 0., 0.
+                    for item_id in item_ids:
+                        for id_, vote in Psi[item_id]:
+                            if id_ == w_id: c_total += 1
+                            if id_ == w_id and vote == j: c += 1
+                    if c_total == 0: continue
+                    W[i][j].append(float(c) / c_total)
+
+        # Plot GT confusion histograms
+        fig, ax = plt.subplots(nrows=V, ncols=V, figsize=(12, 7))
+        fig.suptitle('Ground Truth confusion histogram\n'
+                     '{}% of workers who confuse between classes {} <-> {}, num of items: {}\n'
+                     'workers accuracy: {}, votes per item: {}, votes per worker: {}'.format(
+            conf_workers_prop * 100, 0, 1,
+            item_num, crowd_accuracy, votes_item, votes_worker), size=10)
+        for i in range(V):
+            for j in range(V):
+                ax[i][j].hist(W[i][j])
+                ax[i][j].tick_params(axis='both', which='major', labelsize=6)
+        plt.show()
+
+        # Plot DS confusion histograms
         M = [[[] for _ in range(len(ErrM))] for _ in range(V)]
         for i in range(V):
             for j in range(V):
@@ -349,16 +379,15 @@ def cluster_detection_bimodality_check():
                     M[i][j].append(m[i][j])
                     # if m[i][j] > 0:
                     #     M[i][j].append(m[i][j])
-        # Plot histograms
         fig, ax = plt.subplots(nrows=V, ncols=V, figsize=(12, 7))
-        fig.suptitle('{}% of workers who confuse between classes {} <-> {}, num of items: {}\n'
+        fig.suptitle('Dawid&Skene confusion histogram\n'
+                     '{}% of workers who confuse between classes {} <-> {}, num of items: {}\n'
                      'workers accuracy: {}, votes per item: {}, votes per worker: {}'.format(conf_workers_prop*100, 0, 1,
                      item_num, crowd_accuracy, votes_item, votes_worker), size=10)
         for i in range(V):
             for j in range(V):
                 ax[i][j].hist(M[i][j])
                 ax[i][j].tick_params(axis='both', which='major', labelsize=6)
-                # ax[i][j].set_title('%conf_workers: {}, Class {} -> {}'.format(conf_workers_prop, i, j), size=10)
 
         plt.show()
 
@@ -391,7 +420,7 @@ def generate_data_bimodality_check(items_num, V, conf_workers_prop, votes_item, 
             if worker_ids[worker_id] == 0:
                 del worker_ids[worker_id]
         Psi.append(item_votes)
-    return Psi
+    return Psi, GT
 
 
 if __name__ == '__main__':
