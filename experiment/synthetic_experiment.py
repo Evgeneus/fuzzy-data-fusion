@@ -367,7 +367,7 @@ def cluster_detection_bimodality_check():
             item_num, crowd_accuracy, votes_item, votes_worker), size=10)
         for i in range(V):
             for j in range(V):
-                ax[i][j].hist(W[i][j])
+                ax[i][j].hist(W[i][j], range=[0, 1])
                 ax[i][j].tick_params(axis='both', which='major', labelsize=6)
         plt.show()
 
@@ -386,7 +386,7 @@ def cluster_detection_bimodality_check():
                      item_num, crowd_accuracy, votes_item, votes_worker), size=10)
         for i in range(V):
             for j in range(V):
-                ax[i][j].hist(M[i][j])
+                ax[i][j].hist(M[i][j], range=[0, 1])
                 ax[i][j].tick_params(axis='both', which='major', labelsize=6)
 
         plt.show()
