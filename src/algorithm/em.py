@@ -6,7 +6,8 @@ from util import invert
 
 def expectation_maximization(N, M, Psi):
     """
-    The expectation maximization method (EM) from Dong et al., 2013. It iteratively estimates the probs of objects, then
+    The expectation maximization method (EM) from "Data Fusion: Resolving Conflicts from Multiple Sources"
+    Dong et al., 2013. It iteratively estimates the probs of objects, then
     the accuracies of sources until a convergence is reached.
 
     :param N:
