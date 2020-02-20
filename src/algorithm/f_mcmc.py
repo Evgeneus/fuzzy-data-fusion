@@ -5,7 +5,7 @@ from util import fPsi
 from collections import defaultdict
 
 
-def f_mcmc(N, M, Psi, Cl, params):
+def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
     """
     MCMC inference with fuzzy observations.
     :param N: number of sources
@@ -26,7 +26,7 @@ def f_mcmc(N, M, Psi, Cl, params):
     FV = params['FV']
 
     # init accuracies
-    A = np.random.uniform(0.7, 1, N)
+    A = beta(alpha[0], alpha[1], N)
 
     # init confusions, for now we start with no confusions
     G = {}
@@ -36,7 +36,7 @@ def f_mcmc(N, M, Psi, Cl, params):
             G[obj][s] = 1
 
     # init cluster Pis (confusion probs)
-    Pi = np.random.uniform(0.75, 0.85, K)
+    Pi = beta(gamma[0], gamma[1], K)
     f_Psi, f_inv_Psi = fPsi(N, M, Psi, G, Cl)
 
     # MCMC sampling
@@ -102,7 +102,7 @@ def f_mcmc(N, M, Psi, Cl, params):
                     beta_0 += 1
                 else:
                     beta_1 += 1
-            A[source_id] = beta(beta_0 + 4, beta_1 + 1)
+            A[source_id] = beta(beta_0 + alpha[0], beta_1 + alpha[1])
 
         # update confusions
         for obj in Cl.keys():
@@ -145,7 +145,7 @@ def f_mcmc(N, M, Psi, Cl, params):
                         nPi[k][1] += 1
         # draw from Beta distribution
         for k in range(K):
-            Pi[k] = beta(nPi[k][0] + 8, nPi[k][1] + 2)
+            Pi[k] = beta(nPi[k][0] + gamma[0], nPi[k][1] + gamma[1])
 
         # update observation matrix
         f_Psi, f_inv_Psi = fPsi(N, M, Psi, G, Cl)

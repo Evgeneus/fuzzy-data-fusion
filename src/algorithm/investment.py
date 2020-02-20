@@ -6,7 +6,7 @@ Knowing What to Believe. In COLING.
 @author: Evgeny Krivosheev (e.krivoshe@gmail.com)
 '''
 
-import random
+from numpy.random import beta
 
 max_rounds = 100
 eps = 10e-3
@@ -68,13 +68,14 @@ def get_belief(data, trustw_list, s_obs_count):
     return belief
 
 
-def investment(s_number, data):
+def investment(s_number, data, alpha=(4, 1)):
     sources = range(s_number)
     s_obs_count = dict(zip(sources, [0]*s_number))
     for obj in data.values():
         for s in obj[0]:
             s_obs_count[s] += 1
-    trustw_list = [random.uniform(0.7, 1.) for _ in range(s_number)]
+    # trustw_list = [random.uniform(0.7, 1.) for _ in range(s_number)]
+    trustw_list = list(beta(alpha[0], alpha[1], s_number))
     trustw_delta = 0.3
     iter_number = 0
     while trustw_delta > eps and iter_number < max_rounds:

@@ -1,10 +1,11 @@
-import numpy as np
 import math
+import numpy as np
+from numpy.random import beta
 from collections import defaultdict
 from util import invert
 
 
-def expectation_maximization(N, M, Psi):
+def expectation_maximization(N, M, Psi, alpha=(4, 1)):
     """
     The expectation maximization method (EM) from "Data Fusion: Resolving Conflicts from Multiple Sources"
     Dong et al., 2013. It iteratively estimates the probs of objects, then
@@ -20,7 +21,8 @@ def expectation_maximization(N, M, Psi):
     eps = 0.001
     iter_max = 100
     # init accuracies
-    A = [np.random.uniform(0.7, 1.0) for s in range(N)]
+    # A = [np.random.uniform(0.7, 1.0) for s in range(N)]
+    A = beta(alpha[0], alpha[1], N)
     iter = 0
     while iter != iter_max:
         # E-step

@@ -7,7 +7,7 @@ Knowing What to Believe. In COLING.
 '''
 
 
-import numpy as np
+from numpy.random import beta
 
 max_rounds = 20
 eps = 10e-3
@@ -54,9 +54,10 @@ def get_belief(data, trustw_list):
     return belief
 
 
-def sums(s_number, data):
+def sums(s_number, data, alpha=(4, 1)):
     sources = range(s_number)
-    trustw_list = [np.random.uniform(0.7, 1.0) for _ in range(s_number)]
+    # trustw_list = [np.random.uniform(0.7, 1.0) for _ in range(s_number)]
+    trustw_list = list(beta(alpha[0], alpha[1], s_number))
     trustw_delta = 0.3
     iter_number = 0
     while trustw_delta > eps and iter_number < max_rounds:

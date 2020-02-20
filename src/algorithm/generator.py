@@ -1,4 +1,35 @@
 import numpy as np
+from collections import Counter
+
+
+def compute_clusters(c_Psi):
+    M = len(c_Psi)
+    mv_res = np.zeros(M)
+    conf_label = np.zeros(M)  # array with potential confused labels
+    # prepare data
+    for obj, votes in enumerate(c_Psi):
+        votes = zip(*votes)[1]
+        counter = Counter(votes)
+        most_common2 = counter.most_common(2)
+        mv_res[obj] = most_common2[0][0]
+        if len(most_common2) >= 2:
+            conf_label[obj] = most_common2[1][0]
+        else:
+            conf_label[obj] = np.nan
+
+    # compute clusters
+    Cl = {}
+    for obj in range(M):
+        other_label = conf_label[obj]
+        if np.isnan(other_label):
+            continue
+        other_obj_candidates = np.where(mv_res == other_label)[0]
+        if len(other_obj_candidates) == 0:
+            continue
+        other_obj = np.random.choice(other_obj_candidates, 1, replace=False)[0]
+        Cl[obj] = {'id': obj, 'other': other_obj}
+
+    return Cl
 
 
 def synthesize(N, M, V, density, conf_prob, s_acc):
@@ -78,5 +109,7 @@ def synthesize(N, M, V, density, conf_prob, s_acc):
                 others.remove(GT[obj])
                 c_Psi[obj].append((s, np.random.choice(others)))
             GT_G[obj][s] = 1
+
+    Cl = compute_clusters(c_Psi)
 
     return GT, GT_G, Cl, c_Psi

@@ -5,7 +5,7 @@ from collections import defaultdict
 from util import invert
 
 
-def mcmc(N, M, Psi, params):
+def mcmc(N, M, Psi, params, alpha=(4, 1)):
     """
     MCMC for log-likelihood maximum search.
     :param N:
@@ -21,11 +21,12 @@ def mcmc(N, M, Psi, params):
     inv_Psi = invert(N, M, Psi)
 
     # random init
-    A = np.random.uniform(0.7, 1.0, N)
+    # A = np.random.uniform(0.7, 1.0, N)
+    A = beta(alpha[0], alpha[1], N)
 
     # MCMC sampling
     sample_size = 0.0
-    mcmc_p = [defaultdict(float) for x in range(M)]
+    mcmc_p = [defaultdict(float) for _ in range(M)]
     for _iter in range(N_iter):
         # update objects
         p = []
@@ -79,7 +80,7 @@ def mcmc(N, M, Psi, params):
                     beta_0 += 1
                 else:
                     beta_1 += 1
-            A[source_id] = beta(beta_0 + 4, beta_1 + 1)
+            A[source_id] = beta(beta_0 + alpha[0], beta_1 + alpha[1])
 
         if _iter > burnin and _iter % thin == 0:
             sample_size += 1
