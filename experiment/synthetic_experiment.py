@@ -217,7 +217,7 @@ def accuracy():
             ))
         print('-----------------------')
 
-    pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy_binary.csv', index=False)
+    # pd.DataFrame(res).to_csv(work_dir + 'synthetic_accuracy_binary.csv', index=False)
 
 
 def convergence():
@@ -434,8 +434,8 @@ if __name__ == '__main__':
            ...
            ]
     '''
-    cluster_detection_bimodality_check()
-    # accuracy()
+    # cluster_detection_bimodality_check()
+    accuracy()
     # convergence()
     # values()
     # get_acc_g()

@@ -36,7 +36,8 @@ def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
             G[obj][s] = 1
 
     # init cluster Pis (confusion probs)
-    Pi = beta(gamma[0], gamma[1], K)
+    # Pi = beta(gamma[0], gamma[1], K)
+    Pi = dict(zip(Cl.keys(), beta(gamma[0], gamma[1], K)))
     f_Psi, f_inv_Psi = fPsi(N, M, Psi, G, Cl)
 
     # MCMC sampling
@@ -134,7 +135,10 @@ def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
                 G[obj][s] = int(np.random.rand() < pG[1])
 
         # update cluster counts
-        nPi = [[0, 0] for k in range(K)]
+        # nPi = [[0, 0] for _ in range(K)]
+        nPi = {}
+        for obj in Cl.keys():
+            nPi[obj] = [0, 0]
         for obj in G.keys():
             if obj in Cl:
                 k = Cl[obj]['id']
@@ -144,7 +148,7 @@ def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
                     else:
                         nPi[k][1] += 1
         # draw from Beta distribution
-        for k in range(K):
+        for k in Cl.keys():
             Pi[k] = beta(nPi[k][0] + gamma[0], nPi[k][1] + gamma[1])
 
         # update observation matrix
@@ -191,5 +195,7 @@ def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
                         Psi_fussy[other_obj_id].append((s, value))
                         break
 
-    Cl_conf_scores = [float(j)/(i+j) for i, j in nPi]
+    # ToDO:
+    # Cl_conf_scores = [float(j)/(i+j) for i, j in nPi]
+    Cl_conf_scores = [float(j)/(i+j) for i, j in nPi.values()]
     return f_mcmc_G, Psi_fussy, f_mcmc_p, Cl_conf_scores
