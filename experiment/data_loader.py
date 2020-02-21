@@ -1,5 +1,42 @@
 import pandas as pd
 import numpy as np
+from collections import Counter
+
+
+def compute_clusters(c_Psi):
+    M = len(c_Psi)
+    mv_res = [None for _ in range(M)]
+    conf_label = [None for _ in range(M)]  # array with potential confused labels
+    # prepare data
+    for obj, votes in enumerate(c_Psi):
+        votes = zip(*votes)[1]
+        counter = Counter(votes)
+        most_common2 = counter.most_common(2)
+        # print(counter.most_common(3))
+        mv_res[obj] = most_common2[0][0]
+        if len(most_common2) >= 2:
+            conf_label[obj] = most_common2[1][0]
+        else:
+            conf_label[obj] = None
+
+    mv_res = np.array(mv_res)
+    conf_label = np.array(conf_label)
+    # compute clusters
+    Cl = {}
+    for obj in range(M):
+        other_label = conf_label[obj]
+        if other_label == None:
+            # print("0")
+            continue
+        other_obj_candidates = np.where(mv_res == other_label)[0]
+        # other_obj_candidates = other_obj_candidates[conf_label[other_obj_candidates] == obj]
+        if len(other_obj_candidates) == 0:
+            # print ('!')
+            continue
+        other_obj = np.random.choice(other_obj_candidates, 1, replace=False)[0]
+        Cl[obj] = {'id': obj, 'other': other_obj}
+
+    return Cl
 
 
 def load_data_faces(truncater=None):
@@ -57,6 +94,8 @@ def load_data_faces(truncater=None):
 
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
+    Cl = compute_clusters(Psi)
+
     return [N, M, Psi, GT, Cl, GT_G]
 
 
@@ -126,6 +165,7 @@ def load_data_flags(truncater=None):
 
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
+    Cl = compute_clusters(Psi)
     return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
@@ -203,6 +243,7 @@ def load_data_food(truncater=None):
             total_votes += 1
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
+    Cl = compute_clusters(Psi)
     return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
@@ -260,6 +301,7 @@ def load_data_plots(truncater=None):
             total_votes += 1
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
+    Cl = compute_clusters(Psi)
     return [N, M, Psi, GT, Cl, GT_G]
 
 

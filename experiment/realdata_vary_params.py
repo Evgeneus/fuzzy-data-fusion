@@ -86,29 +86,29 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
         ds_p_f = adapter_prob_dawid(values_prob_f, classes)
 
-        ## cluster detection evaluation
-        conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, mcmc_conf_p)  # ranked pairs of classes that might be confused
-        conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks, conf_ranks_fmcmc)
-        conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
-
-        precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
-        G_precision_list.append(precision)
-        G_recall_list.append(recall)
-        G_accu_b_list.append(G_accu_b)
-
-        # only for 'flags' dataset
-        if 'flags' in load_data.__name__:
-            # compute G ACCuracy only on clusters where we belief confusions might happen
-            f_mcmc_G_clust, GT_G_clust = {}, {}
-            num_of_clusters = 13
-            for obj_id in range(num_of_clusters):
-                f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
-                f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
-                GT_G_clust[obj_id] = GT_G[obj_id]
-                GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
-            G_accu_p_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
-        else:
-            G_accu_p_list.append(accu_G(f_mcmc_G, GT_G))
+        # ## cluster detection evaluation
+        # conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, mcmc_conf_p)  # ranked pairs of classes that might be confused
+        # conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks, conf_ranks_fmcmc)
+        # conf_ranks_pr_fmcmc_sum += conf_ranks_pr_fmcmc
+        #
+        # precision, recall, G_accu_b = precision_recall(f_mcmc_G, GT_G)
+        # G_precision_list.append(precision)
+        # G_recall_list.append(recall)
+        # G_accu_b_list.append(G_accu_b)
+        #
+        # # only for 'flags' dataset
+        # if 'flags' in load_data.__name__:
+        #     # compute G ACCuracy only on clusters where we belief confusions might happen
+        #     f_mcmc_G_clust, GT_G_clust = {}, {}
+        #     num_of_clusters = 13
+        #     for obj_id in range(num_of_clusters):
+        #         f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
+        #         f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
+        #         GT_G_clust[obj_id] = GT_G[obj_id]
+        #         GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
+        #     G_accu_p_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
+        # else:
+        #     G_accu_p_list.append(accu_G(f_mcmc_G, GT_G))
 
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
@@ -180,13 +180,15 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
         for obj_id, obj in enumerate(mv_p):
-            # only for 'flags' dataset
-            if 'flags' in load_data.__name__:
-                if len(obj) > 1 and (obj_id < num_of_clusters or M/2 <= obj_id < M/2+num_of_clusters):
-                    obj_with_conflicts.append(obj_id)
-            else:
-                if len(obj) > 1:
-                    obj_with_conflicts.append(obj_id)
+            # # only for 'flags' dataset
+            # if 'flags' in load_data.__name__:
+            #     if len(obj) > 1 and (obj_id < num_of_clusters or M/2 <= obj_id < M/2+num_of_clusters):
+            #         obj_with_conflicts.append(obj_id)
+            # else:
+            #     if len(obj) > 1:
+            #         obj_with_conflicts.append(obj_id)
+            if len(obj) > 1:
+                obj_with_conflicts.append(obj_id)
 
         for obj in range(M):
             if obj in obj_with_conflicts:
@@ -310,23 +312,23 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     print('pinv: {:1.4f}+-{:1.4f}'.format(np.average(runs[15]), np.std(runs[15])))
     print('pinv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[19]), np.std(runs[19])))
 
-    ## *** Making dataFrame of results (precision in cluster detection) ***
-    data_cl = []
-    ## add MCMC-CONF
-    data_cl += list(zip([votes_per_item]*gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0]+1)),
-                        conf_ranks_pr_fmcmc_sum / n_runs, ['mcmc_conf']*gt_conf_ranks.shape[0]))
-    ## add D&S
-    data_cl += list(zip([votes_per_item] * gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0] + 1)),
-                        conf_ranks_pr_ds_sum / n_runs, ['D&S'] * gt_conf_ranks.shape[0]))
-    ## Save results in a CSV
-    df_cl = pd.DataFrame(data_cl, columns=['votes_per_item', 'top-k', 'precision', 'method'])
-    path = '../data/results/{}_cluster_detection.csv'.format(dataset_name)
-    if os.path.isfile(path):
-        df_prev = pd.read_csv(path)
-        df_new = df_prev.append(df_cl, ignore_index=True)
-        df_new.to_csv(path, index=False)
-    else:
-        df_cl.to_csv(path, index=False)
+    # ## *** Making dataFrame of results (precision in cluster detection) ***
+    # data_cl = []
+    # ## add MCMC-CONF
+    # data_cl += list(zip([votes_per_item]*gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0]+1)),
+    #                     conf_ranks_pr_fmcmc_sum / n_runs, ['mcmc_conf']*gt_conf_ranks.shape[0]))
+    # ## add D&S
+    # data_cl += list(zip([votes_per_item] * gt_conf_ranks.shape[0], list(range(1, gt_conf_ranks.shape[0] + 1)),
+    #                     conf_ranks_pr_ds_sum / n_runs, ['D&S'] * gt_conf_ranks.shape[0]))
+    # ## Save results in a CSV
+    # df_cl = pd.DataFrame(data_cl, columns=['votes_per_item', 'top-k', 'precision', 'method'])
+    # path = '../data/results/{}_cluster_detection.csv'.format(dataset_name)
+    # if os.path.isfile(path):
+    #     df_prev = pd.read_csv(path)
+    #     df_new = df_prev.append(df_cl, ignore_index=True)
+    #     df_new.to_csv(path, index=False)
+    # else:
+    #     df_cl.to_csv(path, index=False)
 
     ## *** Making dataFrame of results (confusion detection and correction) ***
     method_list = ['mv_p', 'truth_finder_p', 'mcmc_p',
@@ -389,7 +391,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     votes_per_item = [len(i) for i in invert(N, M, Psi)]
     df['votes_per_worker_mean'] = np.mean(votes_per_item)
     df['votes_per_worker_std'] = np.std(votes_per_item)
-    path = '../data/results/{}_accuracy_votes_per_item.csv'.format(dataset_name)
+    path = '../data/results/autoclustering_{}_accuracy_votes_per_item.csv'.format(dataset_name)
     if os.path.isfile(path):
         df_prev = pd.read_csv(path)
         df_new = df_prev.append(df, ignore_index=True)
