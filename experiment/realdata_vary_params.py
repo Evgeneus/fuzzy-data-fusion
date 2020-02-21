@@ -400,7 +400,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
-    dataset_name = datasets[1]
+    dataset_name = datasets[3]
     if dataset_name == 'faces':
         load_data = load_data_faces
         votes_per_item_list = [5, 'All']
