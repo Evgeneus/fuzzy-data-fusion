@@ -5,7 +5,7 @@ from util import fPsi
 from collections import defaultdict
 
 
-def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(10, 1)):
+def f_mcmc(N, M, Psi, Cl, params, alpha=(4, 1), gamma=(20, 1)):
     """
     MCMC inference with fuzzy observations.
     :param N: number of sources
