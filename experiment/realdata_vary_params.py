@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from copy import deepcopy
+from collections import Counter
 from src.algorithm.em import expectation_maximization
 from src.algorithm.mv import majority_voting
 from src.algorithm.mcmc import mcmc
@@ -17,7 +18,42 @@ from data_loader import load_data_faces, load_data_flags, load_data_plots, load_
     TruncaterVotesItem, load_gt_conf_ranks, load_gt_conf_ranks_faces
 from synthetic_experiment import adapter_input, adapter_output
 
-n_runs = 50
+n_runs = 30
+
+def compute_clusters(c_Psi):
+    M = len(c_Psi)
+    mv_res = [None for _ in range(M)]
+    conf_label = [None for _ in range(M)]  # array with potential confused labels
+    # prepare data
+    for obj, votes in enumerate(c_Psi):
+        votes = zip(*votes)[1]
+        counter = Counter(votes)
+        most_common2 = counter.most_common(2)
+        # print(counter.most_common(3))
+        mv_res[obj] = most_common2[0][0]
+        if len(most_common2) >= 2:
+            conf_label[obj] = most_common2[1][0]
+        else:
+            conf_label[obj] = None
+
+    mv_res = np.array(mv_res)
+    conf_label = np.array(conf_label)
+    # compute clusters
+    Cl = {}
+    for obj in range(M):
+        other_label = conf_label[obj]
+        if other_label == None:
+            # print("0")
+            continue
+        other_obj_candidates = np.where(mv_res == other_label)[0]
+        # other_obj_candidates = other_obj_candidates[conf_label[other_obj_candidates] == obj]
+        if len(other_obj_candidates) == 0:
+            # print ('!')
+            continue
+        other_obj = np.random.choice(other_obj_candidates, 1, replace=False)[0]
+        Cl[obj] = {'id': obj, 'other': other_obj}
+
+    return Cl
 
 
 def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
@@ -39,7 +75,7 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     else:
         exit(1)
 
-    runs = [[] for _ in range(26)]
+    runs = [[] for _ in range(35)]
     G_accu_p_list, G_accu_b_list, G_precision_list, G_recall_list = [], [], [], []
     G_acc_b_DS, G_precision_DS_list, G_recall_DS_list = [], [], []
     ## data structure for statistics of precion in detecting clusters having confusable classes
@@ -54,7 +90,9 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         em_A, em_p = expectation_maximization(N, M, Psi)
         mcmc_A, mcmc_p = mcmc(N, M, Psi, mcmc_params)
 
+        Cl2 = compute_clusters(deepcopy(Psi))
         f_mcmc_G, Psi_fussy, mcmc_conf_p, Cl_conf_scores = f_mcmc(N, M, deepcopy(Psi), Cl, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
+        _, Psi_fussy2, mcmc_conf_p2, _ = f_mcmc(N, M, deepcopy(Psi), Cl2, {'N_iter': 30, 'burnin': 5, 'thin': 3, 'FV': 4})
         if [] in Psi_fussy:  # check the border case when all votes on an item considered as confused
             print('empty fussion, repeat')
             continue
@@ -86,6 +124,10 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         values_prob_f, _, classes = dawid_skene(Psi_dawid_f, tol=0.001, max_iter=50)
         ds_p_f = adapter_prob_dawid(values_prob_f, classes)
 
+        Psi_dawid_f2 = adapter_psi_dawid(Psi_fussy2)
+        values_prob_f2, _, classes = dawid_skene(Psi_dawid_f2, tol=0.001, max_iter=50)
+        ds_p_f2 = adapter_prob_dawid(values_prob_f2, classes)
+
         # ## cluster detection evaluation
         # conf_ranks_fmcmc = do_conf_ranks_fmcmc(Cl_conf_scores, M, Cl, Psi, mcmc_conf_p)  # ranked pairs of classes that might be confused
         # conf_ranks_pr_fmcmc = conf_ranks_precision(gt_conf_ranks, conf_ranks_fmcmc)
@@ -96,27 +138,32 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         # G_recall_list.append(recall)
         # G_accu_b_list.append(G_accu_b)
         #
-        # # only for 'flags' dataset
-        # if 'flags' in load_data.__name__:
-        #     # compute G ACCuracy only on clusters where we belief confusions might happen
-        #     f_mcmc_G_clust, GT_G_clust = {}, {}
-        #     num_of_clusters = 13
-        #     for obj_id in range(num_of_clusters):
-        #         f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
-        #         f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
-        #         GT_G_clust[obj_id] = GT_G[obj_id]
-        #         GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
-        #     G_accu_p_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
-        # else:
-        #     G_accu_p_list.append(accu_G(f_mcmc_G, GT_G))
+        # only for 'flags' dataset
+        if 'flags' in load_data.__name__:
+            # compute G ACCuracy only on clusters where we belief confusions might happen
+            f_mcmc_G_clust, GT_G_clust = {}, {}
+            num_of_clusters = 13
+            for obj_id in range(num_of_clusters):
+                f_mcmc_G_clust[obj_id] = f_mcmc_G[obj_id]
+                f_mcmc_G_clust[obj_id + M/2] = f_mcmc_G[obj_id + M/2]
+                GT_G_clust[obj_id] = GT_G[obj_id]
+                GT_G_clust[obj_id + M/2] = GT_G[obj_id + M/2]
+            G_accu_p_list.append(accu_G(f_mcmc_G_clust, GT_G_clust))
+        else:
+            G_accu_p_list.append(accu_G(f_mcmc_G, GT_G))
 
         mv_f_p = majority_voting(Psi_fussy)
         em_f_A, em_f_p = expectation_maximization(N, M, Psi_fussy)
         mcmc_f_A, mcmc_f_p = mcmc(N, M, Psi_fussy, mcmc_params)
 
+        mv_f_p2 = majority_voting(Psi_fussy2)
+        em_f_A2, em_f_p2 = expectation_maximization(N, M, Psi_fussy2)
+        mcmc_f_A2, mcmc_f_p2 = mcmc(N, M, Psi_fussy2, mcmc_params)
+
         # BINARY OUTPUT
         data = adapter_input(Psi)
         data_f = adapter_input(Psi_fussy)
+        data_f2 = adapter_input(Psi_fussy2)
 
         mv_b = prob_binary_convert(mv_p)
         em_b = prob_binary_convert(em_p)
@@ -128,11 +175,21 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         ds_b_f = prob_binary_convert(ds_p_f)
         mcmc_conf_b = prob_binary_convert(mcmc_conf_p)  # our algorithm MCMC-C
 
+
+        mv_f_b2 = prob_binary_convert(mv_f_p2)
+        em_f_b2 = prob_binary_convert(em_f_p2)
+        mcmc_f_b2 = prob_binary_convert(mcmc_f_p2)
+        ds_b_f2 = prob_binary_convert(ds_p_f2)
+        mcmc_conf_b2 = prob_binary_convert(mcmc_conf_p2)  # our algorithm MCMC-C
+
         # SUMS
         sums_belief = sums(N, data)
         sums_b = adapter_output(sums_belief, data)
         sums_belief_f = sums(N, data_f)
         sums_bf = adapter_output(sums_belief_f, data_f)
+
+        sums_belief_f2 = sums(N, data_f2)
+        sums_bf2 = adapter_output(sums_belief_f2, data_f2)
 
         # AVG LOG
         avlog_belief = average_log(N, data)
@@ -140,17 +197,26 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         avlog_belief_f = average_log(N, data_f)
         avlog_bf = adapter_output(avlog_belief_f, data_f)
 
+        avlog_belief_f2 = average_log(N, data_f2)
+        avlog_bf2 = adapter_output(avlog_belief_f2, data_f2)
+
         # INVESTMENT
         inv_belief = investment(N, data)
         inv_b = adapter_output(inv_belief, data)
         inv_belief_f = investment(N, data_f)
         inv_bf = adapter_output(inv_belief_f, data_f)
 
+        inv_belief_f2 = investment(N, data_f2)
+        inv_bf2 = adapter_output(inv_belief_f2, data_f2)
+
         # POOLED INVESTMENT
         pinv_belief = pooled_investment(N, data)
         pinv_b = adapter_output(pinv_belief, data)
         pinv_belief_f = pooled_investment(N, data_f)
         pinv_bf = adapter_output(pinv_belief_f, data_f)
+
+        pinv_belief_f2 = pooled_investment(N, data_f2)
+        pinv_bf2 = adapter_output(pinv_belief_f2, data_f2)
 
         mv_hits = []
         em_hits = []
@@ -176,6 +242,16 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         mcmc_conf_b_hist = []
         ds_p_hits, ds_b_hits = [], []
         ds_p_f_hits, ds_b_f_hits = [], []
+
+        mv_f_b_hits2 = []
+        em_f_b_hits2 = []
+        mcmc_f_b_hits2 = []
+        sums_f_hits2 = []
+        avlog_f_hits2 = []
+        inv_f_hits2 = []
+        pinv_f_hits2 = []
+        mcmc_conf_b_hist2 = []
+        ds_b_f_hits2 = []
 
         # slect objects with conflicting votes among ones are in clusters
         obj_with_conflicts = []
@@ -229,6 +305,17 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
                 mcmc_conf_b_hist.append(mcmc_conf_b[obj][GT[obj]])
 
+
+                ds_b_f_hits2.append(ds_b_f2[obj][GT[obj]])
+                mv_f_b_hits2.append(mv_f_b2[obj][GT[obj]])
+                em_f_b_hits2.append(em_f_b2[obj][GT[obj]])
+                mcmc_f_b_hits2.append(mcmc_f_b2[obj][GT[obj]])
+                sums_f_hits2.append(sums_bf2[obj][GT[obj]])
+                avlog_f_hits2.append(avlog_bf2[obj][GT[obj]])
+                inv_f_hits2.append(inv_bf2[obj][GT[obj]])
+                pinv_f_hits2.append(pinv_bf2[obj][GT[obj]])
+                mcmc_conf_b_hist2.append(mcmc_conf_b2[obj][GT[obj]])
+
         runs[0].append(np.average(mv_hits))
         runs[1].append(np.average(em_hits))
         runs[2].append(np.average(mcmc_hits))
@@ -249,12 +336,22 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
         runs[17].append(np.average(avlog_f_hits))
         runs[18].append(np.average(inv_f_hits))
         runs[19].append(np.average(pinv_f_hits))
-        runs[20].append(np.average(mcmc_f_hits))
-        runs[21].append(np.average(mcmc_f_b_hits))
+        runs[20].append(np.average(mcmc_conf_p_hist))
+        runs[21].append(np.average(mcmc_conf_b_hist))
         runs[22].append(np.average(ds_p_hits))
         runs[23].append(np.average(ds_b_hits))
         runs[24].append(np.average(ds_p_f_hits))
         runs[25].append(np.average(ds_b_f_hits))
+
+        runs[26].append(np.average(mv_f_b_hits2))
+        runs[27].append(np.average(em_f_b_hits2))
+        runs[28].append(np.average(mcmc_f_b_hits2))
+        runs[29].append(np.average(sums_f_hits2))
+        runs[30].append(np.average(avlog_f_hits2))
+        runs[31].append(np.average(inv_f_hits2))
+        runs[32].append(np.average(pinv_f_hits2))
+        runs[33].append(np.average(mcmc_conf_b_hist2))
+        runs[34].append(np.average(ds_b_f_hits2))
 
     ## confusion detection MCMC-CONF
     G_acc_p, G_acc_p_std = np.average(G_accu_p_list), np.std(G_accu_p_list)
@@ -295,22 +392,31 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
     print('*mcmc_conf_p*: {:1.4f}+-{:1.4f}'.format(np.average(runs[20]), np.std(runs[20])))
     print('BINARY OUTPUT')
     print('*mcmc_conf_b*: {:1.4f}+-{:1.4f}'.format(np.average(runs[21]), np.std(runs[21])))
+    print('*mcmc_conf_b-auto-cl*: {:1.4f}+-{:1.4f}'.format(np.average(runs[33]), np.std(runs[33])))
     print('mv: {:1.4f}+-{:1.4f}'.format(np.average(runs[6]), np.std(runs[6])))
     print('mv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[9]), np.std(runs[9])))
+    print('mv_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[26]), np.std(runs[26])))
     print('em: {:1.4f}+-{:1.4f}'.format(np.average(runs[7]), np.std(runs[7])))
     print('em_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[10]), np.std(runs[10])))
+    print('em_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[27]), np.std(runs[27])))
     print('D&S: {:1.4f}+-{:1.4f}'.format(np.average(runs[23]), np.std(runs[23])))
     print('D&S_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[25]), np.std(runs[25])))
+    print('D&S_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[34]), np.std(runs[34])))
     print('mcmc: {:1.4f}+-{:1.4f}'.format(np.average(runs[8]), np.std(runs[8])))
     print('mcmc_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[11]), np.std(runs[11])))
+    print('mcmc_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[28]), np.std(runs[28])))
     print('sums: {:1.4f}+-{:1.4f}'.format(np.average(runs[12]), np.std(runs[12])))
     print('sums_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[16]), np.std(runs[16])))
+    print('sums_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[29]), np.std(runs[29])))
     print('avlog: {:1.4f}+-{:1.4f}'.format(np.average(runs[13]), np.std(runs[13])))
     print('avlog_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[17]), np.std(runs[17])))
+    print('avlog_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[30]), np.std(runs[30])))
     print('inv: {:1.4f}+-{:1.4f}'.format(np.average(runs[14]), np.std(runs[14])))
     print('inv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[18]), np.std(runs[18])))
+    print('inv_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[31]), np.std(runs[31])))
     print('pinv: {:1.4f}+-{:1.4f}'.format(np.average(runs[15]), np.std(runs[15])))
     print('pinv_f: {:1.4f}+-{:1.4f}'.format(np.average(runs[19]), np.std(runs[19])))
+    print('pinv_f-auto-cl: {:1.4f}+-{:1.4f}'.format(np.average(runs[32]), np.std(runs[32])))
 
     # ## *** Making dataFrame of results (precision in cluster detection) ***
     # data_cl = []
@@ -402,19 +508,19 @@ def accuracy(load_data, dataset_name, votes_per_item, Truncater=None):
 
 if __name__ == '__main__':
     datasets = ['faces', 'flags', 'food', 'plots']
-    dataset_name = datasets[1]
+    dataset_name = datasets[2]
     if dataset_name == 'faces':
         load_data = load_data_faces
         votes_per_item_list = [5, 'All']
     elif dataset_name == 'flags':
         load_data = load_data_flags
-        votes_per_item_list = [5, 7, 9, 'All']
+        votes_per_item_list = [5,'All']
     elif dataset_name == 'food':
         load_data = load_data_food
-        votes_per_item_list = [5, 7, 9, 'All']
+        votes_per_item_list = [5, 'All']
     elif dataset_name == 'plots':
         load_data = load_data_plots
-        votes_per_item_list = [5, 7, 9, 11, 13, 'All']
+        votes_per_item_list = [5,  'All']
     else:
         print('Dataset not selected')
         exit(1)

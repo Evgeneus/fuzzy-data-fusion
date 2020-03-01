@@ -94,7 +94,7 @@ def load_data_faces(truncater=None):
 
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
-    Cl = compute_clusters(Psi)
+    # Cl = compute_clusters(Psi)
 
     return [N, M, Psi, GT, Cl, GT_G]
 
@@ -165,7 +165,7 @@ def load_data_flags(truncater=None):
 
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
-    Cl = compute_clusters(Psi)
+    # Cl = compute_clusters(Psi)
     return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
@@ -243,7 +243,7 @@ def load_data_food(truncater=None):
             total_votes += 1
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
-    Cl = compute_clusters(Psi)
+    # Cl = compute_clusters(Psi)
     return [N, M+M2, Psi, GT, Cl, GT_G]
 
 
@@ -301,7 +301,7 @@ def load_data_plots(truncater=None):
             total_votes += 1
     # print '#confusions: {}, {:1.1f}%'.format(conf_counter, conf_counter*100./total_votes)
     # print '#total votes: {}'.format(total_votes)
-    Cl = compute_clusters(Psi)
+    # Cl = compute_clusters(Psi)
     return [N, M, Psi, GT, Cl, GT_G]
 
 
