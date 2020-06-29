@@ -377,3 +377,16 @@ class TruncaterVotesItem:
 #     for worker_id in df['_worker_id'].unique():
 #         df_new = df_new.append(df.loc[df['_worker_id'] == worker_id].sample(votes_per_worker), ignore_index=True)
 #     return df_new
+
+def transform_input_data_mcmcc2Glad(Psi, GT, name):
+    data = []
+    data_GT = []
+    for obj_id, obj_data in enumerate(Psi):
+        data_GT.append((obj_id, GT[obj_id]))
+        for worker_id, worker_ans in obj_data:
+            data.append((obj_id, worker_id, worker_ans))
+    df_data = pd.DataFrame(data, columns=["question_ID", "worker_ID", "answer"])
+    df_gold = pd.DataFrame(data_GT, columns=["question_ID", "gold_label"])
+
+    df_data.to_csv("{}_ans.csv".format(name), index=False)
+    df_gold.to_csv("{}_gold.csv".format(name), index=False)
