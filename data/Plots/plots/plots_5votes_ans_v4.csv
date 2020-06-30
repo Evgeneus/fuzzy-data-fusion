@@ -1,0 +1,501 @@
+question_ID,worker_ID,answer
+0,17,Skate Kitchen
+0,27,Skate Kitchen
+0,82,Skate Kitchen
+0,57,Skate Kitchen
+0,22,Skate Kitchen
+1,25,Beautiful Boy
+1,5,Beautiful Boy
+1,76,Beautiful Boy
+1,2,Beautiful Boy
+1,34,Beautiful Boy
+2,8,Puppet Master: The Littlest Reich
+2,17,Puppet Master: The Littlest Reich
+2,105,Puppet Master: The Littlest Reich
+2,55,Puppet Master: The Littlest Reich
+2,77,Puppet Master: The Littlest Reich
+3,107,Smallfoot
+3,2,Smallfoot
+3,50,Smallfoot
+3,82,Smallfoot
+3,5,Smallfoot
+4,91,Upgrade
+4,39,Upgrade
+4,3,Upgrade
+4,17,Upgrade
+4,86,Upgrade
+5,5,Sink or Swim
+5,25,Sink or Swim
+5,44,Sink or Swim
+5,91,Sink or Swim
+5,86,Sink or Swim
+6,25,"Love, Simon"
+6,39,"Love, Simon"
+6,16,"Love, Simon"
+6,105,"Love, Simon"
+6,44,"Love, Simon"
+7,86,Crowhurst
+7,90,The Mercy
+7,16,Crowhurst
+7,76,Crowhurst
+7,28,Crowhurst
+8,62,Rough Night
+8,100,Rough Night
+8,70,Rough Night
+8,50,Rough Night
+8,16,Rough Night
+9,76,Darkest Hour
+9,101,Darkest Hour
+9,106,Darkest Hour
+9,16,Darkest Hour
+9,102,Darkest Hour
+10,84,Churchill
+10,106,Churchill
+10,18,Churchill
+10,79,Churchill
+10,62,Churchill
+11,42,Anthropoid
+11,18,Anthropoid
+11,73,Anthropoid
+11,106,Anthropoid
+11,70,Anthropoid
+12,22,Mowgli: Legend of the Jungle
+12,98,Mowgli: Legend of the Jungle
+12,16,The Jungle Book
+12,25,The Jungle Book
+12,76,Mowgli: Legend of the Jungle
+13,73,Batman v Superman: Dawn of Justice
+13,98,Batman v Superman: Dawn of Justice
+13,39,Batman v Superman: Dawn of Justice
+13,40,Batman v Superman: Dawn of Justice
+13,5,Batman v Superman: Dawn of Justice
+14,2,Zootopia
+14,42,Zootopia
+14,22,Zootopia
+14,86,Zootopia
+14,34,Zootopia
+15,42,Captain Fantastic
+15,34,Captain Fantastic
+15,86,Captain Fantastic
+15,5,Captain Fantastic
+15,98,Captain Fantastic
+16,102,Christine
+16,27,Christine
+16,70,Christine
+16,73,Christine
+16,5,Christine
+17,73,Other People
+17,53,Other People
+17,2,Other People
+17,90,Other People
+17,5,Other People
+18,94,Coming Through the Rye
+18,40,Coming Through the Rye
+18,90,Rebel in the Rye
+18,89,Coming Through the Rye
+18,5,Coming Through the Rye
+19,42,Freaks of Nature
+19,76,Freaks of Nature
+19,27,Freaks of Nature
+19,102,Freaks of Nature
+19,53,Freaks of Nature
+20,4,Spectre
+20,94,Spectre
+20,69,Spectre
+20,34,Spectre
+20,105,Spectre
+21,22,The Martian
+21,102,The Martian
+21,80,The Martian
+21,17,The Martian
+21,86,The Martian
+22,84,Marguerite
+22,80,Marguerite
+22,102,Marguerite
+22,60,Marguerite
+22,103,Marguerite
+23,57,The Beauty Inside
+23,4,The Beauty Inside
+23,3,The Beauty Inside
+23,94,The Beauty Inside
+23,84,The Beauty Inside
+24,84,Moonwalkers
+24,45,Moonwalkers
+24,21,Moonwalkers
+24,23,Moonwalkers
+24,3,Moonwalkers
+25,107,Labyrinth of Lies
+25,57,Labyrinth of Lies
+25,106,Labyrinth of Lies
+25,53,Labyrinth of Lies
+25,97,Labyrinth of Lies
+26,21,Friend Request
+26,1,Friend Request
+26,97,Unfriended
+26,57,Unfriended
+26,22,Unfriended
+27,103,This Is Where I Leave You
+27,34,This Is Where I Leave You
+27,17,This Is Where I Leave You
+27,89,This Is Where I Leave You
+27,90,Oldboy
+28,103,Life After Beth
+28,7,Life After Beth
+28,18,Life After Beth
+28,62,Life After Beth
+28,80,Life After Beth
+29,69,The Equalizer
+29,54,The Equalizer
+29,62,The Equalizer
+29,20,The Equalizer
+29,53,The Equalizer
+30,60,Hercules
+30,41,Hercules
+30,20,Hercules
+30,18,Hercules
+30,22,Hercules
+31,61,The Machine
+31,103,The Machine
+31,20,The Machine
+31,80,The Machine
+31,45,The Machine
+32,34,The Double
+32,86,The Double
+32,36,The Double
+32,38,The Double
+32,90,The Double
+33,38,This Is the End
+33,45,The World's End
+33,57,This Is the End
+33,78,This Is the End
+33,80,This Is the End
+34,92,Oblivion
+34,20,Oblivion
+34,106,Oblivion
+34,51,After Earth
+34,47,Oblivion
+35,14,White House Down
+35,51,White House Down
+35,62,Olympus Has Fallen
+35,69,Olympus Has Fallen
+35,36,Olympus Has Fallen
+36,32,The Other Son
+36,53,The Other Son
+36,78,The Other Son
+36,108,The Other Son
+36,4,The Other Son
+37,69,Upside Down
+37,104,Upside Down
+37,6,Upside Down
+37,56,Upside Down
+37,4,Upside Down
+38,56,"Tomorrow, when the War Began"
+38,106,"Tomorrow, when the War Began"
+38,69,"Tomorrow, when the War Began"
+38,4,"Tomorrow, when the War Began"
+38,61,"Tomorrow, when the War Began"
+39,36,Battleship
+39,29,Battleship
+39,61,Battleship
+39,6,Battleship
+39,54,Battleship
+40,36,Zero Dark Thirty
+40,53,Zero Dark Thirty
+40,107,Zero Dark Thirty
+40,27,Zero Dark Thirty
+40,73,Zero Dark Thirty
+41,107,Mirror Mirror
+41,9,Snow White and the Huntsman
+41,36,Mirror Mirror
+41,4,Mirror Mirror
+41,92,Mirror Mirror
+42,41,The Girl
+42,61,The Girl
+42,27,The Girl
+42,102,The Girl
+42,107,The Girl
+43,27,Quartet
+43,55,A Late Quartet
+43,102,Quartet
+43,4,Quartet
+43,9,Quartet
+44,103,Extraterrestrial
+44,41,Extraterrestrial
+44,4,Extraterrestrial
+44,82,Extraterrestrial
+44,29,Extraterrestrial
+45,104,The Raid
+45,4,The Raid
+45,78,The Raid
+45,57,The Raid
+45,74,The Raid
+46,41,No Strings Attached
+46,63,No Strings Attached
+46,6,No Strings Attached
+46,103,No Strings Attached
+46,86,No Strings Attached
+47,86,Skyline
+47,46,Skyline
+47,104,Skyline
+47,78,Skyline
+47,27,Skyline
+48,31,Despicable Me
+48,61,Despicable Me
+48,38,Despicable Me
+48,6,Despicable Me
+48,36,Despicable Me
+49,24,The A-Team
+49,43,The A-Team
+49,6,The A-Team
+49,46,The A-Team
+49,31,The A-Team
+50,35,Mid90s
+50,101,Skate Kitchen
+50,28,Mid90s
+50,106,Mid90s
+50,55,Skate Kitchen
+51,17,Ben is Back
+51,30,Ben is Back
+51,93,Ben is Back
+51,70,Ben is Back
+51,48,Ben is Back
+52,11,The Happytime Murders
+52,35,The Happytime Murders
+52,39,The Happytime Murders
+52,17,The Happytime Murders
+52,48,The Happytime Murders
+53,107,Abominable
+53,38,Abominable
+53,93,Abominable
+53,11,Abominable
+53,106,Smallfoot
+54,107,Venom
+54,86,Venom
+54,104,Venom
+54,42,Venom
+54,25,Venom
+55,8,Swimming with Men
+55,12,Swimming with Men
+55,26,Swimming with Men
+55,80,Swimming with Men
+55,28,Swimming with Men
+56,65,Alex Strangelove
+56,80,Alex Strangelove
+56,25,Alex Strangelove
+56,42,Alex Strangelove
+56,108,Alex Strangelove
+57,30,The Mercy
+57,103,The Mercy
+57,70,The Mercy
+57,21,Crowhurst
+57,106,The Mercy
+58,106,Girls Trip
+58,107,Girls Trip
+58,31,Girls Trip
+58,76,Girls Trip
+58,42,Girls Trip
+59,70,Dunkirk
+59,63,Dunkirk
+59,39,Dunkirk
+59,107,Dunkirk
+59,30,Dunkirk
+60,101,Darkest Hour
+60,70,Darkest Hour
+60,78,Darkest Hour
+60,3,Darkest Hour
+60,12,Churchill
+61,78,The Man with the Iron Heart
+61,106,The Man with the Iron Heart
+61,42,The Man with the Iron Heart
+61,104,The Man with the Iron Heart
+61,39,The Man with the Iron Heart
+62,52,Mowgli: Legend of the Jungle
+62,84,Mowgli: Legend of the Jungle
+62,80,Mowgli: Legend of the Jungle
+62,27,Mowgli: Legend of the Jungle
+62,10,Mowgli: Legend of the Jungle
+63,104,Captain America: Civil War
+63,39,Captain America: Civil War
+63,10,Captain America: Civil War
+63,80,Captain America: Civil War
+63,87,Captain America: Civil War
+64,34,Sing
+64,76,Sing
+64,87,Sing
+64,78,Sing
+64,38,Sing
+65,4,The Glass Castle
+65,80,The Glass Castle
+65,106,The Glass Castle
+65,54,The Glass Castle
+65,87,The Glass Castle
+66,84,Christine
+66,25,Kate Plays Christine
+66,15,Christine
+66,28,Christine
+66,39,Christine
+67,107,The Hollars
+67,106,The Hollars
+67,63,The Hollars
+67,42,The Hollars
+67,84,The Hollars
+68,103,Rebel in the Rye
+68,106,Rebel in the Rye
+68,15,Rebel in the Rye
+68,28,Coming Through the Rye
+68,25,Coming Through the Rye
+69,85,Scouts Guide to the Zombie Apocalypse
+69,28,Scouts Guide to the Zombie Apocalypse
+69,106,Scouts Guide to the Zombie Apocalypse
+69,42,Scouts Guide to the Zombie Apocalypse
+69,103,Scouts Guide to the Zombie Apocalypse
+70,78,Mission: Impossible – Rogue Nation
+70,80,Mission: Impossible – Rogue Nation
+70,28,Mission: Impossible – Rogue Nation
+70,64,Mission: Impossible – Rogue Nation
+70,31,Mission: Impossible – Rogue Nation
+71,5,Approaching the Unknown
+71,101,The Martian
+71,38,Approaching the Unknown
+71,64,Approaching the Unknown
+71,27,Approaching the Unknown
+72,67,Florence Foster Jenkins
+72,28,Florence Foster Jenkins
+72,80,Florence Foster Jenkins
+72,53,Florence Foster Jenkins
+72,31,American Beauty
+73,42,Every Day
+73,64,Every Day
+73,72,Every Day
+73,46,Every Day
+73,104,Every Day
+74,22,Operation Avalanche
+74,108,Moonwalkers
+74,13,Operation Avalanche
+74,83,Operation Avalanche
+74,31,Moonwalkers
+75,4,The People vs. Fritz Bauer
+75,52,The People vs. Fritz Bauer
+75,46,The People vs. Fritz Bauer
+75,55,Labyrinth of Lies
+75,0,The People vs. Fritz Bauer
+76,13,Friend Request
+76,0,Unfriended
+76,54,Friend Request
+76,48,Friend Request
+76,63,Friend Request
+77,54,August: Osage County
+77,48,August: Osage County
+77,66,August: Osage County
+77,31,August: Osage County
+77,22,August: Osage County
+78,85,Burying the Ex
+78,86,Burying the Ex
+78,93,Burying the Ex
+78,27,Burying the Ex
+78,12,Burying the Ex
+79,86,John Wick
+79,17,John Wick
+79,88,John Wick
+79,12,John Wick
+79,4,John Wick
+80,29,The Legend of Hercules
+80,64,Hercules
+80,23,Hercules
+80,5,Hercules
+80,95,The Legend of Hercules
+81,88,Automata
+81,105,Automata
+81,11,Automata
+81,58,Automata
+81,12,Automata
+82,33,Enemy
+82,75,Enemy
+82,95,Enemy
+82,105,Enemy
+82,63,Enemy
+83,5,The World's End
+83,95,The World's End
+83,71,The World's End
+83,27,The World's End
+83,63,The World's End
+84,27,After Earth
+84,46,After Earth
+84,11,After Earth
+84,29,After Earth
+84,23,After Earth
+85,64,White House Down
+85,58,White House Down
+85,46,White House Down
+85,38,White House Down
+85,33,White House Down
+86,62,"Like Father, Like Son"
+86,80,"Like Father, Like Son"
+86,0,"Like Father, Like Son"
+86,84,"Like Father, Like Son"
+86,18,The Other Son
+87,28,Upside Down
+87,29,Patema Inverted
+87,52,Patema Inverted
+87,62,Patema Inverted
+87,80,Patema Inverted
+88,84,Red Dawn
+88,68,Red Dawn
+88,0,Red Dawn
+88,103,Red Dawn
+88,38,Red Dawn
+89,5,Pacific Rim
+89,16,Pacific Rim
+89,84,Pacific Rim
+89,0,Pacific Rim
+89,38,Pacific Rim
+90,13,Seal Team Six: The Raid on Osama Bin Laden
+90,96,Seal Team Six: The Raid on Osama Bin Laden
+90,99,Seal Team Six: The Raid on Osama Bin Laden
+90,16,Seal Team Six: The Raid on Osama Bin Laden
+90,38,Seal Team Six: The Raid on Osama Bin Laden
+91,12,Snow White and the Huntsman
+91,95,Snow White and the Huntsman
+91,48,Snow White and the Huntsman
+91,23,Snow White and the Huntsman
+91,16,Snow White and the Huntsman
+92,13,Hitchcock
+92,23,Hitchcock
+92,102,Hitchcock
+92,95,Hitchcock
+92,69,Hitchcock
+93,34,A Late Quartet
+93,49,A Late Quartet
+93,81,A Late Quartet
+93,22,A Late Quartet
+93,3,A Late Quartet
+94,25,Seeking a Friend for the End of the World
+94,37,Seeking a Friend for the End of the World
+94,102,Seeking a Friend for the End of the World
+94,19,Seeking a Friend for the End of the World
+94,69,Seeking a Friend for the End of the World
+95,19,Dredd
+95,96,Dredd
+95,33,Dredd
+95,8,Dredd
+95,29,Dredd
+96,62,Friends with Benefits
+96,19,Friends with Benefits
+96,12,Friends with Benefits
+96,102,Friends with Benefits
+96,16,Friends with Benefits
+97,102,Battle: Los Angeles
+97,29,Battle: Los Angeles
+97,13,Battle: Los Angeles
+97,59,Battle: Los Angeles
+97,21,Battle: Los Angeles
+98,85,Megamind
+98,92,Megamind
+98,95,Megamind
+98,103,Megamind
+98,22,Megamind
+99,22,The Losers
+99,86,The Losers
+99,95,The Losers
+99,15,The Losers
+99,16,The Losers
